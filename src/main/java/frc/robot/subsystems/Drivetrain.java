@@ -31,6 +31,10 @@ public class Drivetrain extends SubsystemBase {
     rightFront.set(-right);
   }
 
+  public void driveDistance(double distance) {
+    
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
