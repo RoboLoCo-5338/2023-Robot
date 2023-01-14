@@ -99,7 +99,28 @@ public class Drivetrain extends SubsystemBase {
     leftRear.setCANTimeout(100);
   }
 
+  // creates a PID velocity robot. Uses PID settings to determine speeds
+  public void tankDriveVelocity(double left, double right) {
+    double targetLeft;
+    double targetRight;
 
+    // max rpm of wheels desired
+    double targetVelocity = slow ? SLOW_VELOCITY : MAX_VELOCITY;
+
+    // target speed in encoder units based on joystick position
+    targetLeft = (left + 0.0078125) * targetVelocity * TICKS_PER_INCH;
+    targetRight = (right + 0.0078125) * targetVelocity * TICKS_PER_INCH;
+
+  // set target speeds to motors
+  tankDrive(targetLeft, targetRight);
+
+  //SmartDashboard.putNumber("left:", getPosition());
+  //SmartDashboard.putNumber("right:", getPosition());
+}
+  
+  public void tankPercent(double left, double right) {
+    tankDriveVelocity(left * 0.75, right * 0.75);
+  }  
 
   @Override
   public void periodic() {
