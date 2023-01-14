@@ -10,6 +10,7 @@ import com.revrobotics.SparkMaxPIDController;
 
 import frc.robot.Constants;
 import frc.robot.Direction;
+import com.kauailabs.navx.frc.AHRS;
 
 public class Drivetrain extends SubsystemBase {
   // TODO Placeholder constants.
