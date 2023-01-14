@@ -12,6 +12,12 @@ import frc.robot.Constants;
 import frc.robot.Direction;
 
 public class Drivetrain extends SubsystemBase {
+  private boolean slow = false;
+  private boolean straight = false;
+  private static final double MAX_VELOCITY = 350;
+	private static final double SLOW_VELOCITY = 650;
+  private static double peakOutput = 0.2;
+
   // TODO Placeholder constants.
   private static final double TICKS_PER_REVOLUTION = 4096;
   private static final double WHEEL_DIAMETER = 6.0;
@@ -37,6 +43,7 @@ public class Drivetrain extends SubsystemBase {
   private CANSparkMax rightRear;
   public static double targetPosition;
   public static Direction targetDirection;
+  //public AHRS navX;
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -64,39 +71,24 @@ public class Drivetrain extends SubsystemBase {
       targetPosition = 0;
     }
 
-//    leftFront.set(ControlMode.Position, targetPosition);
-//    rightFront.set(ControlMode.Position, targetPosition);
-    tankDrive(targetPosition, targetPosition);
+    // TODO tankDrive(targetPosition, targetPosition);
   }
 
   public void setPID(double kP, double kI, double kD, double kF) {
-    SparkMaxPIDController rightFrontPID = rightFront.getPIDController();
-    rightFrontPID.setP(kP);
-    rightFrontPID.setI(kI);
-    rightFrontPID.setD(kD);
-    rightFrontPID.setFF(kF);
-    rightFront.setCANTimeout(100);
+    setControllerPID(rightFront, kP, kI, kD, kF);
+    setControllerPID(rightRear, kP, kI, kD, kF);
+    setControllerPID(leftFront, kP, kI, kD, kF);
+    setControllerPID(leftRear, kP, kI, kD, kF);
+  }
 
-    SparkMaxPIDController leftFrontPID = leftFront.getPIDController();
-    leftFrontPID.setP(kP);
-    leftFrontPID.setI(kI);
-    leftFrontPID.setD(kD);
-    leftFrontPID.setFF(kF);
-    leftFront.setCANTimeout(100);
-
-    SparkMaxPIDController rightRearPID = rightRear.getPIDController();
-    rightRearPID.setP(kP);
-    rightRearPID.setI(kI);
-    rightRearPID.setD(kD);
-    rightFrontPID.setFF(kF);
-    rightFront.setCANTimeout(100);
-
-    SparkMaxPIDController leftRearPID = leftRear.getPIDController();
-    leftRearPID.setP(kP);
-    leftRearPID.setI(kI);
-    leftRearPID.setD(kD);
-    leftRearPID.setFF(kF);
-    leftRear.setCANTimeout(100);
+  private void setControllerPID(CANSparkMax sparkMax, double kP, double kI, double kD, double kF)
+  {
+    SparkMaxPIDController controller = sparkMax.getPIDController();
+    controller.setP(kP);
+    controller.setI(kI);
+    controller.setD(kD);
+    controller.setFF(kF);
+    sparkMax.setCANTimeout(100);
   }
 
   // creates a PID velocity robot. Uses PID settings to determine speeds
@@ -121,6 +113,58 @@ public class Drivetrain extends SubsystemBase {
   public void tankPercent(double left, double right) {
     tankDriveVelocity(left * 0.75, right * 0.75);
   }  
+
+  public void setPeakOutput(double output) {
+    peakOutput = output;
+  }
+
+  public double getPosition() {
+    return rightFront.getEncoder().getPosition();
+  }
+
+  public double getVelocity() {
+    return rightFront.getEncoder().getVelocity() / GEAR_RATIO / 2048;
+  }
+
+  public void resetPosition() {
+    leftFront.getEncoder().setPosition(0);
+    rightFront.getEncoder().setPosition(0);
+    leftRear.getEncoder().setPosition(0);
+    rightRear.getEncoder().setPosition(0);
+  }
+
+  public double getAngle() {
+		//return navX.getAngle();
+    return 0; // TODO
+	}
+
+	public void resetAngle() {
+		//navX.reset();
+	}
+
+  public void angleTurn(Direction direction) {
+    double speed = 0.2;
+
+    //SmartDashboard.putNumber("angle: ", getAngle());
+    if (direction == Direction.RIGHT) {
+      leftFront.set(-speed);
+      rightFront.set(speed);
+    } else if (direction == Direction.LEFT) {
+      leftFront.set(speed);
+      rightFront.set(-speed);
+    } else {
+      leftFront.set(0);
+      rightFront.set(0);
+    }
+  }
+
+  public void setSlow(boolean val) {
+    slow = val;
+  }
+
+  public void setStraight(boolean val) {
+    straight = val;
+  }
 
   @Override
   public void periodic() {

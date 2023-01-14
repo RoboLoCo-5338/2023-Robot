@@ -5,6 +5,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Direction;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
@@ -18,6 +20,23 @@ public final class Autos {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
   }
 
+  public static CommandBase angleTurnCommand(double angle, Direction direction) {
+		return new FunctionalCommand(
+			() -> RobotContainer.drivetrain.resetAngle(),
+			() -> RobotContainer.drivetrain.angleTurn(direction),
+			(interrupt) -> RobotContainer.drivetrain.tankDriveVelocity(0, 0),
+			() -> Math.abs(RobotContainer.drivetrain.getAngle()) >= angle,
+			RobotContainer.drivetrain
+		);
+	}
+
+	public static CommandBase resetAngleCommand() {
+		return new InstantCommand(
+			() -> RobotContainer.drivetrain.resetAngle(),
+			RobotContainer.drivetrain
+		);
+	}
+
   public static CommandBase driveDistanceCommand(double distance, Direction direction) {
     return new FunctionalCommand(
             () -> RobotContainer.drivetrain.resetPosition(),
@@ -27,6 +46,10 @@ public final class Autos {
             RobotContainer.drivetrain
     );
   }
+
+  public static CommandBase stopCommand() {
+		return new RunCommand(() -> RobotContainer.drivetrain.tankDriveVelocity(0, 0), RobotContainer.drivetrain);
+	}
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
