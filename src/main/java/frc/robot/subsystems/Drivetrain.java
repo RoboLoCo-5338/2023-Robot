@@ -58,6 +58,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void tankDrive(double left, double right) {
+    // TODO control mode
     leftFront.set(left);
     rightFront.set(-right);
   }
@@ -147,6 +148,7 @@ public class Drivetrain extends SubsystemBase {
     double speed = 0.2;
 
     //SmartDashboard.putNumber("angle: ", getAngle());
+    // TODO control modes
     if (direction == Direction.RIGHT) {
       leftFront.set(-speed);
       rightFront.set(speed);
