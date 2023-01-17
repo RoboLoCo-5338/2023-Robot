@@ -7,10 +7,11 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 
 import frc.robot.Constants;
 import frc.robot.Direction;
-import com.kauailabs.navx.frc.AHRS;
+// import com.kauailabs.navx.frc.AHRS;
 
 public class Drivetrain extends SubsystemBase {
   private boolean slow = false;
@@ -58,9 +59,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void tankDrive(double left, double right) {
-    // TODO control mode
-    leftFront.set(left);
-    rightFront.set(-right);
+    leftFront.getPIDController().setReference(left, ControlType.kPosition);
+    rightFront.getPIDController().setReference(-right, ControlType.kPosition);
   }
 
   public void driveDistance(double inches, Direction direction) {
@@ -73,7 +73,8 @@ public class Drivetrain extends SubsystemBase {
       targetPosition = 0;
     }
 
-    // TODO tankDrive(targetPosition, targetPosition);
+    leftFront.getPIDController().setReference(targetPosition, ControlType.kPosition);
+    rightFront.getPIDController().setReference(targetPosition, ControlType.kPosition);
   }
 
   public void setPID(double kP, double kI, double kD, double kF) {
@@ -90,6 +91,7 @@ public class Drivetrain extends SubsystemBase {
     controller.setI(kI);
     controller.setD(kD);
     controller.setFF(kF);
+    controller.setOutputRange(-1, 1); // TODO move to constant
     sparkMax.setCANTimeout(100);
   }
 
@@ -105,11 +107,12 @@ public class Drivetrain extends SubsystemBase {
     targetLeft = (left + 0.0078125) * targetVelocity * TICKS_PER_INCH;
     targetRight = (right + 0.0078125) * targetVelocity * TICKS_PER_INCH;
 
-  // set target speeds to motors
-  tankDrive(targetLeft, targetRight);
+    // set target speeds to motors
+    leftFront.getPIDController().setReference(targetLeft, ControlType.kVelocity);
+    rightFront.getPIDController().setReference(targetRight, ControlType.kVelocity);
 
-  //SmartDashboard.putNumber("left:", getPosition());
-  //SmartDashboard.putNumber("right:", getPosition());
+    //SmartDashboard.putNumber("left:", getPosition());
+    //SmartDashboard.putNumber("right:", getPosition());
 }
   
   public void tankPercent(double left, double right) {
@@ -148,7 +151,6 @@ public class Drivetrain extends SubsystemBase {
     double speed = 0.2;
 
     //SmartDashboard.putNumber("angle: ", getAngle());
-    // TODO control modes
     if (direction == Direction.RIGHT) {
       leftFront.set(-speed);
       rightFront.set(speed);
