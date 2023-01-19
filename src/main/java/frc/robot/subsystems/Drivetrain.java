@@ -56,6 +56,8 @@ public class Drivetrain extends SubsystemBase {
     rightFront = new CANSparkMax(Constants.MOTOR_ID_2, null);
     rightRear = new CANSparkMax(Constants.MOTOR_ID_3, null);
     rightRear.follow(rightFront);
+
+    configAllControllers(POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
   }
 
   public void tankDrive(double left, double right) {
@@ -64,34 +66,30 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void driveDistance(double inches, Direction direction) {
-    targetDirection = direction;
-    if (direction == Direction.FORWARD) {
-      targetPosition = -inches * TICKS_PER_INCH * GEAR_RATIO;
-    } else if (direction == Direction.BACKWARD) {
-      targetPosition = inches * TICKS_PER_INCH * GEAR_RATIO;
-    } else {
-      targetPosition = 0;
+    if (direction == Direction.LEFT || direction == Direction.RIGHT)
+    {
+      return;
     }
-
+    targetPosition = direction == Direction.BACKWARD ? -inches : inches;
     leftFront.getPIDController().setReference(targetPosition, ControlType.kPosition);
     rightFront.getPIDController().setReference(targetPosition, ControlType.kPosition);
   }
 
-  public void setPID(double kP, double kI, double kD, double kF) {
-    setControllerPID(rightFront, kP, kI, kD, kF);
-    setControllerPID(rightRear, kP, kI, kD, kF);
-    setControllerPID(leftFront, kP, kI, kD, kF);
-    setControllerPID(leftRear, kP, kI, kD, kF);
+  public void configAllControllers(double kP, double kI, double kD, double kF) {
+    configController(rightFront, kP, kI, kD, kF);
+    configController(rightRear, kP, kI, kD, kF);
+    configController(leftFront, kP, kI, kD, kF);
+    configController(leftRear, kP, kI, kD, kF);
   }
 
-  private void setControllerPID(CANSparkMax sparkMax, double kP, double kI, double kD, double kF)
+  private void configController(CANSparkMax sparkMax, double kP, double kI, double kD, double kF)
   {
     SparkMaxPIDController controller = sparkMax.getPIDController();
     controller.setP(kP);
     controller.setI(kI);
     controller.setD(kD);
     controller.setFF(kF);
-    controller.setOutputRange(-1, 1); // TODO move to constant
+    controller.setOutputRange(-peakOutput, peakOutput);
     sparkMax.setCANTimeout(100);
   }
 
@@ -111,8 +109,8 @@ public class Drivetrain extends SubsystemBase {
     leftFront.getPIDController().setReference(targetLeft, ControlType.kVelocity);
     rightFront.getPIDController().setReference(targetRight, ControlType.kVelocity);
 
-    //SmartDashboard.putNumber("left:", getPosition());
-    //SmartDashboard.putNumber("right:", getPosition());
+    // SmartDashboard.putNumber("left:", getPosition());
+    // SmartDashboard.putNumber("right:", getPosition());
 }
   
   public void tankPercent(double left, double right) {
@@ -140,11 +138,11 @@ public class Drivetrain extends SubsystemBase {
 
   public double getAngle() {
 		//return navX.getAngle();
-    return 0; // TODO
+    return 0; // TODO Add NavX functionality.
 	}
 
 	public void resetAngle() {
-		//navX.reset();
+		//navX.reset(); // TODO Add NavX functionality.
 	}
 
   public void angleTurn(Direction direction) {
