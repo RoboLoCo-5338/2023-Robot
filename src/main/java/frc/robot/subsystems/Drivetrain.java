@@ -13,10 +13,10 @@ import frc.robot.Direction;
 
 public class Drivetrain extends SubsystemBase {
   // TODO Placeholder constants.
-  private static final double TICKS_PER_REVOLUTION = 4096;
-  private static final double WHEEL_DIAMETER = 6.0;
+  private static final double TICKS_PER_REVOLUTION = 42;
+  private static final double WHEEL_DIAMETER = 5.0;
   private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
-  private static final double GEAR_RATIO = 10.7 / 1;
+  private static final double GEAR_RATIO = 9.89 / 1;
   private static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
 
   // PID values for teleop.

@@ -18,6 +18,7 @@ public final class Autos {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
   }
 
+  /*
   public static CommandBase driveDistanceCommand(double distance, Direction direction) {
     return new FunctionalCommand(
             () -> RobotContainer.drivetrain.resetPosition(),
@@ -27,6 +28,7 @@ public final class Autos {
             RobotContainer.drivetrain
     );
   }
+  */
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");

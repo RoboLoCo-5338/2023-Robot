@@ -80,16 +80,18 @@ public class RobotContainer {
   private void configureButtonBindings() {
      //drive buttons
     
-    JoystickButton slowButton = new JoystickButton(controller1, Constants.STARTBUTTON);
-    slowButton.whenPressed(toggleSlow);
+     /* 
+    // JoystickButton slowButton = new JoystickButton(controller1, Constants.STARTBUTTON);
+    // slowButton.whenPressed(toggleSlow);
 
-    Trigger slowToggle = new Trigger(() -> controller1.getRawAxis(3) > 0.5);
-    slowToggle.whenActive(slowOn);
-    slowToggle.whenInactive(slowOff);
+    // Trigger slowToggle = new Trigger(() -> controller1.getRawAxis(3) > 0.5);
+    // slowToggle.whenActive(slowOn);
+    // slowToggle.whenInactive(slowOff);
 
-    JoystickButton straightButton = new JoystickButton(controller1, Constants.XBUTTON);
-    straightButton.whileHeld(straightTrue);
-    straightButton.whenReleased(straightFalse);
+    // JoystickButton straightButton = new JoystickButton(controller1, Constants.XBUTTON);
+    // straightButton.whileHeld(straightTrue);
+    // straightButton.whenReleased(straightFalse);
+    */
 
     // climb buttons
    /*  JoystickButton longHighPiston = new JoystickButton(controller2, Constants.LBBUTTON);
