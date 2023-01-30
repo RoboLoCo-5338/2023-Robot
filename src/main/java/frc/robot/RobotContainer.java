@@ -11,10 +11,8 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -25,16 +23,21 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public static Drivetrain drivetrain = new Drivetrain();
-  /*public static ShooterSystem shooterSystem = new ShooterSystem();
-  public static Climb climb = new Climb();
-  public static Intake intake = new Intake();*/
-  
-  private static Joystick controller1 = new Joystick(0);
-  private static Joystick controller2 = new Joystick(1);
-  
-  // Initialize the drive command
-    public Command defaultDrive = new RunCommand(
+  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  public static final Drivetrain drivetrain = new Drivetrain();
+
+  // controllers
+  private static Joystick controller1 = new Joystick(0); //driver
+  private static Joystick controller2 = new Joystick(1); //operator
+
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public RobotContainer() {
+    // Configure the trigger bindings
+    configureBindings();
+    configureDefaultCommands();
+  }
+
+  public Command defaultDrive = new RunCommand(
       () -> drivetrain.tankDrive(
         controller1.getRawAxis(1),
         controller1.getRawAxis(5)
@@ -42,108 +45,27 @@ public class RobotContainer {
       drivetrain
     );
 
-   /* public Command slowOn = new InstantCommand(
-      () -> driveSystem.setSlow(true),
-      driveSystem
-    );
-
-    public Command slowOff = new InstantCommand(
-      () -> driveSystem.setSlow(false),
-      driveSystem
-    );
-
-    public Command straightTrue = new InstantCommand(
-      () -> driveSystem.setStraight(true),
-      driveSystem
-    );
-
-    public Command straightFalse = new InstantCommand(
-      () -> driveSystem.setStraight(false),
-      driveSystem
-    );*/
-
-
-    
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
-    configureDefaultCommands();
-  }
-
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}.
    */
-  private void configureButtonBindings() {
-     //drive buttons
-    
-    JoystickButton slowButton = new JoystickButton(controller1, Constants.STARTBUTTON);
-    slowButton.whenPressed(toggleSlow);
+  private void configureBindings() {
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    new Trigger(m_exampleSubsystem::exampleCondition)
+        .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    Trigger slowToggle = new Trigger(() -> controller1.getRawAxis(3) > 0.5);
-    slowToggle.whenActive(slowOn);
-    slowToggle.whenInactive(slowOff);
-
-    JoystickButton straightButton = new JoystickButton(controller1, Constants.XBUTTON);
-    straightButton.whileHeld(straightTrue);
-    straightButton.whenReleased(straightFalse);
-
-    // climb buttons
-   /*  JoystickButton longHighPiston = new JoystickButton(controller2, Constants.LBBUTTON);
-    longHighPiston.whenPressed(ClimbCommands.longHighToggle);
-    
-    JoystickButton longLowPiston = new JoystickButton(controller2, Constants.RBBUTTON);
-    longLowPiston.whenPressed(ClimbCommands.longLowToggle);
-
-    // shooter buttons
-    JoystickButton shooterButton = new JoystickButton(controller1, Constants.BBUTTON);
-    shooterButton.whileHeld(ShooterCommands.shootCommand());
-    shooterButton.whenReleased(ShooterCommands.stopShootCommand());
-
-    JoystickButton shooterOperatorButton = new JoystickButton(controller2, Constants.BBUTTON);
-    shooterOperatorButton.whileHeld(ShooterCommands.shootCommand());
-    shooterOperatorButton.whenReleased(ShooterCommands.stopShootCommand());*/
-
-    // intake + index buttons
-    // controller 1
-    // JoystickButton intakePneumatics = new JoystickButton(controller1, Constants.YBUTTON); 
-    // intakePneumatics.whenPressed(IntakeCommands.toggleIntakePneumatics());
-
-    // controller 2
-    /*JoystickButton intakePneumatics2 = new JoystickButton(controller2, Constants.YBUTTON); 
-    intakePneumatics2.whenPressed(IntakeCommands.intakeDown());
-    intakePneumatics2.whenReleased(IntakeCommands.intakeUp());
-    
-    // controller 1
-    JoystickButton intakeIndexForward = new JoystickButton(controller1, Constants.RBBUTTON);
-    intakeIndexForward.whenPressed(IntakeCommands.intakeIndexForward());
-    intakeIndexForward.whenReleased(IntakeCommands.stopIntakeMotors());*/
-    // controller 2
-    // JoystickButton intakeIndexForward2 = new JoystickButton(controller2, Constants.LBBUTTON);
-    // intakeIndexForward2.whenPressed(IntakeCommands.intakeIndexForward());
-    // intakeIndexForward2.whenReleased(IntakeCommands.stopIntakeMotors());
-
-    // controller 1
-    //JoystickButton outakeIndexReverse = new JoystickButton(controller1, Constants.LBBUTTON);
-    //outakeIndexReverse.whenPressed(IntakeCommands.outakeIndexReverse());
-    //outakeIndexReverse.whenReleased(IntakeCommands.stopIntakeMotors());
-    // controller 2
-    // JoystickButton outakeIndexReverse2 = new JoystickButton(controller2, Constants.RBBUTTON);
-    // outakeIndexReverse2.whenPressed(IntakeCommands.outakeIndexReverse());
-    // outakeIndexReverse2.whenReleased(IntakeCommands.stopIntakeMotors());
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(defaultDrive);
-    CommandScheduler scheduler = CommandScheduler.getInstance();
-    scheduler.setDefaultCommand(drivetrain, defaultDrive);
-
-   // scheduler.setDefaultCommand(RobotContainer.climb, winchPercent());
-    // scheduler.addButton(() -> indexUpCommand());
-    // scheduler.addButton(() -> indexDownCommand());
   }
 
   /**
@@ -151,13 +73,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  //public Command getAutonomousCommand() {
-   // return Autos.closeAuto();
-  //}
-  
-  
-  
-  
-  
-  
+  public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    return Autos.exampleAuto(m_exampleSubsystem);
+  }
 }
