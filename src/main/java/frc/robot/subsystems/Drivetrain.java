@@ -75,7 +75,7 @@ public class Drivetrain extends SubsystemBase {
     */
 
     leftFront.set(left*1/2);
-    rightFront.set(-right*1/2);
+    rightFront.set(right*1/2);
     
   }
 
