@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
 import frc.robot.Constants;
@@ -19,6 +20,8 @@ public class Drivetrain extends SubsystemBase {
   private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
   private static final double GEAR_RATIO = 8.8984;
   private static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
+
+  private final RelativeEncoder leftEncoder, rightEncoder;
 
   /* 
   // PID values for teleop.
@@ -44,12 +47,19 @@ public class Drivetrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     leftFront = new CANSparkMax(Constants.MOTOR_ID_3, MotorType.kBrushless);
+    leftFront.setInverted(false);
+    leftEncoder = leftFront.getEncoder();
     leftRear = new CANSparkMax(Constants.MOTOR_ID_2, MotorType.kBrushless);
     leftRear.follow(leftFront);
 
+   
+
     rightFront = new CANSparkMax(Constants.MOTOR_ID_1, MotorType.kBrushless);
+    rightFront.setInverted(false);
+    rightEncoder = rightFront.getEncoder();
     rightRear = new CANSparkMax(Constants.MOTOR_ID_0, MotorType.kBrushless);
     rightRear.follow(rightFront);
+
   }
 
   public void tankDrive(double left, double right) {
