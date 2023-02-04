@@ -13,7 +13,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants;
-import frc.robot.Direction;
+import frc.robot.commands.Direction;
 
 
 public class Drivetrain extends SubsystemBase {
@@ -111,6 +111,10 @@ public class Drivetrain extends SubsystemBase {
       return front;
     }
     
+    public void resetPosition(){
+      leftEncoder.setPosition(0);
+      rightEncoder.setPosition(0);
+    }
 
 //    leftFront.set(ControlMode.Position, targetPosition);
 //    rightFront.set(ControlMode.Position, targetPosition);
