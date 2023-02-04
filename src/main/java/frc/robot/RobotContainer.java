@@ -4,68 +4,131 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import frc.robot.commands.LimeLight;
+import frc.robot.subsystems.DriveSystem;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
+ * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  public static final Drivetrain drivetrain = new Drivetrain();
+  //public static DriveSystem driveSystem = new DriveSystem();
+  // public static Climb climb = new Climb();
+  public static DriveSystem driveSystem = new DriveSystem();
+  public static final LimeLight limeLight = new LimeLight();
 
-  // controllers
-  private static Joystick controller1 = new Joystick(0); //driver
-  private static Joystick controller2 = new Joystick(1); //operator
+  
+  private static Joystick controller1 = new Joystick(0);
+  private static Joystick controller2 = new Joystick(1);
+  
+  // Initialize the drive command
+    public Command defaultDrive = new RunCommand(
+      () -> driveSystem.tankDriveVelocity(
+        controller1.getRawAxis(1)*0.1,
+        controller1.getRawAxis(5)*0.1
+      ),
+      driveSystem
+    );
+
+    public Command slowOn = new InstantCommand(
+      () -> driveSystem.setSlow(true),
+      driveSystem
+    );
+
+    public Command slowOff = new InstantCommand(
+      () -> driveSystem.setSlow(false),
+      driveSystem
+    );
+
+   /*  public Command runLimeLight = new RunCommand(
+      () -> limeLight.execute(),
+      driveSystem);
+
+    public Command faceTarget = new InstantCommand(
+      () ->driveSystem.tankDriveVelocity(
+        limeLight.getX()>0.1 ? 0.1 : -0.1,
+        limeLight.getX()>0.1 ? -0.1 : 0.1
+      ),
+      driveSystem
+    );
+
+*/
+
+    public Command straightTrue = new InstantCommand(
+      () -> driveSystem.setStraight(true),
+      driveSystem
+    );
+
+    public Command straightFalse = new InstantCommand(
+      () -> driveSystem.setStraight(false),
+      driveSystem
+    );
+
+  // climb percent output commands for motors
+  // public static Command climbPercentForward() {
+  //   return new RunCommand(
+  //     () -> RobotContainer.climb.climbPercent(
+  //       controller2.getRawAxis(1)
+  //     ), 
+  //     RobotContainer.climb
+  //     );
+  // }
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
-    configureBindings();
+    // Configure the button bindings
+    configureButtonBindings();
     configureDefaultCommands();
   }
 
-  public Command defaultDrive = new RunCommand(
-      () -> drivetrain.tankDrive(
-        controller1.getRawAxis(1),
-        controller1.getRawAxis(5)
-      ),
-      drivetrain
-    );
-
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+  private void configureButtonBindings() {
+    // drive buttons
+  
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    Trigger slowToggle = new Trigger(() -> controller1.getRawAxis(3) > 0.5);
+    slowToggle.whileTrue(slowOn);
+    slowToggle.whileFalse(slowOff);
+
+   /*  JoystickButton limeLightButton = new JoystickButton(controller1, Constants.BBUTTON);
+    JoystickButton face = new JoystickButton(controller1, Constants.XBUTTON);
+
+    limeLightButton.whileTrue(runLimeLight);
+
+    if(limeLight.getX()>1){
+      face.whileTrue(faceTarget);
+    }
+*/
   }
 
   private void configureDefaultCommands() {
-    drivetrain.setDefaultCommand(defaultDrive);
+    driveSystem.setDefaultCommand(defaultDrive);
+    CommandScheduler scheduler = CommandScheduler.getInstance();
+    scheduler.setDefaultCommand(driveSystem, defaultDrive);
+
+
+    // scheduler.addButton(() -> indexUpCommand());
+    // scheduler.addButton(() -> indexDownCommand());
   }
 
   /**
@@ -73,8 +136,5 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
+
 }

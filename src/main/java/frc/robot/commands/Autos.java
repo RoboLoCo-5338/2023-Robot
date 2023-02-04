@@ -5,9 +5,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import frc.robot.Direction;
+import frc.robot.commands.Direction;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands; 
