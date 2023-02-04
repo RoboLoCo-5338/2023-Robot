@@ -4,13 +4,17 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants;
 import frc.robot.Direction;
+
 
 public class Drivetrain extends SubsystemBase {
   // TODO Placeholder constants.
@@ -41,15 +45,31 @@ public class Drivetrain extends SubsystemBase {
   public static double targetPosition;
   public static Direction targetDirection;
 
+  private RelativeEncoder leftEncoder;
+  private RelativeEncoder rightEncoder;
+  private SparkMaxPIDController rightFrontPID;
+  private SparkMaxPIDController leftFrontPID;
+
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     leftFront = new CANSparkMax(Constants.MOTOR_ID_3, MotorType.kBrushless);
+    leftEncoder = leftFront.getEncoder();
     leftRear = new CANSparkMax(Constants.MOTOR_ID_2, MotorType.kBrushless);
     leftRear.follow(leftFront);
 
     rightFront = new CANSparkMax(Constants.MOTOR_ID_1, MotorType.kBrushless);
+    rightEncoder = rightFront.getEncoder();
     rightRear = new CANSparkMax(Constants.MOTOR_ID_0, MotorType.kBrushless);
     rightRear.follow(rightFront);
+
+    leftEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    leftEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    rightEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    rightEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+
+    rightFrontPID = leftFront.getPIDController();
+    leftFrontPID = rightFront.getPIDController();
+
   }
 
   public void tankDrive(double left, double right) {
@@ -79,45 +99,42 @@ public class Drivetrain extends SubsystemBase {
       targetPosition = 0;
     }
 
+    SmartDashboard.putNumber("SetPoint", targetPosition);
+    SmartDashboard.putNumber( "Left Position", leftEncoder.getPosition());
+    SmartDashboard.putNumber( "Right Position", rightEncoder.getPosition());
+    rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+    leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+  }
+
+    public double getPosition() {
+      double front = leftEncoder.getPosition() + rightEncoder.getPosition();
+      return front;
+    }
+    
+
 //    leftFront.set(ControlMode.Position, targetPosition);
 //    rightFront.set(ControlMode.Position, targetPosition);
-    tankDrive(targetPosition, targetPosition);
-  }
-/* 
+  
+ 
   public void setPID(double kP, double kI, double kD, double kF) {
-    SparkMaxPIDController rightFrontPID = rightFront.getPIDController();
+
     rightFrontPID.setP(kP);
     rightFrontPID.setI(kI);
     rightFrontPID.setD(kD);
     rightFrontPID.setFF(kF);
     rightFront.setCANTimeout(100);
 
-    SparkMaxPIDController leftFrontPID = leftFront.getPIDController();
     leftFrontPID.setP(kP);
     leftFrontPID.setI(kI);
     leftFrontPID.setD(kD);
     leftFrontPID.setFF(kF);
     leftFront.setCANTimeout(100);
-
-    SparkMaxPIDController rightRearPID = rightRear.getPIDController();
-    rightRearPID.setP(kP);
-    rightRearPID.setI(kI);
-    rightRearPID.setD(kD);
-    rightFrontPID.setFF(kF);
-    rightFront.setCANTimeout(100);
-
-    SparkMaxPIDController leftRearPID = leftRear.getPIDController();
-    leftRearPID.setP(kP);
-    leftRearPID.setI(kI);
-    leftRearPID.setD(kD);
-    leftRearPID.setFF(kF);
-    leftRear.setCANTimeout(100);
   }
-*/
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+  
 }
