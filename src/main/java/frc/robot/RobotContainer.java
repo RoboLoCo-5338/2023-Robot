@@ -38,8 +38,8 @@ public class RobotContainer {
   // Initialize the drive command
     public Command defaultDrive = new RunCommand(
       () -> driveSystem.tankDriveVelocity(
-        controller1.getRawAxis(1)*0.1,
-        controller1.getRawAxis(5)*0.1
+        controller1.getRawAxis(1)*0.2,
+        controller1.getRawAxis(5)*0.2
       ),
       driveSystem
     );
@@ -54,19 +54,12 @@ public class RobotContainer {
       driveSystem
     );
 
-   /*  public Command runLimeLight = new RunCommand(
+     public Command runLimeLight = new RunCommand(
       () -> limeLight.execute(),
       driveSystem);
 
-    public Command faceTarget = new InstantCommand(
-      () ->driveSystem.tankDriveVelocity(
-        limeLight.getX()>0.1 ? 0.1 : -0.1,
-        limeLight.getX()>0.1 ? -0.1 : 0.1
-      ),
-      driveSystem
-    );
+    
 
-*/
 
     public Command straightTrue = new InstantCommand(
       () -> driveSystem.setStraight(true),
@@ -110,15 +103,15 @@ public class RobotContainer {
     slowToggle.whileTrue(slowOn);
     slowToggle.whileFalse(slowOff);
 
-   /*  JoystickButton limeLightButton = new JoystickButton(controller1, Constants.BBUTTON);
-    JoystickButton face = new JoystickButton(controller1, Constants.XBUTTON);
+     JoystickButton limeLightButton = new JoystickButton(controller1, Constants.BBUTTON);
+  
 
     limeLightButton.whileTrue(runLimeLight);
 
-    if(limeLight.getX()>1){
-      face.whileTrue(faceTarget);
-    }
-*/
+    
+
+    
+
   }
 
   private void configureDefaultCommands() {

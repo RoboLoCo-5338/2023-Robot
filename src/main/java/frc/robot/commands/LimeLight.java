@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -17,6 +18,7 @@ public class LimeLight extends CommandBase {
   private double x;
   private double y;
   private double area;
+  private double p;
 
 
   /** Creates a new LimeLight. */
@@ -25,6 +27,7 @@ public class LimeLight extends CommandBase {
     x=0;
     y=0;
     area=0;
+    p=0.02;
   }
 
   // Called when the command is initially scheduled.
@@ -50,18 +53,26 @@ area = ta.getDouble(0.0);
   SmartDashboard.putNumber("LimelightY", y);
   SmartDashboard.putNumber("LimelightArea", area);
   System.out.println(x);
+  
+  double left= -p*x > 0 ? Math.min(-p*x, 0.3) : Math.max(-p*x, -0.3);
+  double right= p*x > 0 ? Math.min(p*x, 0.3) : Math.max(p*x, -0.3);
+
+  if(x!=0){
+    RobotContainer.driveSystem.tankDriveVelocity(left, right);
+  }
+  
 
 
   }
 
-  /*public double getX(){
+  public double getX(){
     return x;
   }
 
   public double getY(){
-    return x;
+    return y;
   }
-*/
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
