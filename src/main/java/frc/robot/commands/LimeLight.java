@@ -15,13 +15,13 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class LimeLight extends CommandBase {
 
   private NetworkTable table;
-  private double x;
-  private double y;
-  private double area;
-  private double p;
+  private double x;//tx value
+  private double y;//ty value
+  private double area;//ta value
+  private double p;//multiplier value (proportional speed for turning depending on tx value)
 
 
-  /** Creates a new LimeLight. */
+  /** Creates a new LimeLight + sets initial values. */
   public LimeLight() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
     x=0;
@@ -37,39 +37,36 @@ public class LimeLight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     SmartDashboard.putString("HELLO", "HELLO");  
     NetworkTableEntry tx = table.getEntry("tx");
-  NetworkTableEntry ty = table.getEntry("ty");
-  NetworkTableEntry ta = table.getEntry("ta");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
 
-//read values periodically
-x = tx.getDouble(0.0);
-y = ty.getDouble(0.0);
-area = ta.getDouble(0.0);
+    //read values periodically + get 
+    x = tx.getDouble(0.0);
+    y  = ty.getDouble(0.0);
+    area = ta.getDouble(0.0);
 
-  //post to smart dashboard periodically
-  SmartDashboard.putNumber("LimelightX", x);  
-  SmartDashboard.putNumber("LimelightY", y);
-  SmartDashboard.putNumber("LimelightArea", area);
-  System.out.println(x);
+    //post to smart dashboard periodically
+    SmartDashboard.putNumber("LimelightX", x);  
+    SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightArea", area);
+    //System.out.println(x);
   
-  double left= -p*x > 0 ? Math.min(-p*x, 0.3) : Math.max(-p*x, -0.3);
-  double right= p*x > 0 ? Math.min(p*x, 0.3) : Math.max(p*x, -0.3);
+    //sets velocity value for turning towards the target
+    double left= -p*x > 0 ? Math.min(-p*x, 0.3) : Math.max(-p*x, -0.3);//basically an if else statement; if it's greater, choose the smaller of the values, else chooses the max of the other two values
+    double right= p*x > 0 ? Math.min(p*x, 0.3) : Math.max(p*x, -0.3);
 
-  if(x!=0){
-    RobotContainer.driveSystem.tankDriveVelocity(left, right);
-  }
-  
-
-
+    if(x!=0){//turns when not facing the april tag/when the tag is not in sight
+      RobotContainer.driveSystem.tankDriveVelocity(left, right);
+    }
   }
 
-  public double getX(){
+  public double getX(){//getter for x
     return x;
   }
 
-  public double getY(){
+  public double getY(){//getter for y
     return y;
   }
 
