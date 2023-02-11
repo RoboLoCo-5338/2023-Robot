@@ -9,7 +9,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 
 import frc.robot.Constants;
-import frc.robot.Direction;
+import frc.robot.commands.Direction;
+
+import com.revrobotics.RelativeEncoder; 
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 
 public class Drivetrain extends SubsystemBase {
   // TODO Placeholder constants.
@@ -19,34 +23,49 @@ public class Drivetrain extends SubsystemBase {
   private static final double GEAR_RATIO = 10.7 / 1;
   private static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
 
-  // PID values for teleop.
-  public static final double VELOCITY_P = 0.0110;
-  public static final double VELOCITY_I = 0.0;
-  public static final double VELOCITY_D = 0.0;
-  public static final double VELOCITY_FEED_FORWARD = 0.0;
-
   // PID values for autonomous.
   public static final double POSITION_P = 0.0175821;
   public static final double POSITION_I = 0.0;
   public static final double POSITION_D = 0.0020951;
   public static final double POSITION_FEED_FORWARD = 0.0;
 
+  // motors and encoders 
   private CANSparkMax leftFront;
   private CANSparkMax leftRear;
   private CANSparkMax rightFront;
   private CANSparkMax rightRear;
+  private RelativeEncoder leftEncoder;
+  private RelativeEncoder rightEncoder;
   public static double targetPosition;
   public static Direction targetDirection;
+  private SparkMaxPIDController rightFrontPID; 
+  private SparkMaxPIDController leftFrontPID;
+  
+
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
-    leftFront = new CANSparkMax(Constants.MOTOR_ID_0, null);
+    leftFront = new CANSparkMax(Constants.MOTOR_ID_0, MotorType.kBrushless);
+    leftEncoder = leftFront.getEncoder(); 
     leftRear = new CANSparkMax(Constants.MOTOR_ID_1, null);
     leftRear.follow(leftFront);
 
-    rightFront = new CANSparkMax(Constants.MOTOR_ID_2, null);
+    rightFront = new CANSparkMax(Constants.MOTOR_ID_2, MotorType.kBrushless); // might need to change MotorType
+    rightEncoder = rightFront.getEncoder(); 
     rightRear = new CANSparkMax(Constants.MOTOR_ID_3, null);
     rightRear.follow(rightFront);
+
+    // set conversion factors to GEAR_RATIO
+    leftEncoder.setPositionConversionFactor(GEAR_RATIO / WHEEL_CIRCUMFERENCE);
+    rightEncoder.setVelocityConversionFactor(GEAR_RATIO / WHEEL_CIRCUMFERENCE);
+    leftEncoder.setPositionConversionFactor(GEAR_RATIO / WHEEL_CIRCUMFERENCE);
+    rightEncoder.setVelocityConversionFactor(GEAR_RATIO / WHEEL_CIRCUMFERENCE);
+
+    rightFrontPID = rightFront.getPIDController();
+    leftFrontPID = leftFront.getPIDController();
+
+    // method to set PID values 
+    this.setPID(POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
   }
 
   public void tankDrive(double left, double right) {
@@ -64,39 +83,35 @@ public class Drivetrain extends SubsystemBase {
       targetPosition = 0;
     }
 
-//    leftFront.set(ControlMode.Position, targetPosition);
-//    rightFront.set(ControlMode.Position, targetPosition);
-    tankDrive(targetPosition, targetPosition);
+    leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+    rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
   }
 
   public void setPID(double kP, double kI, double kD, double kF) {
-    SparkMaxPIDController rightFrontPID = rightFront.getPIDController();
     rightFrontPID.setP(kP);
     rightFrontPID.setI(kI);
     rightFrontPID.setD(kD);
     rightFrontPID.setFF(kF);
     rightFront.setCANTimeout(100);
 
-    SparkMaxPIDController leftFrontPID = leftFront.getPIDController();
     leftFrontPID.setP(kP);
     leftFrontPID.setI(kI);
     leftFrontPID.setD(kD);
     leftFrontPID.setFF(kF);
     leftFront.setCANTimeout(100);
 
-    SparkMaxPIDController rightRearPID = rightRear.getPIDController();
-    rightRearPID.setP(kP);
-    rightRearPID.setI(kI);
-    rightRearPID.setD(kD);
-    rightFrontPID.setFF(kF);
-    rightFront.setCANTimeout(100);
+  }
 
-    SparkMaxPIDController leftRearPID = leftRear.getPIDController();
-    leftRearPID.setP(kP);
-    leftRearPID.setI(kI);
-    leftRearPID.setD(kD);
-    leftRearPID.setFF(kF);
-    leftRear.setCANTimeout(100);
+  public double getPosition() {
+    double front = leftEncoder.getPosition() + rightEncoder.getPosition();
+    // double rear = leftRear.getEncoder() + rightRear.getEncoder()
+    // double avg = (front + rear) / 4.0;
+    return front;
+  }
+
+  public void resetPosition(){
+    leftEncoder.setPosition(0);
+    rightEncoder.setPosition(0);
   }
 
 
