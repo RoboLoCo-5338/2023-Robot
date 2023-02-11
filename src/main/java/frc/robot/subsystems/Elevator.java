@@ -26,7 +26,7 @@ public class Elevator extends SubsystemBase {
 
   public void change(double inches, Height height) {
       changePosition = targetPosition - height
-      sparkMax.set(changePosition)
+      sparkMax.setPosition(changePosition)
   }
 
 
