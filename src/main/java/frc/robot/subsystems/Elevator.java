@@ -11,7 +11,6 @@ import com.revrobotics.SparkMaxPIDController;
 
 
 import frc.robot.Constants;
-import frc.robot.Height;
 
 public class Elevator extends SubsystemBase {
 
@@ -25,8 +24,8 @@ public class Elevator extends SubsystemBase {
     }
 
   public void change(double inches, Height height) {
-      changePosition = targetPosition - height
-      sparkMax.setPosition(changePosition)
+      changePosition = targetPosition - height;
+      sparkMax.set(changePosition);
   }
 
 
