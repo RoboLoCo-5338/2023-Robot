@@ -30,13 +30,13 @@ public class Drivetrain extends SubsystemBase {
   public static final double VELOCITY_I = 0.0;
   public static final double VELOCITY_D = 0.0;
   public static final double VELOCITY_FEED_FORWARD = 0.0;
-
-  // PID values for autonomous.
-  public static final double POSITION_P = 0.0175821;
-  public static final double POSITION_I = 0.0;
-  public static final double POSITION_D = 0.0020951;
-  public static final double POSITION_FEED_FORWARD = 0.0;
   */
+
+  //PID values for autonomous.
+  public static final double POSITION_P = 0.01;
+  public static final double POSITION_I = 0.0;
+  public static final double POSITION_D = 0.0;
+  public static final double POSITION_FEED_FORWARD = 0.0;
 
   private CANSparkMax leftFront;
   private CANSparkMax leftRear;
@@ -69,6 +69,8 @@ public class Drivetrain extends SubsystemBase {
 
     rightFrontPID = leftFront.getPIDController();
     leftFrontPID = rightFront.getPIDController();
+
+    setPID(POSITION_I, POSITION_FEED_FORWARD, POSITION_D, GEAR_RATIO);
 
   }
 
@@ -115,9 +117,6 @@ public class Drivetrain extends SubsystemBase {
       leftEncoder.setPosition(0);
       rightEncoder.setPosition(0);
     }
-
-//    leftFront.set(ControlMode.Position, targetPosition);
-//    rightFront.set(ControlMode.Position, targetPosition);
   
  
   public void setPID(double kP, double kI, double kD, double kF) {
