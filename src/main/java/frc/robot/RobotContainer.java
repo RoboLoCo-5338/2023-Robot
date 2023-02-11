@@ -10,8 +10,9 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.Direction;
 
-import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
+
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -79,6 +80,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return AutoCommands.sampleAuto();
+    return AutoCommands.driveDistanceCommand(20, Direction.FORWARD);
   }
 }

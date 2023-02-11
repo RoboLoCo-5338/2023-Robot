@@ -24,19 +24,19 @@ public class Drivetrain extends SubsystemBase {
   private static final double GEAR_RATIO = 8.8984;
   private static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
 
-  /* 
+
   // PID values for teleop.
-  public static final double VELOCITY_P = 0.0110;
-  public static final double VELOCITY_I = 0.0;
-  public static final double VELOCITY_D = 0.0;
-  public static final double VELOCITY_FEED_FORWARD = 0.0;
+  // public static final double VELOCITY_P = 0.0110;
+  // public static final double VELOCITY_I = 0.0;
+  // public static final double VELOCITY_D = 0.0;
+  // public static final double VELOCITY_FEED_FORWARD = 0.0;
 
   // PID values for autonomous.
-  public static final double POSITION_P = 0.0175821;
+  public static final double POSITION_P = 0.01;
   public static final double POSITION_I = 0.0;
-  public static final double POSITION_D = 0.0020951;
-  public static final double POSITION_FEED_FORWARD = 0.0;
-  */
+  public static final double POSITION_D = 0;
+  public static final double POSITION_FEED_FORWARD = 0;
+
 
   private CANSparkMax leftFront;
   private CANSparkMax leftRear;
@@ -69,6 +69,8 @@ public class Drivetrain extends SubsystemBase {
 
     rightFrontPID = leftFront.getPIDController();
     leftFrontPID = rightFront.getPIDController();
+
+    setPID(POSITION_I, POSITION_FEED_FORWARD, POSITION_D, GEAR_RATIO);
 
   }
 
@@ -114,9 +116,10 @@ public class Drivetrain extends SubsystemBase {
     public void resetPosition(){
       leftEncoder.setPosition(0);
       rightEncoder.setPosition(0);
+      SmartDashboard.putString("Hello", "hi");
     }
 
-//    leftFront.set(ControlMode.Position, targetPosition);
+//    leftFront.set(ControlMode.Position, targetPosition);  
 //    rightFront.set(ControlMode.Position, targetPosition);
   
  
