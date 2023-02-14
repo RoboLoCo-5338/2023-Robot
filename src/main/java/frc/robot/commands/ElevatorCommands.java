@@ -14,9 +14,9 @@ public class ElevatorCommands extends CommandBase {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     public static CommandBase change = new InstantCommand(
-      () -> RobotContainer.elevator.change(),
+      () -> RobotContainer.Elevator.change(),
       RobotContainer.elevator
-    );
+
 
   }
 
