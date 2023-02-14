@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
@@ -23,8 +23,8 @@ public class Elevator extends SubsystemBase {
       sparkMax = new CANSparkMax(Constants.MOTOR_ID_3, MotorType.kBrushless);
     }
 
-  public void change(double inches, Height height) {
-      changePosition = targetPosition - height;
+  public void change() {
+      changePosition = targetPosition - Height;
       sparkMax.set(changePosition);
   }
 
@@ -36,7 +36,7 @@ public class Elevator extends SubsystemBase {
 
 
 /** Add your docs here. */
-public class Elevator extends Subsystem {
+//public class Elevator extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
@@ -46,7 +46,7 @@ public class Elevator extends Subsystem {
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new Change());
   }
 }
 
