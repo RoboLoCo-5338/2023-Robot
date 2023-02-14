@@ -8,10 +8,15 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Elevator;
 
 
-public class Elevator extends Command {
-  public Elevator() {
+public class ElevatorCommands extends Command {
+  public ElevatorCommands() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    public static Command change = new InstantCommand(
+      () -> RobotContainer.elevator.change(),
+      RobotContainer.elevator
+    );
+
   }
 
   // Called just before this Command runs the first time
@@ -23,7 +28,7 @@ public class Elevator extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    RobotContainer.Elevator.change();
+    RobotContainer.ElevatorCommands.change();
   }
 
   @Override
