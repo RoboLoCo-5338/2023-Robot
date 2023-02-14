@@ -4,15 +4,16 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Elevator;
 
 
-public class ElevatorCommands extends Command {
+public class ElevatorCommands extends CommandBase {
+
   public ElevatorCommands() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    public static Command change = new InstantCommand(
+    public static CommandBase change = new InstantCommand(
       () -> RobotContainer.elevator.change(),
       RobotContainer.elevator
     );
