@@ -15,7 +15,7 @@ public class ElevatorCommands extends CommandBase {
     // eg. requires(chassis);
     public static CommandBase change = new InstantCommand(
       () -> RobotContainer.Elevator.change(),
-      RobotContainer.elevator
+      RobotContainer.Elevator
 
 
   }
@@ -23,13 +23,12 @@ public class ElevatorCommands extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    target = System.currentTimeMillis();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    RobotContainer.ElevatorCommands.change();
+    frc.robot.RobotContainer.Elevator.change();
   }
 
   @Override
