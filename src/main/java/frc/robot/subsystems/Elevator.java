@@ -4,15 +4,15 @@
 
 package frc.robot.subsystems;
 
-// import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 // import com.revrobotics.SparkMaxPIDController;
-// import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.Joystick;
 
 
-import frc.robot.Constants;
+
 // import frc.robot.RobotContainer;
 import frc.robot.RobotContainer;
 
@@ -24,8 +24,11 @@ public class Elevator extends SubsystemBase {
   public static double targetPosition;
   public static double changePosition;
 
-  public Elevator() {
+  public Elevator(int port) {
       sparkMax = new CANSparkMax(Constants.MOTOR_ID_3, MotorType.kBrushless);
+      Joystick name = new Joystick(port);
+
+      
     }
 
 
