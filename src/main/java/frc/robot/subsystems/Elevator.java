@@ -19,14 +19,13 @@ import frc.robot.RobotContainer;
 public class Elevator extends SubsystemBase {
 
 
-  private static final double Height = frc.robot.Constants.Height;
-  private CANSparkMax sparkMax;
+  private CANSparkMax elevatorMotor;
   public static double targetPosition;
   public static double changePosition;
 
   public Elevator(int preset) {
-      sparkMax = new CANSparkMax(Constants.MOTOR_ID_4, MotorType.kBrushless);
-      sparkMax.set(preset);
+      elevatorMotor = new CANSparkMax(Constants.MOTOR_ID_4, MotorType.kBrushless);
+      elevatorMotor.set(preset);
     }
 
 
