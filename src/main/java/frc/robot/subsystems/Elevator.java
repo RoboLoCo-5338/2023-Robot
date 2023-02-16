@@ -24,21 +24,22 @@ public class Elevator extends SubsystemBase {
   public static double targetPosition;
   public static double changePosition;
 
-  public Elevator() {
-      sparkMax = new CANSparkMax(Constants.MOTOR_ID_3, MotorType.kBrushless);
+  public Elevator(int preset) {
+      sparkMax = new CANSparkMax(Constants.MOTOR_ID_4, MotorType.kBrushless);
+      sparkMax.set(preset);
     }
 
 
-  public void change() {
-      changePosition = targetPosition - Height;
-      sparkMax.set(changePosition);
-  }
+  // public void change() {
+  //     changePosition = targetPosition - Height;
+  //     sparkMax.set(changePosition);
+  // }
 
 
-public boolean xhenPressed(){
-  final RobotContainer Botcontainer = new RobotContainer();
-  return Botcontainer.controller3.getTopPressed();
-}
+// public boolean xhenPressed(){
+//   final RobotContainer Botcontainer = new RobotContainer();
+//   return Botcontainer.controller3.getTopPressed();
+// }
 
 
 
