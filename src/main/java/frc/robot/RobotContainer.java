@@ -37,7 +37,6 @@ public class RobotContainer {
   // controllers
   private static Joystick controller1 = new Joystick(0); //driver
   private static Joystick controller2 = new Joystick(1); //operator
-  public Joystick controller3 = new Joystick(2); //elevator
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -54,7 +53,8 @@ public class RobotContainer {
       drivetrain
     );
 
-  /**
+
+    /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
