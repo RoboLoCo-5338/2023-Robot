@@ -4,17 +4,20 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 
 
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Elevator extends SubsystemBase {
 
 
+  private static final double Height = frc.robot.Constants.Height;
   private CANSparkMax sparkMax;
   public static double targetPosition;
   public static double changePosition;
@@ -23,10 +26,20 @@ public class Elevator extends SubsystemBase {
       sparkMax = new CANSparkMax(Constants.MOTOR_ID_3, MotorType.kBrushless);
     }
 
+
   public void change() {
       changePosition = targetPosition - Height;
       sparkMax.set(changePosition);
   }
+
+
+public boolean xhenPressed(){
+  return whenPressed();
+  //^^^ want to make it so it returns true when the appropriate button is pressed.
+  //this line is referenced in robotContainer
+  // TODO button press boolean 
+}
+
 
 
 
