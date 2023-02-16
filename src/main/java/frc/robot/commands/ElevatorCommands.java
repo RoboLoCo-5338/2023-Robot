@@ -10,21 +10,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants;
 
 
-/** An example command that uses an example subsystem. */
 public class ElevatorCommands extends CommandBase {
-  private Elevator m_Elevator;
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public ElevatorCommands(Elevator Elevator) {
-    m_Elevator = Elevator;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Elevator);
+  public ElevatorCommands() {
+    execute();
   }
-   
 
   // Called when the command is initially scheduled.
   @Override
@@ -59,9 +49,7 @@ public class ElevatorCommands extends CommandBase {
     }
   }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+
 
   // Returns true when the command should end.
   @Override
