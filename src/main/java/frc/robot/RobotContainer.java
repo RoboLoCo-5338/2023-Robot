@@ -29,13 +29,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final Elevator m_Elevator = new Elevator();
 
+  public static final Elevator m_Elevator = new Elevator();
+  public static ElevatorCommands m_ElevatorCommands;
   public static final Drivetrain drivetrain = new Drivetrain();
 
   // controllers
   private static Joystick controller1 = new Joystick(0); //driver
   private static Joystick controller2 = new Joystick(1); //operator
+  public Joystick controller3 = new Joystick(2); //elevator
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -69,15 +71,15 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-
     new Trigger(m_Elevator::xhenPressed)
-    .onTrue(new ElevatorCommands(m_Elevator));
+        .onTrue(new ElevatorCommands(m_Elevator));
+
   }
+
 
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(defaultDrive);
   }
-
 
 
   /**
@@ -89,9 +91,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
-
-    JoystickTrigger MoveElevator = new JoystickTrigger(GenericHID joystick::LBBUTTON);
-    MoveElevator.whenPressed(ElevatorCommands.change);
   }
 
 

@@ -4,47 +4,39 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Elevator;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-
+/** An example command that uses an example subsystem. */
 public class ElevatorCommands extends CommandBase {
-  private final Elevator m_Elevator;
+  private Elevator m_Elevator;
 
-  @param subsystem 
-
-  public ElevatorCommands(Elevator m_Elevator) {
-    m_Elevator = subsystem;
-
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    public static CommandBase s = new InstantCommand(
-      () -> RobotContainer.Elevator.change(),
-      RobotContainer.Elevator
-
-
+  /**
+   * Creates a new ExampleCommand.
+   *
+   * @param subsystem The subsystem used by this command.
+   */
+  public ElevatorCommands(Elevator Elevator) {
+    m_Elevator = Elevator;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(Elevator);
   }
 
-  // Called just before this Command runs the first time
+  // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
-  // Called repeatedly when this Command is scheduled to run
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    frc.robot.RobotContainer.Elevator.change();
-  }
+  public void execute() {}
 
+  // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
-
-  // Called once after isFinished returns true
+  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return System.currentTimeMillis() - target > targetTime;
+    return false;
   }
 }
-// slightly changed from 2022 shooter code

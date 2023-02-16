@@ -4,14 +4,16 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+// import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxPIDController;
+// import com.revrobotics.SparkMaxPIDController;
+// import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 
 import frc.robot.Constants;
+// import frc.robot.RobotContainer;
 import frc.robot.RobotContainer;
 
 public class Elevator extends SubsystemBase {
@@ -34,10 +36,8 @@ public class Elevator extends SubsystemBase {
 
 
 public boolean xhenPressed(){
-  return whenPressed();
-  //^^^ want to make it so it returns true when the appropriate button is pressed.
-  //this line is referenced in robotContainer
-  // TODO button press boolean 
+  final RobotContainer Botcontainer = new RobotContainer();
+  return Botcontainer.controller3.getTopPressed();
 }
 
 
