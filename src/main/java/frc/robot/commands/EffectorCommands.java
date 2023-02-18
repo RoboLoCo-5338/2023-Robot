@@ -6,23 +6,23 @@ import frc.robot.RobotContainer;
 
 public class EffectorCommands {
     public static Command effectorReverse() {
-        return new InstantCommand(
-			() -> RobotContainer.effector.effectorReverse(),
-			RobotContainer.effector
-		);
+      return new InstantCommand(
+        () -> RobotContainer.effector.effectorReverse(),
+        RobotContainer.effector
+      );
     }
     
     public static Command effectorForward() {
-        return new InstantCommand(
-			() -> RobotContainer.effector.effectorForward(),
-			RobotContainer.effector
-		);
+      return new InstantCommand(
+        () -> RobotContainer.effector.effectorForward(),
+        RobotContainer.effector
+      );
     }
 
     public static Command effectorStop() {
-        return new InstantCommand(
-			() -> RobotContainer.effector.effectorStop(),
-			RobotContainer.effector
-		);
+      return new InstantCommand(
+        () -> RobotContainer.effector.effectorStop(),
+        RobotContainer.effector
+      );
     }
 }
