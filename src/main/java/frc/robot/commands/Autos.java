@@ -4,19 +4,18 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 // import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 // import frc.robot.Direction;
 // import frc.robot.RobotContainer;
 // import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Commands; 
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.RobotContainer; 
 
 public final class Autos {
-  /** Example static factory for an autonomous command. */
-  public static CommandBase exampleAuto(ExampleSubsystem subsystem) {
-    return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
-  }
 /* 
   public static CommandBase driveDistanceCommand(double distance, Direction direction) {
     return new FunctionalCommand(
@@ -28,6 +27,14 @@ public final class Autos {
     );
   }
 */
+
+  public static CommandBase tempCommand() {
+    return new RunCommand(
+      () -> RobotContainer.drivetrain.tankDrive(0,0),
+      RobotContainer.drivetrain
+    );
+  }
+  
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
