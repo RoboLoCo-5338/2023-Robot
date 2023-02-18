@@ -14,11 +14,12 @@ public class Elevator extends SubsystemBase {
 
   public Elevator(int preset) {
       elevatorMotor = new CANSparkMax(Constants.MOTOR_ID_4, MotorType.kBrushless);
-      elevatorMotor.set(preset);
+      // elevatorMotor.set(preset);
     }
 
     public void setHeight(int h) {
-      elevatorMotor.set(g);
+      elevatorMotor.set(h);
+      // TODO 2/18
     }
 }
 
