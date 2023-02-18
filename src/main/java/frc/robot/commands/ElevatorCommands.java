@@ -17,7 +17,7 @@ public class ElevatorCommands extends CommandBase {
 
   public ElevatorCommands() {
     execute();
-    elevator = new Elevator()
+    elevator = new Elevator();
 
     for (int i = 0; i < 10; i++)
       joysticks[port: i] = new Joystick(port: i)
