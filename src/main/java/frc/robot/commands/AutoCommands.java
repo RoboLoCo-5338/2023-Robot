@@ -17,7 +17,7 @@ public class AutoCommands {
       () -> RobotContainer.drivetrain.resetPosition(),
       () -> RobotContainer.drivetrain.driveDistance(distance, direction),
       (interrupt) -> RobotContainer.drivetrain.tankDrive(0, 0),
-      () -> Math.abs(RobotContainer.drivetrain.getPosition()) >= Math.abs(RobotContainer.drivetrain.targetPosition) - 1000,
+      () -> Math.abs(RobotContainer.drivetrain.getPosition()) >= Math.abs(RobotContainer.drivetrain.targetPosition) - 0.1,
       RobotContainer.drivetrain
     );
   }

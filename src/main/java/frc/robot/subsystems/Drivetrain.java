@@ -32,7 +32,7 @@ public class Drivetrain extends SubsystemBase {
   // public static final double VELOCITY_FEED_FORWARD = 0.0;
 
   // PID values for autonomous.
-  public static final double POSITION_P = 0.01;
+  public static final double POSITION_P = 0.1;
   public static final double POSITION_I = 0.0;
   public static final double POSITION_D = 0;
   public static final double POSITION_FEED_FORWARD = 0;
@@ -57,6 +57,9 @@ public class Drivetrain extends SubsystemBase {
     leftRear = new CANSparkMax(Constants.MOTOR_ID_2, MotorType.kBrushless);
     leftRear.follow(leftFront);
 
+    leftFront.setInverted(true);
+
+
     rightFront = new CANSparkMax(Constants.MOTOR_ID_1, MotorType.kBrushless);
     rightEncoder = rightFront.getEncoder();
     rightRear = new CANSparkMax(Constants.MOTOR_ID_0, MotorType.kBrushless);
@@ -69,6 +72,10 @@ public class Drivetrain extends SubsystemBase {
 
     rightFrontPID = leftFront.getPIDController();
     leftFrontPID = rightFront.getPIDController();
+
+    leftFrontPID.setOutputRange(-0.1, 0.1);
+    rightFrontPID.setOutputRange(-0.1, 0.1);
+
 
     setPID(POSITION_I, POSITION_FEED_FORWARD, POSITION_D, GEAR_RATIO);
 
@@ -86,17 +93,17 @@ public class Drivetrain extends SubsystemBase {
 
     */
 
-    leftFront.set(left*1/2);
-    rightFront.set(-right*1/2);
+    leftFront.set(left*1/9);
+    rightFront.set(-right*1/9);
     
   }
 
   public void driveDistance(double inches, Direction direction) {
     targetDirection = direction;
     if (direction == Direction.FORWARD) {
-      targetPosition = -inches * TICKS_PER_INCH * GEAR_RATIO;
+      targetPosition = -inches;
     } else if (direction == Direction.BACKWARD) {
-      targetPosition = inches * TICKS_PER_INCH * GEAR_RATIO;
+      targetPosition = inches;
     } else {
       targetPosition = 0;
     }
@@ -109,8 +116,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
     public double getPosition() {
-      double front = leftEncoder.getPosition() + rightEncoder.getPosition();
-      return front;
+      return (leftEncoder.getPosition() + rightEncoder.getPosition())/2;
     }
     
     public void resetPosition(){

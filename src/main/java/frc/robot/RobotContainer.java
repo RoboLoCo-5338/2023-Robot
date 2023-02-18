@@ -80,6 +80,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return AutoCommands.driveDistanceCommand(20, Direction.FORWARD);
+    return AutoCommands.driveDistanceCommand(60, Direction.FORWARD);
   }
 }
