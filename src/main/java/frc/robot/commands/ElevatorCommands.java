@@ -11,9 +11,16 @@ import frc.robot.Constants;
 
 
 public class ElevatorCommands extends CommandBase {
+  Elevator elevator;
+  Joystick joysticks[] = new Joystick [10]();
+  Constants m_constants = new Constants();
 
   public ElevatorCommands() {
     execute();
+    elevator = new Elevator()
+
+    for (int i = 0; i < 10; i++)
+      joysticks[port: i] = new Joystick(port: i)
   }
 
   // Called when the command is initially scheduled.
@@ -23,17 +30,13 @@ public class ElevatorCommands extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-     Constants m_constants = new Constants();
 
-    Joystick controller3 = new Joystick(3);
-    Joystick controller4 = new Joystick(4);
-    Joystick controller5 = new Joystick(5);
-    Joystick controller6 = new Joystick(6);
-    Joystick controller7 = new Joystick(7);
-
+    for (Joystick j : enumerate Joysticks)
+      if (j.getTopPressed())
+        this.elevator.setHeight(0);
 
     if (controller3.getTopPressed()){
-      Elevator elevator = new Elevator(Constants.height1);
+      this.elevator = new Elevator(Constants.height1);
     }
     if (controller4.getTopPressed()){
       Elevator elevator = new Elevator(Constants.height2);
