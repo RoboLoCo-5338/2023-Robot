@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.AutoCommands;
+import frc.robot.commands.Direction;
 import frc.robot.subsystems.Drivetrain;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -72,6 +73,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return AutoCommands.sampleAuto();
+    return AutoCommands.driveDistanceCommand(60, Direction.FORWARD);
   }
 }
