@@ -37,9 +37,6 @@ public class RobotContainer {
   // controllers
   private static Joystick controller1 = new Joystick(0); //driver
   private static Joystick controller2 = new Joystick(1); //operator
-  public Button button;
-  // TODO with only these two controllers, have n buttons that ElevatorCommands can reference to know when they've been pressed.
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -70,7 +67,6 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
-        
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
@@ -81,7 +77,6 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(defaultDrive);
-    
   }
 
 

@@ -19,7 +19,7 @@ public class Elevator extends SubsystemBase {
 
     public void setHeight(int h) {
       elevatorMotor.set(h);
-      // TODO 2/18 (photo sent in email)
+      // TODO 2/18
     }
 }
 
