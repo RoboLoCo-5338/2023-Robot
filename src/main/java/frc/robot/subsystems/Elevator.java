@@ -12,7 +12,7 @@ import frc.robot.Constants;
 public class Elevator extends SubsystemBase {
   private CANSparkMax elevatorMotor;
 
-  public Elevator() {
+  public Elevator(int preset) {
       elevatorMotor = new CANSparkMax(Constants.MOTOR_ID_4, MotorType.kBrushless);
       // elevatorMotor.set(preset);
     }
