@@ -3,23 +3,16 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import frc.robot.Constants;
 
-public class Elevator extends SubsystemBase {
-  private CANSparkMax elevatorMotor;
 
-  public Elevator() {
-      elevatorMotor = new CANSparkMax(Constants.MOTOR_ID_4, MotorType.kBrushless);
-      // elevatorMotor.set(preset);
-    }
-
-    public void setHeight(int h) {
-      elevatorMotor.set(h);
-      // TODO 2/18 (photo sent in email)
-    }
+/** Add your docs here. */
+public class Arm extends SubsystemBase{
+    private CANSparkMax armMotor;
+}   public Arm(int preset) {
+    armMotor = new CANSparkMax(Constants.MOTOR_ID_5, MotorType.kBrushless);
+      armMotor.set(preset);
 }
-
