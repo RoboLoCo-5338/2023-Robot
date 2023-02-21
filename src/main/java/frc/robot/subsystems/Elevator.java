@@ -16,9 +16,5 @@ public class Elevator extends SubsystemBase {
       elevatorMotor = new CANSparkMax(Constants.MOTOR_ID_4, MotorType.kBrushless);
       elevatorMotor.set(preset);
     }
-
-    public void setHeight(int h) {
-      elevatorMotor.set(g);
-    }
 }
 
