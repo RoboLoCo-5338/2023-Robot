@@ -8,6 +8,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Drivetrain;
 
 
 public class autocommands {
@@ -19,7 +20,7 @@ public class autocommands {
           () -> RobotContainer.drivetrain.resetPosition(),
           () -> RobotContainer.drivetrain.driveDistance(distance , Direction.BACKWARD),
           (interrupt) -> RobotContainer.drivetrain.tankDrive(0, 0),
-          () -> Math.abs(RobotContainer.drivetrain.getPosition()) >= Math.abs(RobotContainer.drivetrain.targetPosition) - 1000,
+          () -> Math.abs(RobotContainer.drivetrain.getPosition()) >= Math.abs(Drivetrain.targetPosition) - 1000,
           RobotContainer.drivetrain
         );
       }
@@ -40,7 +41,7 @@ public class autocommands {
         () -> RobotContainer.drivetrain.resetPosition(),
         () -> RobotContainer.drivetrain.driveDistance(distance, Direction.FORWARD),
         (interrupt) -> RobotContainer.drivetrain.tankDrive(0, 0),
-        () -> Math.abs(RobotContainer.drivetrain.getPosition()) >= Math.abs(RobotContainer.drivetrain.targetPosition) - 1000,
+        () -> Math.abs(RobotContainer.drivetrain.getPosition()) >= Math.abs(Drivetrain.targetPosition) - 1000,
         RobotContainer.drivetrain
       );
     }
