@@ -12,7 +12,11 @@ import frc.robot.Constants;
 /** Add your docs here. */
 public class Arm extends SubsystemBase{
     private CANSparkMax armMotor;
-}   public Arm(int preset) {
-    armMotor = new CANSparkMax(Constants.MOTOR_ID_5, MotorType.kBrushless);
-      armMotor.set(preset);
-}
+
+    public Arm() {
+        armMotor = new CANSparkMax(Constants.MOTOR_ID_5, MotorType.kBrushless);
+    }
+
+   
+
+}  
