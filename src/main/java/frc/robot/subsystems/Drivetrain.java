@@ -26,15 +26,26 @@ public class Drivetrain extends SubsystemBase {
 
 
   // PID values for teleop.
-  // public static final double VELOCITY_P = 0.0110;
-  // public static final double VELOCITY_I = 0.0;
-  // public static final double VELOCITY_D = 0.0;
-  // public static final double VELOCITY_FEED_FORWARD = 0.0;
+   public static final double VELOCITY_P = 0.0110;
+   public static final double VELOCITY_I = 0.0;
+   public static final double VELOCITY_D = 0.0;
+   public static final double VELOCITY_FEED_FORWARD = 0.0;
 
   // PID values for autonomous.
-  public static final double POSITION_P = 0.1;
-  public static final double POSITION_I = 0.0;
-  public static final double POSITION_D = 0;
+  //public static final double POSITION_P = 1;
+  public static final double POSITION_I = 0;
+  public static final double POSITION_D = 0.01;
+
+  public static final double RIGHT_POSITION_P = 0.065;
+  public static final double LEFT_POSITION_P = 0.01;
+
+  //public static final double RIGHT_POSITION_I = 0.0;
+  //public static final double LEFT_POSITION_I = 0;
+
+  //public static final double RIGHT_POSITION_D = 0;
+  //public static final double LEFT_POSITION_D = 0;
+
+
   public static final double POSITION_FEED_FORWARD = 0;
 
 
@@ -77,7 +88,8 @@ public class Drivetrain extends SubsystemBase {
     rightFrontPID.setOutputRange(-0.1, 0.1);
 
 
-    setPID(POSITION_I, POSITION_FEED_FORWARD, POSITION_D, GEAR_RATIO);
+    setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
+    setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
 
   }
 
@@ -111,9 +123,16 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("SetPoint", targetPosition);
     SmartDashboard.putNumber( "Left Position", leftEncoder.getPosition());
     SmartDashboard.putNumber( "Right Position", rightEncoder.getPosition());
-    rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
-    leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+    //rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+    //leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+
   }
+
+  public void tankDriveVelocity(double leftVelocity, double rightVelocity){
+    rightFrontPID.setReference(rightVelocity, CANSparkMax.ControlType.kVelocity);
+    leftFrontPID.setReference(leftVelocity, CANSparkMax.ControlType.kVelocity);
+  }
+
 
     public double getPosition() {
       return (leftEncoder.getPosition() + rightEncoder.getPosition())/2;
@@ -124,12 +143,32 @@ public class Drivetrain extends SubsystemBase {
       rightEncoder.setPosition(0);
       SmartDashboard.putString("Hello", "hi");
     }
+  
+  public void resetVelocity(){
+    rightFrontPID.setReference(0, CANSparkMax.ControlType.kVelocity);
+    leftFrontPID.setReference(0, CANSparkMax.ControlType.kVelocity);
+  }
 
 //    leftFront.set(ControlMode.Position, targetPosition);  
 //    rightFront.set(ControlMode.Position, targetPosition);
   
  
-  public void setPID(double kP, double kI, double kD, double kF) {
+  public void setPositionPID(double kPR, double kPL, double kI, double kD, double kF) {
+
+    rightFrontPID.setP(kPR);
+    rightFrontPID.setI(kI);
+    rightFrontPID.setD(kD);
+    rightFrontPID.setFF(kF);
+    rightFront.setCANTimeout(100);
+
+    leftFrontPID.setP(kPL);
+    leftFrontPID.setI(kI);
+    leftFrontPID.setD(kD);
+    leftFrontPID.setFF(kF);
+    leftFront.setCANTimeout(100);
+  }
+
+  public void setVelocityPID(double kP, double kI, double kD, double kF) {
 
     rightFrontPID.setP(kP);
     rightFrontPID.setI(kI);
@@ -143,7 +182,6 @@ public class Drivetrain extends SubsystemBase {
     leftFrontPID.setFF(kF);
     leftFront.setCANTimeout(100);
   }
-
 
   @Override
   public void periodic() {

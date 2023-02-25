@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
@@ -21,10 +20,21 @@ public class AutoCommands {
       RobotContainer.drivetrain
     );
   }
+  public static Command driveVelocityCommand(double distance, double leftVelocity, double rightVelocity){
+    return new FunctionalCommand( 
+      () -> RobotContainer.drivetrain.resetVelocity(),
+      () -> RobotContainer.drivetrain.tankDriveVelocity(leftVelocity, rightVelocity),
+      (interrupt) -> RobotContainer.drivetrain.tankDriveVelocity(0, 0),
+      () -> Math.abs(RobotContainer.drivetrain.getPosition())>= Math.abs(distance) - 0.1,
+      RobotContainer.drivetrain
+    );
+  }
+
 
   public static Command sampleAuto() {
     return new SequentialCommandGroup(
-      driveDistanceCommand(20, Direction.FORWARD)
+      driveDistanceCommand(20, Direction.FORWARD),
+      driveVelocityCommand(20, 20, 20),
     );
   }
 }

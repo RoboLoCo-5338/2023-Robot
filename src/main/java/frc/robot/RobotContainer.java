@@ -42,13 +42,21 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
+  // public Command defaultDrive = new RunCommand(
+  //     () -> drivetrain.tankDrive(
+  //       controller1.getRawAxis(1),
+  //       controller1.getRawAxis(5)
+  //     ),
+  //     drivetrain
+  //   );
+  
   public Command defaultDrive = new RunCommand(
-      () -> drivetrain.tankDrive(
-        controller1.getRawAxis(1),
-        controller1.getRawAxis(5)
-      ),
-      drivetrain
-    );
+    () -> drivetrain.tankDriveVelocity(
+      controller1.getRawAxis(1),
+      controller1.getRawAxis(5)
+    ),
+    drivetrain
+  );
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -80,6 +88,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return AutoCommands.driveDistanceCommand(60, Direction.FORWARD);
+    //return AutoCommands.driveDistanceCommand(120, Direction.FORWARD);
+    return AutoCommands.driveVelocityCommand(0, 0, 0);
   }
+  
 }
