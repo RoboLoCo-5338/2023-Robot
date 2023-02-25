@@ -37,6 +37,10 @@ public class ArmCommands extends CommandBase {
     elevator.moveArm(-0.1);
   }
 
+  public void stop(Elevator elevator){
+    elevator.stopArm();
+  }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

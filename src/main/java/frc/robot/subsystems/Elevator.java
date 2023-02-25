@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -18,11 +19,11 @@ public class Elevator extends SubsystemBase {
   private CANSparkMax elevatorMotor;
   private RelativeEncoder elevatorEncoder;
   private SparkMaxPIDController elevatorController;
-  private double[] elevatorHeights = new double[3];
+  private double[] elevatorHeights = new double[5];
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
   private SparkMaxPIDController armController;
-  private double[] armHeights = new double[3];
+  private double[] armHeights = new double[5];
 
   public static double elevatorP=0.1;
   public static double elevatorI=0.0;
@@ -45,10 +46,12 @@ public class Elevator extends SubsystemBase {
       armController = armMotor.getPIDController();
       armController.setOutputRange(-0.1, 0.1);
       armEncoder.setPositionConversionFactor(1);
+
+      configController();
       
     }
 
-    public void setHeight(int preset){
+    public void setElevatorHeight(int preset){
       double current = elevatorEncoder.getPosition();
       double change = elevatorHeights[preset] - current;
       elevatorController.setReference(change, ControlType.kPosition);
@@ -79,25 +82,40 @@ public class Elevator extends SubsystemBase {
       armEncoder.setPosition(0);
     }
 
-    public double getPosition(){
+    public double getArmPosition(){
 
       return armEncoder.getPosition();
+    
+
+    }
+
+    public void stopArm(){
+      armMotor.set(0);
+    }
+
+    public void stopElevator(){
+      elevatorMotor.set(0);
+    }
+
+    public double getElevatorPosition(){
+
       return elevatorEncoder.getPosition();
 
     }
 
-    //private void configController(CANSparkMax sparkMax, double kP, double kI, double kD, double kF)
+    private void configController(){
     
-      
-      //SparkMaxPIDController controller = sparkMax.getPIDController();
-      //controller.setP(kP);
-      //controller.setI(kI);
-      //controller.setD(kD);
-      //controller.setFF(kF);
-      //controller.setOutputRange(-peakOutput, peakOutput);
-      //sparkMax.setCANTimeout(100);
-      //TO DO pid later
+    elevatorController.setP(elevatorP);
+    elevatorController.setI(elevatorI);
+    elevatorController.setD(elevatorD);
+    elevatorController.setFF(elevator_Forward);
+
+    armController.setP(armP);
+    armController.setI(armI);
+    armController.setD(armD);
+    armController.setFF(armFeed_Forward);
     
+  }
    
 }
 
