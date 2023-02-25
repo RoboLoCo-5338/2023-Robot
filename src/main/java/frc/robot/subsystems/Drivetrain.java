@@ -7,15 +7,16 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.RelativeEncoder;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+
 
 import frc.robot.Constants;
 import frc.robot.commands.Direction;
-
-
 public class Drivetrain extends SubsystemBase {
   // TODO Placeholder constants.
   private static final double TICKS_PER_REVOLUTION = 43;
@@ -36,7 +37,7 @@ public class Drivetrain extends SubsystemBase {
   public static final double POSITION_I = 0;
   public static final double POSITION_D = 0.01;
 
-  public static final double RIGHT_POSITION_P = 0.065;
+  public static final double RIGHT_POSITION_P = 0.065; 
   public static final double LEFT_POSITION_P = 0.01;
 
   //public static final double RIGHT_POSITION_I = 0.0;
@@ -60,6 +61,11 @@ public class Drivetrain extends SubsystemBase {
   private RelativeEncoder rightEncoder;
   private SparkMaxPIDController rightFrontPID;
   private SparkMaxPIDController leftFrontPID;
+
+  public AHRS navX;
+
+
+  //navXAhrs = new AHRS(SPI.Port.kMXP);
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -90,6 +96,9 @@ public class Drivetrain extends SubsystemBase {
 
     setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
     setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
+
+    navX = new AHRS(SPI.Port.kMXP);
+
 
   }
 
@@ -182,6 +191,29 @@ public class Drivetrain extends SubsystemBase {
     leftFrontPID.setFF(kF);
     leftFront.setCANTimeout(100);
   }
+
+   public void resetAngle(){
+     navX.reset();
+   }
+
+   public double getAngle(){
+     return navX.getAngle();
+   }
+
+   public void angleTurn(Direction direction){
+     double speed = 0.2;
+     
+     if (direction == Direction.RIGHT) {
+      leftFront.set(-speed);
+      rightFront.set(speed);
+    } else if (direction == Direction.LEFT) {
+      leftFront.set(speed);
+      rightFront.set( -speed);
+    } else {
+      leftFront.set(0);
+      rightFront.set(0);
+    }
+   }
 
   @Override
   public void periodic() {

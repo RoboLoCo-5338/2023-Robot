@@ -5,10 +5,13 @@
 package frc.robot.commands;
 
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
+
 
 public class AutoCommands {
   public static Command driveDistanceCommand(double distance, Direction direction){
@@ -29,6 +32,17 @@ public class AutoCommands {
       RobotContainer.drivetrain
     );
   }
+
+
+public static Command PIDTurnCommand(double angle, Direction direction){
+  return new PIDCommand(
+    new PIDController(0, 0, 0),
+    () -> Math.abs(RobotContainer.drivetrain.getAngle()),
+    () -> angle,
+    (output) -> RobotContainer.drivetrain.tankDriveVelocity(direction==Direction.RIGHT ? -output : output, direction==Direction.RIGHT ? output : -output),
+    RobotContainer.drivetrain
+  );
+}
 
 
   public static Command sampleAuto() {
