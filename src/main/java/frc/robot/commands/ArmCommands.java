@@ -4,7 +4,11 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Elevator;
 
 public class ArmCommands extends CommandBase {
@@ -25,20 +29,34 @@ public class ArmCommands extends CommandBase {
   @Override
   public void end(boolean interrupted) {}
 
-  public void setArm(Elevator elevator, int preset){
-    elevator.setArm(preset);
+  public static Command setArm(Elevator elevator, int preset){
+    return new FunctionalCommand(
+      () -> RobotContainer.m_Elevator.setArmChange(preset),
+      () -> RobotContainer.m_Elevator.setArm(),
+      (interrupt) -> RobotContainer.m_Elevator.stopArm(),
+      () -> Math.abs(RobotContainer.m_Elevator.getArmPosition()) >= Math.abs(Elevator.armChange+RobotContainer.m_Elevator.getArmPosition()-0.1),
+      RobotContainer.m_Elevator);
   }
 
-  public void moveUp(Elevator elevator){
-    elevator.moveArm(0.1);
+  public static Command moveUp(Elevator elevator){
+    return new InstantCommand(
+      () -> RobotContainer.m_Elevator.moveArm(0.1),
+      RobotContainer.m_Elevator
+    );
   }
 
-  public void moveDown(Elevator elevator){
-    elevator.moveArm(-0.1);
+  public static Command moveDown(Elevator elevator){
+    return new InstantCommand(
+      () -> RobotContainer.m_Elevator.moveArm(-0.1),
+      RobotContainer.m_Elevator
+    );
   }
 
-  public void stop(Elevator elevator){
-    elevator.stopArm();
+  public static Command stop(Elevator elevator){
+    return new InstantCommand(
+      () -> RobotContainer.m_Elevator.stopArm(),
+      RobotContainer.m_Elevator
+    );
   }
 
   // Returns true when the command should end.
