@@ -13,6 +13,9 @@ import frc.robot.commands.Direction;
 
 import com.revrobotics.RelativeEncoder; 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 
 public class Drivetrain extends SubsystemBase {
@@ -23,11 +26,17 @@ public class Drivetrain extends SubsystemBase {
   private static final double GEAR_RATIO = 10.7 / 1;
   private static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
 
-  // PID values for autonomous.
+  // PID values for autonomous, position values 
   public static final double POSITION_P = 0.0175821;
   public static final double POSITION_I = 0.0;
   public static final double POSITION_D = 0.0020951;
   public static final double POSITION_FEED_FORWARD = 0.0;
+
+  // PID values for autonomous, velocity values 
+  public static final double VELOCITY_P = 0.0175821;
+  public static final double VELOCITY_I = 0.0;
+  public static final double VELOCITY_D = 0.0020951;
+  public static final double VELOCITY_FEED_FORWARD = 0.0; 
 
   // motors and encoders 
   private CANSparkMax leftFront;
@@ -41,7 +50,6 @@ public class Drivetrain extends SubsystemBase {
   private SparkMaxPIDController rightFrontPID; 
   private SparkMaxPIDController leftFrontPID;
   
-
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -65,7 +73,7 @@ public class Drivetrain extends SubsystemBase {
     leftFrontPID = leftFront.getPIDController();
 
     // method to set PID values 
-    this.setPID(POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
+    this.setPIDPosition(POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
   }
 
   public void tankDrive(double left, double right) {
@@ -87,7 +95,7 @@ public class Drivetrain extends SubsystemBase {
     rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
   }
 
-  public void setPID(double kP, double kI, double kD, double kF) {
+  public void setPIDPosition(double kP, double kI, double kD, double kF) {
     rightFrontPID.setP(kP);
     rightFrontPID.setI(kI);
     rightFrontPID.setD(kD);
@@ -102,6 +110,20 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  public void setPID(double kP, double kI, double kD, double kF) {
+    rightFrontPID.setP(kP);
+    rightFrontPID.setI(kI);
+    rightFrontPID.setD(kD);
+    rightFrontPID.setFF(kF);
+    rightFront.setCANTimeout(100);
+
+    leftFrontPID.setP(kP);
+    leftFrontPID.setI(kI);
+    leftFrontPID.setD(kD);
+    leftFrontPID.setFF(kF);
+    leftFront.setCANTimeout(100);
+
+  }
   public double getPosition() {
     double front = leftEncoder.getPosition() + rightEncoder.getPosition();
     // double rear = leftRear.getEncoder() + rightRear.getEncoder()
@@ -113,8 +135,28 @@ public class Drivetrain extends SubsystemBase {
     leftEncoder.setPosition(0);
     rightEncoder.setPosition(0);
   }
+// angle stuff
+  public double getAngle() {
+		return navX.getAngle();
+	}
+  public void resetAngle() {
+		navX.reset();
+	}
+  public void angleTurn(Direction direction) {
+    double speed = 0.2;
 
-
+    SmartDashboard.putNumber("angle: ", getAngle());
+    if (direction == Direction.RIGHT) {
+      leftFront.set(-speed);
+      rightFront.set(speed);
+    } else if (direction == Direction.LEFT) {
+      leftFront.set(speed);
+      rightFront.set(-speed);
+    } else {
+      leftFront.set(0);
+      rightFront.set(0);
+    }
+  }
 
   @Override
   public void periodic() {

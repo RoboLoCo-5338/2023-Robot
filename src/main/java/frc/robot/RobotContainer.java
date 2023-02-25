@@ -76,6 +76,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //REPLACE
-    return autocommands.moveForward(16);
+    return autocommands.moveForward(60);
   }
 }

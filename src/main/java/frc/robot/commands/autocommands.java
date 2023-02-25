@@ -25,16 +25,17 @@ public class autocommands {
         );
       }
 
-    // turns the robot a certain amount to face the scoring area 
-    // public static Command turnAngle(double angle, Direction direction){
-    //   return new InstantCommand(
-    //     () -> RobotContainer.drivetrain.resetAngle(),
-    //     () -> RobotContainer.drivetrain.angleTurn(direction),
-    //     (interrupt) -> RobotContainer.drivetrain.tankDriveVelocity(0, 0),
-    //     () -> Math.abs(RobotContainer.drivetrain.getAngle()) >= angle,
-    //     RobotContainer.drivetrain
-    //   );
-    // }
+    //turns the robot a certain amount to face the scoring area 
+
+    public static Command turnAngle(double angle, Direction direction){
+      return new FunctionalCommand(
+        () -> RobotContainer.drivetrain.resetAngle(),
+        () -> RobotContainer.drivetrain.angleTurn(direction),
+        (interrupt) -> RobotContainer.drivetrain.tankDrive(0, 0),
+        () -> Math.abs(RobotContainer.drivetrain.getAngle()) >= angle,
+        RobotContainer.drivetrain
+      );
+    }
 
     public static Command moveForward(double distance){
       return new FunctionalCommand(
