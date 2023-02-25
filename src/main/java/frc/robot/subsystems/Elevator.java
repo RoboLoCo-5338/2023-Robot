@@ -66,7 +66,7 @@ public class Elevator extends SubsystemBase {
     }
 
     //private void configController(CANSparkMax sparkMax, double kP, double kI, double kD, double kF)
-    {
+    
       
       //SparkMaxPIDController controller = sparkMax.getPIDController();
       //controller.setP(kP);

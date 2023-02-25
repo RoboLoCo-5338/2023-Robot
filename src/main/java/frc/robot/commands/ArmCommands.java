@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Elevator;
 
 public class ArmCommands extends CommandBase {
   /** Creates a new ArmCommands. */
@@ -23,6 +24,18 @@ public class ArmCommands extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
+
+  public void setArm(Elevator elevator, int preset){
+    elevator.setArm(preset);
+  }
+
+  public void moveUp(Elevator elevator){
+    elevator.moveArm(0.1);
+  }
+
+  public void moveDown(Elevator elevator){
+    elevator.moveArm(-0.1);
+  }
 
   // Returns true when the command should end.
   @Override
