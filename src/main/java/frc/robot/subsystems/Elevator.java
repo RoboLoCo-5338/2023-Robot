@@ -16,10 +16,18 @@ import com.revrobotics.CANSparkMax.ControlType;
 
 public class Elevator extends SubsystemBase {
   private CANSparkMax elevatorMotor;
+  private RelativeEncoder elevatorEncoder;
+  private SparkMaxPIDController elevatorController;
+  private double[] elevatorHeights = new double[3];
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
-  private SparkMaxPIDController armController ;
+  private SparkMaxPIDController armController;
   private double[] armHeights = new double[3];
+
+  public static double elevatorP=0.1;
+  public static double elevatorI=0.0;
+  public static double elevatorD=0.0;
+  public static double elevator_Forward=0.0;
 
   public static double armP=0.1;
   public static double armI=0.0;
@@ -28,15 +36,22 @@ public class Elevator extends SubsystemBase {
 
   public Elevator() {
       elevatorMotor = new CANSparkMax(Constants.MOTOR_ID_4, MotorType.kBrushless);
+      elevatorEncoder = elevatorMotor.getEncoder();
+      elevatorController = elevatorMotor.getPIDController();
+      elevatorController.setOutputRange(-0.1, 0.1);
+      elevatorEncoder.setPositionConversionFactor(1);
       armMotor = new CANSparkMax(Constants.MOTOR_ID_5, MotorType.kBrushless);
       armEncoder = armMotor.getEncoder();
       armController = armMotor.getPIDController();
       armController.setOutputRange(-0.1, 0.1);
       armEncoder.setPositionConversionFactor(1);
-      // elevatorMotor.set(preset);
+      
     }
 
-    public void setHeight(int preset) {
+    public void setHeight(int preset){
+      double current = elevatorEncoder.getPosition();
+      double change = elevatorHeights[preset] - current;
+      elevatorController.setReference(change, ControlType.kPosition);
      // double current = elevatorMotor.getEncoder().getPosition();
      // double change = height[preset] - current;
     //  current = height[preset];
@@ -44,7 +59,12 @@ public class Elevator extends SubsystemBase {
      // elevatorMotor.getEncoder().setPosition(0);
       // TODO 2/18
     }
-
+    public void moveElevator(double speed){
+      elevatorMotor.set(speed);
+    }
+    public void resetElevator(){
+      elevatorEncoder.setPosition(0);
+    }
     public void setArm(int preset){
       double current = armEncoder.getPosition();
       double change = armHeights[preset] - current;
@@ -62,6 +82,7 @@ public class Elevator extends SubsystemBase {
     public double getPosition(){
 
       return armEncoder.getPosition();
+      return elevatorEncoder.getPosition();
 
     }
 
