@@ -7,12 +7,18 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.commands.Autos;
+import frc.robot.commands.EffectorCommands;
+import frc.robot.commands.ElevatorCommands;
+import frc.robot.commands.LimeLight;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
+import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.HIDType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,13 +31,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+
+  public static final Elevator m_Elevator = new Elevator();
+  public static ElevatorCommands m_ElevatorCommands;
   public static final Drivetrain drivetrain = new Drivetrain();
+  public static final LimeLight LimeLight = new LimeLight();
   public static final Effector effector = new Effector();
+
+  public static int coneOffset =0;
 
   // controllers
   private static Joystick controller1 = new Joystick(0); //driver
   private static Joystick controller2 = new Joystick(1); //operator
-  public Joystick controller3 = new Joystick(2); //elevator
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -48,7 +59,39 @@ public class RobotContainer {
       drivetrain
     );
 
-  /**
+    public Command defaultElevator = new RunCommand(
+      () -> m_Elevator.moveElevator(
+       controller1.getRawAxis(1)
+      ),
+      m_Elevator
+    );
+
+    public Command defaultArm = new RunCommand(
+      () -> m_Elevator.moveArm(
+       controller1.getRawAxis(5)
+      ),
+      m_Elevator
+    );
+
+    public Command coneSwitchCommand = new InstantCommand(
+      () -> {coneOffset=2;}
+    );
+
+    public Command cubeSwitchCommand = new InstantCommand(
+      () -> {coneOffset=0;}
+    );
+
+    public Command runLimeLight = new InstantCommand(
+      () -> LimeLight.execute());
+
+    public Command swapPipeline = new InstantCommand(
+    () -> LimeLight.setPipeline());
+    
+
+    public SequentialCommandGroup defaultElev = new SequentialCommandGroup(defaultElevator,defaultArm);
+
+
+    /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
@@ -58,15 +101,52 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+   
+    JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
+    JoystickButton backwardEffector = new JoystickButton(controller1, Constants.LBBUTTON);
+    Trigger limeLight = new Trigger(() -> controller1.getRawAxis(2)>0.5);
+    Trigger pipeLine = new Trigger(() -> controller1.getRawAxis(3)>0.5);
+
+    JoystickButton intakeHeight = new JoystickButton(controller2, Constants.BBUTTON);
+    JoystickButton bottomHeight = new JoystickButton(controller2, Constants.ABUTTON);
+    JoystickButton mediumHeight = new JoystickButton(controller2, Constants.XBUTTON);
+    JoystickButton highHeight = new JoystickButton(controller2, Constants.YBUTTON);
+
+    JoystickButton cubeSwitch = new JoystickButton(controller2, Constants.RBBUTTON);
+    JoystickButton coneSwitch = new JoystickButton(controller2, Constants.LBBUTTON);
+
+    Trigger forwardEffector2 = new Trigger(() -> controller2.getRawAxis(3)>0.5);
+    Trigger backwardEffector2 = new Trigger(() -> controller2.getRawAxis(2)>0.5);
+
+    forwardEffector.whileTrue(EffectorCommands.effectorForward());
+    backwardEffector.whileTrue(EffectorCommands.effectorReverse());
+
+    forwardEffector.onFalse(EffectorCommands.effectorStop());
+    backwardEffector.onFalse(EffectorCommands.effectorStop());
+
+    limeLight.whileTrue(runLimeLight);
+
+    pipeLine.whileTrue(swapPipeline);
+
+    intakeHeight.onTrue(ElevatorCommands.setElevatorHeight(0));
+    bottomHeight.onTrue(ElevatorCommands.setElevatorHeight(1));
+    mediumHeight.onTrue(ElevatorCommands.setElevatorHeight(2+coneOffset));
+    highHeight.onTrue(ElevatorCommands.setElevatorHeight(3+coneOffset));
+
+    cubeSwitch.onTrue(cubeSwitchCommand);
+    coneSwitch.onTrue(coneSwitchCommand);
+
+    forwardEffector2.whileTrue(EffectorCommands.effectorForward());
+    backwardEffector2.whileTrue(EffectorCommands.effectorReverse());
+    
+    
 
   }
 
 
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(defaultDrive);
+    m_Elevator.setDefaultCommand(defaultElev);
   }
 
 
@@ -76,8 +156,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.tempCommand();
-  }
+ 
+
+
 }
