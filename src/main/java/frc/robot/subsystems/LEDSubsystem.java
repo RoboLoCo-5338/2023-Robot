@@ -25,7 +25,7 @@ public class LEDSubsystem extends SubsystemBase{
     }
 
     private void roboLocoColor(){
-      setFrontAll(Color.kYellow); 
+      setAll(Color.kYellow); 
     }
 
     private void setLEDs() {
