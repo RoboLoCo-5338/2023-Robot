@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -55,6 +56,7 @@ public class Elevator extends SubsystemBase {
     }
     public void setElevatorChange(int preset) {
       double current = elevatorEncoder.getPosition();
+      SmartDashboard.putNumber("Elevator Position", preset);
       elevatorChange = elevatorHeights[preset] - current;
     }
     public void setElevatorHeight(){
@@ -69,6 +71,7 @@ public class Elevator extends SubsystemBase {
     }
     public void setArmChange(int preset){
       double current = armEncoder.getPosition();
+      SmartDashboard.putNumber("Arm Position", preset);
       armChange = armHeights[preset] - current;
     }
     public void setArm(){
@@ -118,5 +121,6 @@ public class Elevator extends SubsystemBase {
     
   }
    
+
 }
 

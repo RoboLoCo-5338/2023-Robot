@@ -59,16 +59,16 @@ public class RobotContainer {
       drivetrain
     );
 
-    public Command defaultElevator = new RunCommand(
+    public Command defaultElevator = new RunCommand(//left joystick
       () -> m_Elevator.moveElevator(
-       controller1.getRawAxis(1)
+       controller2.getRawAxis(1)*0.1
       ),
       m_Elevator
     );
 
-    public Command defaultArm = new RunCommand(
+    public Command defaultArm = new RunCommand(//right joystick
       () -> m_Elevator.moveArm(
-       controller1.getRawAxis(5)
+       controller2.getRawAxis(5)*0.1
       ),
       m_Elevator
     );
@@ -78,7 +78,7 @@ public class RobotContainer {
     );
 
     public Command cubeSwitchCommand = new InstantCommand(
-      () -> {coneOffset=0;}
+      () -> {coneOffset=0;}//starting value for cube indexing-ish?
     );
 
     public Command runLimeLight = new InstantCommand(
@@ -88,7 +88,7 @@ public class RobotContainer {
     () -> LimeLight.setPipeline());
     
 
-    public SequentialCommandGroup defaultElev = new SequentialCommandGroup(defaultElevator,defaultArm);
+    public SequentialCommandGroup defaultElev = new SequentialCommandGroup(defaultElevator, defaultArm);
 
 
     /**
@@ -121,7 +121,7 @@ public class RobotContainer {
     forwardEffector.whileTrue(EffectorCommands.effectorForward());
     backwardEffector.whileTrue(EffectorCommands.effectorReverse());
 
-    forwardEffector.onFalse(EffectorCommands.effectorStop());
+    forwardEffector.onFalse(EffectorCommands.effectorStop());//driver
     backwardEffector.onFalse(EffectorCommands.effectorStop());
 
     limeLight.whileTrue(runLimeLight);
@@ -137,7 +137,7 @@ public class RobotContainer {
     coneSwitch.onTrue(coneSwitchCommand);
 
     forwardEffector2.whileTrue(EffectorCommands.effectorForward());
-    backwardEffector2.whileTrue(EffectorCommands.effectorReverse());
+    backwardEffector2.whileTrue(EffectorCommands.effectorReverse());//operator
     
     
 
@@ -150,13 +150,6 @@ public class RobotContainer {
   }
 
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  
- 
 
 
 }
