@@ -23,19 +23,20 @@ public class Elevator extends SubsystemBase {
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
   private SparkMaxPIDController armController;
-  private double[] armHeights = new double[5];
+  private double[] armHeights = new double[5]; // TODO Add preset arm heights.
 
-  public static double elevatorP=0.1;
-  public static double elevatorI=0.0;
-  public static double elevatorD=0.0;
-  public static double elevator_Forward=0.0;
+  public static double elevatorP = 0.1;
+  public static double elevatorI = 0.0;
+  public static double elevatorD = 0.0;
+  public static double elevator_Forward = 0.0;
 
-  public static double armP=0.1;
-  public static double armI=0.0;
-  public static double armD=0.0;
-  public static double armFeed_Forward=0.0;
+  public static double armP = 0.1;
+  public static double armI = 0.0;
+  public static double armD = 0.0;
+  public static double armFeed_Forward = 0.0;
 
   public Elevator() {
+      // Init.
       elevatorMotor = new CANSparkMax(Constants.MOTOR_ID_4, MotorType.kBrushless);
       elevatorEncoder = elevatorMotor.getEncoder();
       elevatorController = elevatorMotor.getPIDController();
@@ -51,6 +52,7 @@ public class Elevator extends SubsystemBase {
       
     }
 
+    // Set the elevator height based on preset heights.
     public void setElevatorHeight(int preset){
       double current = elevatorEncoder.getPosition();
       double change = elevatorHeights[preset] - current;
@@ -68,6 +70,8 @@ public class Elevator extends SubsystemBase {
     public void resetElevator(){
       elevatorEncoder.setPosition(0);
     }
+
+    // Set arm heights based on presets.
     public void setArm(int preset){
       double current = armEncoder.getPosition();
       double change = armHeights[preset] - current;
@@ -105,11 +109,13 @@ public class Elevator extends SubsystemBase {
 
     private void configController(){
     
+    // PID config for the elevator
     elevatorController.setP(elevatorP);
     elevatorController.setI(elevatorI);
     elevatorController.setD(elevatorD);
     elevatorController.setFF(elevator_Forward);
 
+    // PID config for the arm
     armController.setP(armP);
     armController.setI(armI);
     armController.setD(armD);

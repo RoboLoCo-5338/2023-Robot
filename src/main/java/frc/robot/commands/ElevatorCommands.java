@@ -24,6 +24,8 @@ public class ElevatorCommands extends CommandBase {
   @Override
   public void execute() {}
 
+  // Bindings for elevator methods.
+  
   public void setElevator(Elevator elevator, int preset){
     elevator.setElevatorHeight(preset);
   }

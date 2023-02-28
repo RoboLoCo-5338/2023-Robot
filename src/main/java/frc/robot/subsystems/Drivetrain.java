@@ -43,6 +43,7 @@ public class Drivetrain extends SubsystemBase {
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
+    // Motor controller initialization and settings.
     leftFront = new CANSparkMax(Constants.MOTOR_ID_3, MotorType.kBrushless);
     leftRear = new CANSparkMax(Constants.MOTOR_ID_2, MotorType.kBrushless);
     leftRear.follow(leftFront);
@@ -63,13 +64,14 @@ public class Drivetrain extends SubsystemBase {
     }
 
     */
-
+    // Invert speed on right side
     leftFront.set(left*1/2);
     rightFront.set(-right*1/2);
     
   }
 
   public void driveDistance(double inches, Direction direction) {
+    // Change position sign based on direction
     targetDirection = direction;
     if (direction == Direction.FORWARD) {
       targetPosition = -inches * TICKS_PER_INCH * GEAR_RATIO;
