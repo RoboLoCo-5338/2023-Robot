@@ -5,13 +5,18 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Elevator;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 
 public class ElevatorCommands extends CommandBase {
 
+ 
   public ElevatorCommands() {
     execute();
   }
@@ -24,30 +29,40 @@ public class ElevatorCommands extends CommandBase {
   @Override
   public void execute() {}
 
-  // Bindings for elevator methods.
-  
-  public void setElevator(Elevator elevator, int preset){
-    elevator.setElevatorHeight(preset);
+   // Called once the command ends or is interrupted.
+   @Override
+   public void end(boolean interrupted) {}
+
+  public static Command setElevatorHeight(int preset) {
+    return new FunctionalCommand(
+      () -> RobotContainer.m_Elevator.setElevatorChange(preset),
+      () -> RobotContainer.m_Elevator.setElevatorHeight(),
+      (interrupt) -> RobotContainer.m_Elevator.stopElevator(),
+      () -> Math.abs(RobotContainer.m_Elevator.getElevatorPosition()) >= Math.abs(Elevator.elevatorChange+RobotContainer.m_Elevator.getElevatorPosition()-0.1),
+      RobotContainer.m_Elevator
+    );
   }
-
-  public void moveUp(Elevator elevator){
-    elevator.moveElevator(0.1);
+  public static Command moveUpElevator(Elevator elevator){
+    return new InstantCommand(
+      () -> RobotContainer.m_Elevator.moveElevator(0.1),
+      RobotContainer.m_Elevator
+    );
   }
+  public static Command moveDownElevator(Elevator elevator){
+    return new InstantCommand(
+      () -> RobotContainer.m_Elevator.moveElevator(-0.1),
+      RobotContainer.m_Elevator
+    );
 
-  public void moveDown(Elevator elevator){
-    elevator.moveElevator(-0.1);
   }
-
-  public void stop(Elevator elevator){
-    elevator.stopElevator();
+  public static Command stopElevator(Elevator elevator){
+    return new InstantCommand(
+      () -> RobotContainer.m_Elevator.stopElevator(),
+      RobotContainer.m_Elevator
+    );
   }
-
-
-
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
-}
+   // Returns true when the command should end.
+   @Override
+   public boolean isFinished() {
+     return false;
+   }

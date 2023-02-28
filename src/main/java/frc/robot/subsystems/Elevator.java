@@ -20,6 +20,7 @@ public class Elevator extends SubsystemBase {
   private RelativeEncoder elevatorEncoder;
   private SparkMaxPIDController elevatorController;
   private double[] elevatorHeights = new double[5];
+  public static double elevatorChange=0;
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
   private SparkMaxPIDController armController;
@@ -51,12 +52,12 @@ public class Elevator extends SubsystemBase {
       configController();
       
     }
-
-    // Set the elevator height based on preset heights.
-    public void setElevatorHeight(int preset){
+    public void setElevatorChange(int preset) {
       double current = elevatorEncoder.getPosition();
-      double change = elevatorHeights[preset] - current;
-      elevatorController.setReference(change, ControlType.kPosition);
+      elevatorChange = elevatorHeights[preset] - current;
+    }
+    public void setElevatorHeight(){
+      elevatorController.setReference(elevatorChange, ControlType.kPosition);
      // double current = elevatorMotor.getEncoder().getPosition();
      // double change = height[preset] - current;
     //  current = height[preset];
@@ -77,7 +78,7 @@ public class Elevator extends SubsystemBase {
       double change = armHeights[preset] - current;
       armController.setReference(change, ControlType.kPosition);
     }
-
+  
     public void moveArm(double speed){
       armMotor.set(speed);
     }
