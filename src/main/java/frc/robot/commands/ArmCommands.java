@@ -34,7 +34,7 @@ public class ArmCommands extends CommandBase {
   @Override
   public void end(boolean interrupted) {}
 
-
+//todo the elevator parameter might not be needed
   public static Command setArmPresets(Elevator elevator, int preset){
     return new FunctionalCommand(
       () -> RobotContainer.m_Elevator.setArmChange(preset),

@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-
+import frc.robot.commands.ArmCommands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class ElevatorCommands extends CommandBase {
 
@@ -53,6 +54,14 @@ public class ElevatorCommands extends CommandBase {
     return new InstantCommand(
       () -> RobotContainer.m_Elevator.stopElevator(),
       RobotContainer.m_Elevator
+    );
+  }
+//todo might want to use a different method, maybe one that is timed instead of using a preset for this
+  public static Command startMechanism(){
+    return new SequentialCommandGroup(
+      setElevatorHeight(1),
+      ArmCommands.setArmPresets(RobotContainer.m_Elevator,1),
+      setElevatorHeight(0)
     );
   }
    // Returns true when the command should end.

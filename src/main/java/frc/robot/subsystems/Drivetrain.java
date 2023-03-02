@@ -21,12 +21,12 @@ public class Drivetrain extends SubsystemBase {
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
-    leftFront = new CANSparkMax(Constants.MOTOR_ID_3, MotorType.kBrushless);
-    leftRear = new CANSparkMax(Constants.MOTOR_ID_2, MotorType.kBrushless);
+    leftFront = new CANSparkMax(Constants.LEFTFRONT_MOTOR, MotorType.kBrushless);
+    leftRear = new CANSparkMax(Constants.LEFTREAR_MOTOR, MotorType.kBrushless);
     leftRear.follow(leftFront);
 
-    rightFront = new CANSparkMax(Constants.MOTOR_ID_1, MotorType.kBrushless);
-    rightRear = new CANSparkMax(Constants.MOTOR_ID_0, MotorType.kBrushless);
+    rightFront = new CANSparkMax(Constants.RIGHTFRONT_MOTOR, MotorType.kBrushless);
+    rightRear = new CANSparkMax(Constants.RIGHTREAR_MOTOR, MotorType.kBrushless);
     rightRear.follow(rightFront);
   }
 

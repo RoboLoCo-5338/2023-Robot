@@ -40,12 +40,12 @@ public class Elevator extends SubsystemBase {
   public static double armFeed_Forward=0.0;
 
   public Elevator() {
-      elevatorMotor = new CANSparkMax(Constants.MOTOR_ID_4, MotorType.kBrushless);
+      elevatorMotor = new CANSparkMax(Constants.ELEVATOR_MOTOR, MotorType.kBrushless);
       elevatorEncoder = elevatorMotor.getEncoder();
       elevatorController = elevatorMotor.getPIDController();
       elevatorController.setOutputRange(-0.1, 0.1);
       elevatorEncoder.setPositionConversionFactor(1);
-      armMotor = new CANSparkMax(Constants.MOTOR_ID_5, MotorType.kBrushless);
+      armMotor = new CANSparkMax(Constants.ARM_MOTOR, MotorType.kBrushless);
       armEncoder = armMotor.getEncoder();
       armController = armMotor.getPIDController();
       armController.setOutputRange(-0.1, 0.1);
