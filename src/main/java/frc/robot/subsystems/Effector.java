@@ -8,17 +8,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import frc.robot.Constants;
+import com.revrobotics.SparkMaxPIDController;
 
 
 public class Effector extends SubsystemBase{
 
     private CANSparkMax outerMotor;
     private double speed = 0.5;
+    private SparkMaxPIDController effectorController;
+    //untested PID
+    public static double effectorP=0.1;
+    public static double effectorI=0.0;
+    public static double effectorD=0.0;
+    public static double effector_Forward=0.0;
    
     public void effectorSystem() {
         outerMotor = new CANSparkMax(Constants.MOTOR_ID_1, MotorType.kBrushless);
         this.outerMotor.setInverted(true);
-        
+        configController();
     }
 
 
@@ -34,6 +41,11 @@ public class Effector extends SubsystemBase{
     public void effectorStop() {
         outerMotor.set(0);
     }
-
+     private void configController(){
+    effectorController.setP(effectorP);
+    effectorController.setI(effectorI);
+    effectorController.setD(effectorD);
+    effectorController.setFF(effector_Forward);
 }
 
+}
