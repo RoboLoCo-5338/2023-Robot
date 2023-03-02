@@ -7,9 +7,11 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.commands.Autos;
+import frc.robot.commands.ConeTipperCommands;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.LimeLight;
+import frc.robot.subsystems.ConeTipper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import frc.robot.subsystems.Elevator;
@@ -37,8 +39,13 @@ public class RobotContainer {
   public static final Drivetrain drivetrain = new Drivetrain();
   public static final LimeLight LimeLight = new LimeLight();
   public static final Effector effector = new Effector();
+  public static final ConeTipper coneTipper = new ConeTipper();
+
+  public static double percent = 0.3;
 
   public static int coneOffset =0;
+
+  public static int coneTipperPreset=0;
 
   // controllers
   private static Joystick controller1 = new Joystick(0); //driver
@@ -53,8 +60,8 @@ public class RobotContainer {
 
   public Command defaultDrive = new RunCommand(
       () -> drivetrain.tankDrive(
-        controller1.getRawAxis(1),
-        controller1.getRawAxis(5)
+        controller1.getRawAxis(1)*(percent+controller1.getRawAxis(3)*(1-percent)),
+        controller1.getRawAxis(5)*(percent+controller1.getRawAxis(3)*(1-percent))
       ),
       drivetrain
     );
@@ -86,6 +93,7 @@ public class RobotContainer {
 
     public Command swapPipeline = new InstantCommand(
     () -> LimeLight.setPipeline());
+
     
 
     public SequentialCommandGroup defaultElev = new SequentialCommandGroup(defaultElevator, defaultArm);
@@ -104,8 +112,9 @@ public class RobotContainer {
    
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
     JoystickButton backwardEffector = new JoystickButton(controller1, Constants.LBBUTTON);
-    Trigger limeLight = new Trigger(() -> controller1.getRawAxis(2)>0.5);
-    Trigger pipeLine = new Trigger(() -> controller1.getRawAxis(3)>0.5);
+    JoystickButton limeLight = new JoystickButton(controller1, Constants.ABUTTON);
+   
+
 
     JoystickButton intakeHeight = new JoystickButton(controller2, Constants.BBUTTON);
     JoystickButton bottomHeight = new JoystickButton(controller2, Constants.ABUTTON);
@@ -118,6 +127,14 @@ public class RobotContainer {
     Trigger forwardEffector2 = new Trigger(() -> controller2.getRawAxis(3)>0.5);
     Trigger backwardEffector2 = new Trigger(() -> controller2.getRawAxis(2)>0.5);
 
+
+    JoystickButton coneTipperForward = new JoystickButton(controller2, Constants.CONE_TIPPER_FORWARD);
+    JoystickButton coneTipperBackward = new JoystickButton(controller2, Constants.CONE_TIPPER_BACKWARD);
+
+    JoystickButton coneTipperCycleUp = new JoystickButton(controller2, Constants.CONE_TIPPER_CYCLE_UP);
+   
+
+
     forwardEffector.whileTrue(EffectorCommands.effectorForward());
     backwardEffector.whileTrue(EffectorCommands.effectorReverse());
 
@@ -126,7 +143,7 @@ public class RobotContainer {
 
     limeLight.whileTrue(runLimeLight);
 
-    pipeLine.whileTrue(swapPipeline);
+    
 
     intakeHeight.onTrue(ElevatorCommands.setElevatorHeight(0));
     bottomHeight.onTrue(ElevatorCommands.setElevatorHeight(1));
@@ -139,7 +156,11 @@ public class RobotContainer {
     forwardEffector2.whileTrue(EffectorCommands.effectorForward());
     backwardEffector2.whileTrue(EffectorCommands.effectorReverse());//operator
     
+    coneTipperForward.whileTrue(ConeTipperCommands.moveForward());
+    coneTipperBackward.whileTrue(ConeTipperCommands.moveBackward());
+
     
+    coneTipperCycleUp.onTrue(ConeTipperCommands.setConeTipper());
 
   }
 

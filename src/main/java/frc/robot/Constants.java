@@ -24,6 +24,7 @@ public final class Constants {
   public static final int MOTOR_ID_3 = 4;
   public static final int MOTOR_ID_4 = 5;
   public static final int MOTOR_ID_5 = 6;
+  public static final int CONE_TIPPER = 7;
   public static final int Height = 3;
 
 
@@ -37,4 +38,7 @@ public final class Constants {
   public static final int STARTBUTTON = 8; 
   public static final int LEFTSTICKBUTTON = 9; 
   public static final int RIGHTSTICKBUTTON = 10;
+  public static final int CONE_TIPPER_FORWARD =11;
+  public static final int CONE_TIPPER_CYCLE_UP =12;
+  public static final int CONE_TIPPER_BACKWARD =13;
 }
