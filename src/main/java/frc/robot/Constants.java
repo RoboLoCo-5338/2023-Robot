@@ -17,13 +17,17 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
    
     
+    
   }
   public static final int MOTOR_ID_0 = 1;
   public static final int MOTOR_ID_1 = 2;
   public static final int MOTOR_ID_2 = 3;
   public static final int MOTOR_ID_3 = 4;
+  public static final int MOTOR_ID_4 = 5;
+  public static final int MOTOR_ID_5 = 6;
   public static final int Height = 3;
-  
+
+
   public static final int ABUTTON = 1; 
   public static final int BBUTTON = 2; 
     public static final int XBUTTON = 3; 
