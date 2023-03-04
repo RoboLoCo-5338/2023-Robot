@@ -15,7 +15,7 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
-    public static int LBBUTTON = 5;
+   
     
   }
   public static final int MOTOR_ID_0 = 1;
@@ -23,4 +23,16 @@ public final class Constants {
   public static final int MOTOR_ID_2 = 3;
   public static final int MOTOR_ID_3 = 4;
   public static final int Height = 3;
+  
+  public static final int ABUTTON = 1; 
+  public static final int BBUTTON = 2; 
+    public static final int XBUTTON = 3; 
+    public static final int YBUTTON = 4; 
+    public static final  int LBBUTTON = 5;
+    public static final int RBBUTTON = 6;
+    public static final int BACKBUTTON = 7; 
+    public static final int STARTBUTTON = 8; 
+    public static final int LEFTSTICKBUTTON = 9; 
+    public static final int RIGHTSTICKBUTTON = 10;
+    public static final int BACKBOTTOMBUTTON = 11;
 }

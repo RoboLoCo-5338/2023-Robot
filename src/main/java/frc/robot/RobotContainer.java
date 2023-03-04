@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.commands.Autos;
+import frc.robot.commands.EffectorCommands;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import edu.wpi.first.wpilibj.Joystick;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -57,19 +59,49 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
+  // private Command configureBindings(
+  //   () -> EffectorCommands.effectorForward(
+  //     controller1.getButton(7),
+  //   () -> EffectorCommands.effectorReverse(
+  //     controller1.getButton(8), 
+  //     EffectorCommands
+  //   ));
+
+    // Tried to do Command but error only went away when I used @ sign. I do not know why
+    
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // START HERE THURSDAY 
+    
 
-  }
+  // }
+private void configureBindings(){
+  JoystickButton effectorReverseButton2 = new JoystickButton(controller2, Constants.BACKBUTTON);
+  effectorReverseButton2.whileTrue(EffectorCommands.effectorReverse() );
 
+  JoystickButton effectorForwardButton2 = new JoystickButton(controller2, Constants.STARTBUTTON);
+  effectorForwardButton2.whileTrue(EffectorCommands.effectorForward() );
+ 
+  JoystickButton effectorReverseButton1 = new JoystickButton(controller1, Constants.LBBUTTON);
+  effectorReverseButton1.whileTrue(EffectorCommands.effectorReverse() );
+  effectorReverseButton1.whileFalse(EffectorCommands.effectorStop () );
+
+  JoystickButton effectorForwardButton1 = new JoystickButton(controller1, Constants.RBBUTTON);
+  effectorForwardButton1.whileTrue(EffectorCommands.effectorForward() );
+  effectorForwardButton1.whileFalse(EffectorCommands.effectorStop () );
+
+
+}
 
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(defaultDrive);
-  }
+  } 
 
-
+  
+    
+  
+    
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
