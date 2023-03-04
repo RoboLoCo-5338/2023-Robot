@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
   public static final Elevator m_Elevator = new Elevator();
   public static ElevatorCommands m_ElevatorCommands;
   public static final Drivetrain drivetrain = new Drivetrain();
@@ -61,7 +60,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    
+  
   }
 
 

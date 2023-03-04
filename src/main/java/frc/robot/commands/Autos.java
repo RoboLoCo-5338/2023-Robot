@@ -12,7 +12,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands; 
 
 public final class Autos {
-/* 
+  public static CommandBase angleTurnCommand(double angle, Direction direction) {
+		return new FunctionalCommand(
+			() -> RobotContainer.drivetrain.resetAngle(),
+			() -> RobotContainer.drivetrain.angleTurn(direction),
+			(interrupt) -> RobotContainer.drivetrain.tankDriveVelocity(0, 0),
+			() -> Math.abs(RobotContainer.drivetrain.getAngle()) >= angle,
+			RobotContainer.drivetrain
+		);
+	}
+
+	public static CommandBase resetAngleCommand() {
+		return new InstantCommand(
+			() -> RobotContainer.drivetrain.resetAngle(),
+			RobotContainer.drivetrain
+		);
+	}
+  
   public static CommandBase driveDistanceCommand(double distance, Direction direction) {
     return new FunctionalCommand(
             () -> RobotContainer.drivetrain.resetPosition(),
@@ -22,7 +38,11 @@ public final class Autos {
             RobotContainer.drivetrain
     );
   }
-*/
+  
+  public static CommandBase stopCommand() {
+		return new RunCommand(() -> RobotContainer.drivetrain.tankDriveVelocity(0, 0), RobotContainer.drivetrain);
+	}
+  
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
