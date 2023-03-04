@@ -103,16 +103,12 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void tankDrive(double left, double right) {
-    /*
-    if (Math.abs(left) > 0.1){
-      left = Math.signum(left)*0.1;
-    }
 
-    if (Math.abs(right) > 0.1){
-      right = Math.signum(right)*0.1;
-    }
+    // if (Math.abs(right) > 0.1){
+    //   right = Math.signum(right)*0.1;
+    // }
 
-    */
+    // */
 
     leftFront.set(left*1/9);
     rightFront.set(-right*1/9);
@@ -122,77 +118,49 @@ public class Drivetrain extends SubsystemBase {
   public void driveDistance(double inches, Direction direction) {
     targetDirection = direction;
     if (direction == Direction.FORWARD) {
-      targetPosition = -inches;
+      targetPosition = -inches * TICKS_PER_INCH * GEAR_RATIO;
     } else if (direction == Direction.BACKWARD) {
-      targetPosition = inches;
+      targetPosition = inches * TICKS_PER_INCH * GEAR_RATIO;
     } else {
       targetPosition = 0;
     }
 
-    SmartDashboard.putNumber("SetPoint", targetPosition);
-    SmartDashboard.putNumber( "Left Position", leftEncoder.getPosition());
-    SmartDashboard.putNumber( "Right Position", rightEncoder.getPosition());
-    //rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
-    //leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
-
-  }
-
-  public void tankDriveVelocity(double leftVelocity, double rightVelocity){
-    rightFrontPID.setReference(rightVelocity, CANSparkMax.ControlType.kVelocity);
-    leftFrontPID.setReference(leftVelocity, CANSparkMax.ControlType.kVelocity);
-  }
-
-
-    public double getPosition() {
-      return (leftEncoder.getPosition() + rightEncoder.getPosition())/2;
-    }
-    
-    public void resetPosition(){
-      leftEncoder.setPosition(0);
-      rightEncoder.setPosition(0);
-      SmartDashboard.putString("Hello", "hi");
-    }
-  
-  public void resetVelocity(){
-    rightFrontPID.setReference(0, CANSparkMax.ControlType.kVelocity);
-    leftFrontPID.setReference(0, CANSparkMax.ControlType.kVelocity);
-  }
-
-//    leftFront.set(ControlMode.Position, targetPosition);  
+//    leftFront.set(ControlMode.Position, targetPosition);
 //    rightFront.set(ControlMode.Position, targetPosition);
-  
- 
-  public void setPositionPID(double kPR, double kPL, double kI, double kD, double kF) {
-
-    rightFrontPID.setP(kPR);
-    rightFrontPID.setI(kI);
-    rightFrontPID.setD(kD);
-    rightFrontPID.setFF(kF);
-    rightFront.setCANTimeout(100);
-
-    leftFrontPID.setP(kPL);
-    leftFrontPID.setI(kI);
-    leftFrontPID.setD(kD);
-    leftFrontPID.setFF(kF);
-    leftFront.setCANTimeout(100);
+    tankDrive(targetPosition, targetPosition);
   }
-
-  public void setVelocityPID(double kP, double kI, double kD, double kF) {
-
+/* 
+  public void setPID(double kP, double kI, double kD, double kF) {
+    SparkMaxPIDController rightFrontPID = rightFront.getPIDController();
     rightFrontPID.setP(kP);
     rightFrontPID.setI(kI);
     rightFrontPID.setD(kD);
     rightFrontPID.setFF(kF);
     rightFront.setCANTimeout(100);
 
+    SparkMaxPIDController leftFrontPID = leftFront.getPIDController();
     leftFrontPID.setP(kP);
     leftFrontPID.setI(kI);
     leftFrontPID.setD(kD);
     leftFrontPID.setFF(kF);
     leftFront.setCANTimeout(100);
-  }
 
-   public void resetAngle(){
+    SparkMaxPIDController rightRearPID = rightRear.getPIDController();
+    rightRearPID.setP(kP);
+    rightRearPID.setI(kI);
+    rightRearPID.setD(kD);
+    rightFrontPID.setFF(kF);
+    rightFront.setCANTimeout(100);
+
+    SparkMaxPIDController leftRearPID = leftRear.getPIDController();
+    leftRearPID.setP(kP);
+    leftRearPID.setI(kI);
+    leftRearPID.setD(kD);
+    leftRearPID.setFF(kF);
+    leftRear.setCANTimeout(100);
+  }
+*/
+ public void resetAngle(){
      navX.reset();
    }
 
@@ -213,7 +181,8 @@ public class Drivetrain extends SubsystemBase {
       leftFront.set(0);
       rightFront.set(0);
     }
-   }
+  }
+
 
   @Override
   public void periodic() {
