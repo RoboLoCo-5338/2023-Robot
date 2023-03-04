@@ -91,9 +91,9 @@ public class Drivetrain extends SubsystemBase {
     } else {
       targetPosition = 0;
     }
-    targetPosition = direction == Direction.BACKWARD ? -inches : inches;
-    leftFront.getPIDController().setReference(targetPosition, ControlType.kPosition);
-    rightFront.getPIDController().setReference(targetPosition, ControlType.kPosition);
+    //    leftFront.set(ControlMode.Position, targetPosition);
+    //    rightFront.set(ControlMode.Position, targetPosition);
+    tankDrive(targetPosition, targetPosition);
   }
 
   public void configAllControllers(double kP, double kI, double kD, double kF) {
