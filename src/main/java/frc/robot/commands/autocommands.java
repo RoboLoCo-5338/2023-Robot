@@ -15,11 +15,12 @@ public class autocommands {
 
       /** moveback, turn angle, extend arm, moveforward (out of community)*/
 
+      //moveback 
       public static Command moveBackward(double distance){
         return new FunctionalCommand(
           () -> RobotContainer.drivetrain.resetPosition(),
           () -> RobotContainer.drivetrain.driveDistance(distance , Direction.BACKWARD),
-          (interrupt) -> RobotContainer.drivetrain.tankDrive(0, 0),
+          (interrupt) -> RobotContainer.drivetrain.tankDriveVelocity(0, 0),
           () -> Math.abs(RobotContainer.drivetrain.getPosition()) >= Math.abs(Drivetrain.targetPosition) - 1000,
           RobotContainer.drivetrain
         );
@@ -31,17 +32,18 @@ public class autocommands {
       return new FunctionalCommand(
         () -> RobotContainer.drivetrain.resetAngle(),
         () -> RobotContainer.drivetrain.angleTurn(direction),
-        (interrupt) -> RobotContainer.drivetrain.tankDrive(0, 0),
+        (interrupt) -> RobotContainer.drivetrain.tankDriveVelocity(0, 0),
         () -> Math.abs(RobotContainer.drivetrain.getAngle()) >= angle,
         RobotContainer.drivetrain
       );
     }
 
+    // moves forward 
     public static Command moveForward(double distance){
       return new FunctionalCommand(
         () -> RobotContainer.drivetrain.resetPosition(),
         () -> RobotContainer.drivetrain.driveDistance(distance, Direction.FORWARD),
-        (interrupt) -> RobotContainer.drivetrain.tankDrive(0, 0),
+        (interrupt) -> RobotContainer.drivetrain.tankDriveVelocity(0, 0),
         () -> Math.abs(RobotContainer.drivetrain.getPosition()) >= Math.abs(Drivetrain.targetPosition) - 1000,
         RobotContainer.drivetrain
       );

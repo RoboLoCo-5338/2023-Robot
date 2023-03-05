@@ -38,7 +38,7 @@ public class RobotContainer {
   }
 
   public Command defaultDrive = new RunCommand(
-      () -> drivetrain.tankDrive(
+      () -> drivetrain.tankDriveVelocity(
         controller1.getRawAxis(1),
         controller1.getRawAxis(5)
       ),

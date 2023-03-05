@@ -76,7 +76,7 @@ public class Drivetrain extends SubsystemBase {
     this.setPIDPosition(POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
   }
 
-  public void tankDrive(double left, double right) {
+  public void tankDriveVelocity(double left, double right) {
     leftFront.set(left);
     rightFront.set(-right);
   }
@@ -157,6 +157,8 @@ public class Drivetrain extends SubsystemBase {
       rightFront.set(0);
     }
   }
+
+  public void tankDriveVelocity(0.25 + 0.75(trigger), 0.25 + 0.75(trigger));
 
   @Override
   public void periodic() {
