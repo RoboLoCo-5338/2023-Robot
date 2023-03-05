@@ -15,7 +15,9 @@ import com.revrobotics.RelativeEncoder;
 import frc.robot.Constants;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 
+@SuppressWarnings("Serial Warnings")
 public class Elevator extends SubsystemBase {
   private CANSparkMax elevatorMotor;
   private RelativeEncoder elevatorEncoder;
@@ -41,11 +43,13 @@ public class Elevator extends SubsystemBase {
 
   public Elevator() {
       elevatorMotor = new CANSparkMax(Constants.ELEVATOR_MOTOR, MotorType.kBrushless);
+      elevatorMotor.setIdleMode(IdleMode.kBrake);
       elevatorEncoder = elevatorMotor.getEncoder();
       elevatorController = elevatorMotor.getPIDController();
       elevatorController.setOutputRange(-0.1, 0.1);
       elevatorEncoder.setPositionConversionFactor(1);
       armMotor = new CANSparkMax(Constants.ARM_MOTOR, MotorType.kBrushless);
+      armMotor.setIdleMode(IdleMode.kBrake);
       armEncoder = armMotor.getEncoder();
       armController = armMotor.getPIDController();
       armController.setOutputRange(-0.1, 0.1);
@@ -64,6 +68,7 @@ public class Elevator extends SubsystemBase {
     
     }
     public void moveElevator(double speed){
+      SmartDashboard.putNumber("Elevator Position", getElevatorPosition());
       elevatorMotor.set(speed);
     }
     public void resetElevator(){
@@ -79,6 +84,7 @@ public class Elevator extends SubsystemBase {
     }
   
     public void moveArm(double speed){
+      SmartDashboard.putNumber("Arm Position", getArmPosition());
       armMotor.set(speed);
     }
 

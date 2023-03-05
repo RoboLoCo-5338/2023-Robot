@@ -22,7 +22,9 @@ public final class Constants {
   public static final int RIGHTFRONT_MOTOR = 2;
   public static final int LEFTREAR_MOTOR = 3;
   public static final int LEFTFRONT_MOTOR = 4;
-  public static final int ELEVATOR_MOTOR = 5;
+  public static final int ELEVATOR_MOTOR = 7;
+  public static final int CONE_TIPPER = 0;
+  public static final int EFFECTOR_MOTOR = 5;
   public static final int ARM_MOTOR = 6;
   public static final int Height = 3;
 
