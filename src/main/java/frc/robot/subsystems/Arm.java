@@ -14,7 +14,7 @@ public class Arm extends SubsystemBase{
     private CANSparkMax armMotor;
 
     public Arm() {
-        armMotor = new CANSparkMax(Constants.MOTOR_ID_5, MotorType.kBrushless);
+        armMotor = new CANSparkMax(Constants.ARM_MOTOR, MotorType.kBrushless);
     }
 
    

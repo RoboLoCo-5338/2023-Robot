@@ -11,12 +11,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Elevator;
 
-public class ArmCommands {
-
-
-//todo the elevator parameter might not be needed
-  public static Command setArmPresets(Elevator elevator, int preset){
-
 public class ArmCommands extends CommandBase {
   /** Creates a new ArmCommands. */
   public ArmCommands() {
@@ -36,7 +30,7 @@ public class ArmCommands extends CommandBase {
   public void end(boolean interrupted) {}
 
   // Move arm to preset height and stop when the height is reached.
-  public static Command setArm(Elevator elevator, int preset){
+  public static Command setArm(int preset){
     return new FunctionalCommand(
       () -> RobotContainer.m_Elevator.setArmChange(preset),
       () -> RobotContainer.m_Elevator.setArm(),

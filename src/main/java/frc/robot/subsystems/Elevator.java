@@ -114,21 +114,7 @@ public class Elevator extends SubsystemBase {
       return elevatorEncoder.getPosition();
 
     }
-
-    private void configController(){
     
-    elevatorController.setP(elevatorP);
-    elevatorController.setI(elevatorI);
-    elevatorController.setD(elevatorD);
-    elevatorController.setFF(elevator_Forward);
-
-    armController.setP(armP);
-    armController.setI(armI);
-    armController.setD(armD);
-    armController.setFF(armFeed_Forward);
-    
-  }
-
     private void configController(){
     
     // PID config for the elevator

@@ -27,8 +27,6 @@ public final class Constants {
   public static final int CONE_TIPPER = 0;
   public static final int EFFECTOR_MOTOR = 5;
   public static final int ARM_MOTOR = 6;
-  public static final int Height = 3;
-
 
   public static final int ABUTTON = 1; 
   public static final int BBUTTON = 2; 
