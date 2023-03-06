@@ -36,7 +36,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-
   public static final Elevator m_Elevator = new Elevator();
   public static ElevatorCommands m_ElevatorCommands;
   public static final Drivetrain drivetrain = new Drivetrain();
@@ -61,6 +60,7 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
+  // Drive using the joysticks.
   public Command defaultDrive = new RunCommand(
       () -> drivetrain.tankDrive(
         // controller1.getRawAxis(1)*(percent+controller1.getRawAxis(3)*(1-percent)),
@@ -103,7 +103,6 @@ public class RobotContainer {
 
     // public SequentialCommandGroup defaultElev = new SequentialCommandGroup(defaultElevator, defaultArm);
 
-
     /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -114,7 +113,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-   
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
     JoystickButton backwardEffector = new JoystickButton(controller1, Constants.LBBUTTON);
     JoystickButton limeLight = new JoystickButton(controller1, Constants.ABUTTON);
@@ -187,7 +185,6 @@ public class RobotContainer {
 
     
     // coneTipperCycleUp.onTrue(ConeTipperCommands.setConeTipper());
-
   }
 
 
@@ -195,8 +192,4 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(defaultDrive);
    // m_Elevator.setDefaultCommand(defaultElev);
   }
-
-
-
-
 }

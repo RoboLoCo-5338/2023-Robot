@@ -58,15 +58,17 @@ public class Elevator extends SubsystemBase {
       configController();
       
     }
+  
     public void setElevatorChange(int preset) {
       double current = elevatorEncoder.getPosition();
       SmartDashboard.putNumber("Elevator Position", preset);
       elevatorChange = elevatorHeights[preset] - current;
     }
+  
     public void setElevatorHeight(){
       elevatorController.setReference(elevatorChange, ControlType.kPosition);
-    
     }
+  
     public void moveElevator(double speed){
       SmartDashboard.putNumber("Elevator Position", getElevatorPosition());
       elevatorMotor.set(speed);
@@ -126,7 +128,19 @@ public class Elevator extends SubsystemBase {
     armController.setFF(armFeed_Forward);
     
   }
-   
 
+    private void configController(){
+    
+    // PID config for the elevator
+    elevatorController.setP(elevatorP);
+    elevatorController.setI(elevatorI);
+    elevatorController.setD(elevatorD);
+    elevatorController.setFF(elevator_Forward);
+
+    // PID config for the arm
+    armController.setP(armP);
+    armController.setI(armI);
+    armController.setD(armD);
+    armController.setFF(armFeed_Forward);
+  }
 }
-

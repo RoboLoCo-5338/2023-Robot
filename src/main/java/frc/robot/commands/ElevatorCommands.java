@@ -12,7 +12,22 @@ import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 @SuppressWarnings("Serial Warnings")
 public class ElevatorCommands {
+  public ElevatorCommands() {
+    execute();
+  }
 
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {}
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
+  
   public static Command setElevatorHeight(int preset) {
     return new FunctionalCommand(
       () -> RobotContainer.m_Elevator.setElevatorChange(preset),
@@ -28,6 +43,20 @@ public class ElevatorCommands {
       RobotContainer.m_Elevator
     );
   }
+  
+  public static Command moveUpElevator(Elevator elevator){
+    return new InstantCommand(
+      () -> RobotContainer.m_Elevator.moveElevator(0.1),
+      RobotContainer.m_Elevator
+    );
+  }
+  
+  public static Command moveDownElevator(Elevator elevator){
+    return new InstantCommand(
+      () -> RobotContainer.m_Elevator.moveElevator(-0.1),
+      RobotContainer.m_Elevator
+    );
+  }
 
   public static Command stopElevator(){
     return new InstantCommand(
@@ -35,7 +64,8 @@ public class ElevatorCommands {
       RobotContainer.m_Elevator
     );
   }
-//todo might want to use a different method, maybe one that is timed instead of using a preset for this
+  
+  //todo might want to use a different method, maybe one that is timed instead of using a preset for this
   public static Command startMechanism(){
     return new SequentialCommandGroup(
       setElevatorHeight(1),
@@ -43,4 +73,10 @@ public class ElevatorCommands {
       setElevatorHeight(0)
     );
   }
+  
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
   }
+}

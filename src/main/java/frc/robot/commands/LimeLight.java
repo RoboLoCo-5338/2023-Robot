@@ -21,6 +21,7 @@ public class LimeLight extends CommandBase {
   private double p;//multiplier value (proportional speed for turning depending on tx value)
   public double pipeLineNum=0;
   /** Creates a new LimeLight + sets initial values. */
+  
   public LimeLight() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
     x=0;
