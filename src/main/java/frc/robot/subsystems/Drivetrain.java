@@ -4,14 +4,18 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 
 import frc.robot.Constants;
-import frc.robot.Direction;
+import frc.robot.commands.Direction;
 @SuppressWarnings("Serial Warnings")
 
 public class Drivetrain extends SubsystemBase {
@@ -22,7 +26,7 @@ public class Drivetrain extends SubsystemBase {
   private static double peakOutput = 0.2;
 
   // TODO Placeholder constants.
-  private static final double TICKS_PER_REVOLUTION = 42;
+  private static final double TICKS_PER_REVOLUTION = 43;
   private static final double WHEEL_DIAMETER = 5.0;
   private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
   private static final double GEAR_RATIO = 8.8984;
@@ -39,29 +43,55 @@ public class Drivetrain extends SubsystemBase {
   public static final double POSITION_I = 0.0;
   public static final double POSITION_D = 0.0020951;
   public static final double POSITION_FEED_FORWARD = 0.0;
+  public static final double RIGHT_POSITION_P = 0.065; 
+  public static final double LEFT_POSITION_P = 0.01;
 
   private CANSparkMax leftFront;
   private CANSparkMax leftRear;
   private CANSparkMax rightFront;
   private CANSparkMax rightRear;
-  
   public static double targetPosition;
   public static Direction targetDirection;
-  //public AHRS navX;
+
+  private RelativeEncoder leftEncoder;
+  private RelativeEncoder rightEncoder;
+  private SparkMaxPIDController rightFrontPID;
+  private SparkMaxPIDController leftFrontPID;
+
+  public AHRS navX;
+
+
+  //navXAhrs = new AHRS(SPI.Port.kMXP);
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     leftFront = new CANSparkMax(Constants.LEFTFRONT_MOTOR, MotorType.kBrushless);
+    leftEncoder = leftFront.getEncoder();
     leftRear = new CANSparkMax(Constants.LEFTREAR_MOTOR, MotorType.kBrushless);
-    leftFront.setInverted(true);
     leftRear.follow(leftFront);
 
+    leftFront.setInverted(true);
+
+
     rightFront = new CANSparkMax(Constants.RIGHTFRONT_MOTOR, MotorType.kBrushless);
+    rightEncoder = rightFront.getEncoder();
     rightRear = new CANSparkMax(Constants.RIGHTREAR_MOTOR, MotorType.kBrushless);
-    rightFront.setInverted(true);
     rightRear.follow(rightFront);
 
-    configAllControllers(POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
+    leftEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    leftEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    rightEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    rightEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+
+    rightFrontPID = leftFront.getPIDController();
+    leftFrontPID = rightFront.getPIDController();
+
+    leftFrontPID.setOutputRange(-0.1, 0.1);
+    rightFrontPID.setOutputRange(-0.1, 0.1);
+
+    configAllControllers(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
+
+    navX = new AHRS(SPI.Port.kMXP);
   }
 
   public void tankDrive(double left, double right) {
@@ -70,14 +100,14 @@ public class Drivetrain extends SubsystemBase {
       left = Math.signum(left)*0.1;
     }
 
-    if (Math.abs(right) > 0.1){
-      right = Math.signum(right)*0.1;
-    }
+    // if (Math.abs(right) > 0.1){
+    //   right = Math.signum(right)*0.1;
+    // }
 
-    */
-    // Invert speed on right side
-    leftFront.set(left*1/2);
-    rightFront.set(-right*1/2);
+    // */
+
+    leftFront.set(left*1/9);
+    rightFront.set(-right*1/9);
     
   }
 
@@ -157,30 +187,9 @@ public class Drivetrain extends SubsystemBase {
     rightRear.getEncoder().setPosition(0);
   }
 
-  public double getAngle() {
-		//return navX.getAngle();
-    return 0; // TODO Add NavX functionality.
-	}
-
-	public void resetAngle() {
-		//navX.reset(); // TODO Add NavX functionality.
-	}
-
-  public void angleTurn(Direction direction) {
-    double speed = 0.2;
-
-    //SmartDashboard.putNumber("angle: ", getAngle());
-    if (direction == Direction.RIGHT) {
-      leftFront.set(-speed);
-      rightFront.set(speed);
-    } else if (direction == Direction.LEFT) {
-      leftFront.set(speed);
-      rightFront.set(-speed);
-    } else {
-      leftFront.set(0);
-      rightFront.set(0);
-    }
+  public void resetVelocity() {
   }
+
 /* 
   public void setPID(double kP, double kI, double kD, double kF) {
     SparkMaxPIDController rightFrontPID = rightFront.getPIDController();
@@ -209,6 +218,29 @@ public class Drivetrain extends SubsystemBase {
     leftRear.setCANTimeout(100);
   }
 */
+ public void resetAngle(){
+     navX.reset();
+   }
+
+   public double getAngle(){
+     return navX.getAngle();
+   }
+
+   public void angleTurn(Direction direction){
+     double speed = 0.2;
+     
+     if (direction == Direction.RIGHT) {
+      leftFront.set(-speed);
+      rightFront.set(speed);
+    } else if (direction == Direction.LEFT) {
+      leftFront.set(speed);
+      rightFront.set( -speed);
+    } else {
+      leftFront.set(0);
+      rightFront.set(0);
+    }
+  }
+
 
   public void setSlow(boolean val) {
     slow = val;
@@ -221,5 +253,5 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
+  } 
 }
