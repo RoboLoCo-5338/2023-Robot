@@ -4,15 +4,9 @@
 
 package frc.robot;
 
-<<<<<<< HEAD
-import frc.robot.commands.AutoCommands;
-import frc.robot.commands.Direction;
-import frc.robot.subsystems.Drivetrain;
-
-=======
 import frc.robot.Constants.OperatorConstants;
 
-import frc.robot.commands.Autos;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.ConeTipperCommands;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
@@ -21,7 +15,6 @@ import frc.robot.subsystems.ConeTipper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import frc.robot.subsystems.Elevator;
->>>>>>> origin/Mechanism
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.HIDType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,12 +33,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-<<<<<<< HEAD
-=======
 
   public static final Elevator m_Elevator = new Elevator();
   public static ElevatorCommands m_ElevatorCommands;
->>>>>>> origin/Mechanism
   public static final Drivetrain drivetrain = new Drivetrain();
   public static final LimeLight LimeLight = new LimeLight();
   public static final Effector effector = new Effector();
@@ -77,21 +67,12 @@ public class RobotContainer {
   //   );
   
   public Command defaultDrive = new RunCommand(
-<<<<<<< HEAD
-    () -> drivetrain.tankDriveVelocity(
-      controller1.getRawAxis(1),
-      controller1.getRawAxis(5)
-    ),
-    drivetrain
-  );
-=======
       () -> drivetrain.tankDrive(
         controller1.getRawAxis(1)*(percent+controller1.getRawAxis(3)*(1-percent)),
         controller1.getRawAxis(5)*(percent+controller1.getRawAxis(3)*(1-percent))
       ),
       drivetrain
     );
->>>>>>> origin/Mechanism
 
     public Command defaultElevator = new RunCommand(//left joystick
       () -> m_Elevator.moveElevator(
@@ -136,11 +117,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-<<<<<<< HEAD
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // new Trigger(m_exampleSubsystem::exampleCondition)
-    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
-=======
    
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
     JoystickButton backwardEffector = new JoystickButton(controller1, Constants.LBBUTTON);
@@ -193,7 +169,6 @@ public class RobotContainer {
 
     
     coneTipperCycleUp.onTrue(ConeTipperCommands.setConeTipper());
->>>>>>> origin/Mechanism
 
   }
 
@@ -203,21 +178,7 @@ public class RobotContainer {
     m_Elevator.setDefaultCommand(defaultElev);
   }
 
-<<<<<<< HEAD
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    //return AutoCommands.driveDistanceCommand(120, Direction.FORWARD);
-    return AutoCommands.driveVelocityCommand(0, 0, 0);
-  }
-  
-=======
 
 
 
->>>>>>> origin/Mechanism
 }
