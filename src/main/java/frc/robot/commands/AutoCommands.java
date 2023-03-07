@@ -26,7 +26,7 @@ public class AutoCommands {
   public static Command driveVelocityCommand(double distance, double leftVelocity, double rightVelocity){
     return new FunctionalCommand( 
       () -> RobotContainer.drivetrain.resetVelocity(),
-      () -> RobotContainer.drivetrain.tankDriveVelocity(leftVelocity, rightVelocity),
+      () -> RobotContainer.drivetrain.tankDrive(leftVelocity, rightVelocity),
       (interrupt) -> RobotContainer.drivetrain.tankDriveVelocity(0, 0),
       () -> Math.abs(RobotContainer.drivetrain.getPosition())>= Math.abs(distance) - 0.1,
       RobotContainer.drivetrain
@@ -39,7 +39,7 @@ public static Command PIDTurnCommand(double angle, Direction direction){
     new PIDController(0, 0, 0),
     () -> Math.abs(RobotContainer.drivetrain.getAngle()),
     () -> angle,
-    (output) -> RobotContainer.drivetrain.tankDriveVelocity(direction==Direction.RIGHT ? -output : output, direction==Direction.RIGHT ? output : -output),
+    (output) -> RobotContainer.drivetrain.tankDrive(direction==Direction.RIGHT ? -output : output, direction==Direction.RIGHT ? output : -output),
     RobotContainer.drivetrain
   );
 }
