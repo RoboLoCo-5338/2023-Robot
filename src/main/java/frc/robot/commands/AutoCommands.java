@@ -48,7 +48,7 @@ public static Command PIDTurnCommand(double angle, Direction direction){
   public static Command sampleAuto() {
     return new SequentialCommandGroup(
       driveDistanceCommand(20, Direction.FORWARD),
-      driveVelocityCommand(20, 20, 20),
+      driveVelocityCommand(20, 20, 20)
     );
   }
 }

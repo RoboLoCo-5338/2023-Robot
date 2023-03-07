@@ -4,15 +4,18 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 
 import frc.robot.Constants;
-import frc.robot.Direction;
+import frc.robot.commands.Direction;
 @SuppressWarnings("Serial Warnings")
 
 public class Drivetrain extends SubsystemBase {
@@ -40,6 +43,8 @@ public class Drivetrain extends SubsystemBase {
   public static final double POSITION_I = 0.0;
   public static final double POSITION_D = 0.0020951;
   public static final double POSITION_FEED_FORWARD = 0.0;
+  public static final double RIGHT_POSITION_P = 0.065; 
+  public static final double LEFT_POSITION_P = 0.01;
 
   private CANSparkMax leftFront;
   private CANSparkMax leftRear;
@@ -60,17 +65,17 @@ public class Drivetrain extends SubsystemBase {
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
-    leftFront = new CANSparkMax(Constants.MOTOR_ID_3, MotorType.kBrushless);
+    leftFront = new CANSparkMax(Constants.LEFTFRONT_MOTOR, MotorType.kBrushless);
     leftEncoder = leftFront.getEncoder();
-    leftRear = new CANSparkMax(Constants.MOTOR_ID_2, MotorType.kBrushless);
+    leftRear = new CANSparkMax(Constants.LEFTREAR_MOTOR, MotorType.kBrushless);
     leftRear.follow(leftFront);
 
     leftFront.setInverted(true);
 
 
-    rightFront = new CANSparkMax(Constants.MOTOR_ID_1, MotorType.kBrushless);
+    rightFront = new CANSparkMax(Constants.RIGHTFRONT_MOTOR, MotorType.kBrushless);
     rightEncoder = rightFront.getEncoder();
-    rightRear = new CANSparkMax(Constants.MOTOR_ID_0, MotorType.kBrushless);
+    rightRear = new CANSparkMax(Constants.RIGHTREAR_MOTOR, MotorType.kBrushless);
     rightRear.follow(rightFront);
 
     leftEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
@@ -84,13 +89,9 @@ public class Drivetrain extends SubsystemBase {
     leftFrontPID.setOutputRange(-0.1, 0.1);
     rightFrontPID.setOutputRange(-0.1, 0.1);
 
-
-    setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
-    setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
+    configAllControllers(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
 
     navX = new AHRS(SPI.Port.kMXP);
-
-
   }
 
   public void tankDrive(double left, double right) {
@@ -186,30 +187,9 @@ public class Drivetrain extends SubsystemBase {
     rightRear.getEncoder().setPosition(0);
   }
 
-  public double getAngle() {
-		//return navX.getAngle();
-    return 0; // TODO Add NavX functionality.
-	}
-
-	public void resetAngle() {
-		//navX.reset(); // TODO Add NavX functionality.
-	}
-
-  public void angleTurn(Direction direction) {
-    double speed = 0.2;
-
-    //SmartDashboard.putNumber("angle: ", getAngle());
-    if (direction == Direction.RIGHT) {
-      leftFront.set(-speed);
-      rightFront.set(speed);
-    } else if (direction == Direction.LEFT) {
-      leftFront.set(speed);
-      rightFront.set(-speed);
-    } else {
-      leftFront.set(0);
-      rightFront.set(0);
-    }
+  public void resetVelocity() {
   }
+
 /* 
   public void setPID(double kP, double kI, double kD, double kF) {
     SparkMaxPIDController rightFrontPID = rightFront.getPIDController();

@@ -187,7 +187,7 @@ public class RobotContainer {
     // coneTipperBackward.whileTrue(ConeTipperCommands.moveBackward());
 
     
-    coneTipperCycleUp.onTrue(ConeTipperCommands.setConeTipper());
+    // coneTipperCycleUp.onTrue(ConeTipperCommands.setConeTipper());
 
   }
 
