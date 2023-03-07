@@ -51,4 +51,31 @@ public static Command PIDTurnCommand(double angle, Direction direction){
       driveVelocityCommand(20, 20, 20)
     );
   }
+  public static Command middleAuto() {
+    return new SequentialCommandGroup(
+      driveVelocityCommand(10, -1, -1),
+      //turn and score cube?
+      driveVelocityCommand(60.69, 1, 1),
+      //mount charging station?
+      driveVelocityCommand(76.125, 1, 1),
+      driveVelocityCommand(40, 1, 1),
+      driveVelocityCommand(40, -1, -1),
+      driveVelocityCommand(38.0625, -1, -2)
+      //engage on charging station?
+    );
+  }
+
+  public static Command rightAuto(){
+    return new SequentialCommandGroup(
+      driveVelocityCommand(10, -1, -1),
+      //turn and score cube?
+      driveVelocityCommand(56.75, 1, 1),
+      driveVelocityCommand(40, 1, 1),
+      PIDTurnCommand(90, Direction.LEFT),
+      driveVelocityCommand(22, 1, 1),
+      PIDTurnCommand(90, Direction.LEFT),
+      driveVelocityCommand(38.0625, 1, 1)
+      //engange on charging station?
+    );
+  }
 }
