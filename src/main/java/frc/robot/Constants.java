@@ -18,14 +18,15 @@ public final class Constants {
     
     
   }
+
   public static final int RIGHTREAR_MOTOR = 1;
   public static final int RIGHTFRONT_MOTOR = 2;
   public static final int LEFTREAR_MOTOR = 3;
   public static final int LEFTFRONT_MOTOR = 4;
-  public static final int ELEVATOR_MOTOR = 5;
+  public static final int ELEVATOR_MOTOR = 7;
+  public static final int CONE_TIPPER = 0;
+  public static final int EFFECTOR_MOTOR = 5;
   public static final int ARM_MOTOR = 6;
-  public static final int Height = 3;
-
 
   public static final int ABUTTON = 1; 
   public static final int BBUTTON = 2; 
@@ -40,4 +41,12 @@ public final class Constants {
   public static final int CONE_TIPPER_FORWARD =11;
   public static final int CONE_TIPPER_CYCLE_UP =12;
   public static final int CONE_TIPPER_BACKWARD =13;
+
+  // Height presets.
+  public static final int Height = 3;
+  public static final int height1 = 1;
+  public static final int height2 = 2;
+  public static final int height3 = 3;
+  public static final int height4 = 4;
+  public static final int height5 = 5;
 }

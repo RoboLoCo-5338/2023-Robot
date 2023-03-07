@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
+@SuppressWarnings("Serial Warnings")
 public class LimeLight extends CommandBase {
 
   private NetworkTable table;
@@ -21,6 +21,7 @@ public class LimeLight extends CommandBase {
   private double p;//multiplier value (proportional speed for turning depending on tx value)
   public double pipeLineNum=0;
   /** Creates a new LimeLight + sets initial values. */
+  
   public LimeLight() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
     x=0;

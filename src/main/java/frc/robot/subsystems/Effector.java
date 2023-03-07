@@ -9,8 +9,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import frc.robot.Constants;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 
-
+@SuppressWarnings("Serial Warnings")
 public class Effector extends SubsystemBase{
 
     private CANSparkMax outerMotor;
@@ -22,10 +23,11 @@ public class Effector extends SubsystemBase{
     public static double effectorD=0.0;
     public static double effector_Forward=0.0;
    
-    public void effectorSystem() {
-        outerMotor = new CANSparkMax(Constants.MOTOR_ID_1, MotorType.kBrushless);
-        this.outerMotor.setInverted(true);
-        configController();
+    public Effector() {
+        outerMotor = new CANSparkMax(Constants.EFFECTOR_MOTOR, MotorType.kBrushless);
+        outerMotor.setIdleMode(IdleMode.kCoast);
+       // outerMotor.setInverted(true);
+        //configController();
     }
 
 
