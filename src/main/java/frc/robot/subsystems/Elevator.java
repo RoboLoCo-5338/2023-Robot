@@ -4,8 +4,8 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
+// import edu.wpi.first.math.controller.ElevatorFeedforward;
+// import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -26,6 +26,7 @@ public class Elevator extends SubsystemBase {
   private SparkMaxPIDController armController;
   private double[] armHeights = new double[5]; // TODO Add preset arm heights.
 
+  // PID values for elevator 
   public static double elevatorP = 0.1;
   public static double elevatorI = 0.0;
   public static double elevatorD = 0.0;

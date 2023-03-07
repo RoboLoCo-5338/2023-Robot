@@ -66,3 +66,4 @@ public class ElevatorCommands extends CommandBase {
    public boolean isFinished() {
      return false;
    }
+  }
