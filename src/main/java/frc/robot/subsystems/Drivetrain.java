@@ -16,6 +16,13 @@ import com.revrobotics.CANSparkMax.ControlType;
 
 import frc.robot.Constants;
 import frc.robot.commands.Direction;
+
+import com.revrobotics.RelativeEncoder; 
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+
 @SuppressWarnings("Serial Warnings")
 
 public class Drivetrain extends SubsystemBase {
@@ -32,13 +39,7 @@ public class Drivetrain extends SubsystemBase {
   private static final double GEAR_RATIO = 8.8984;
   private static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
 
-  // PID values for teleop.
-  public static final double VELOCITY_P = 0.0110;
-  public static final double VELOCITY_I = 0.0;
-  public static final double VELOCITY_D = 0.0;
-  public static final double VELOCITY_FEED_FORWARD = 0.0;
-
-  // PID values for autonomous.
+  // PID values for autonomous, position values 
   public static final double POSITION_P = 0.0175821;
   public static final double POSITION_I = 0.0;
   public static final double POSITION_D = 0.0020951;
@@ -46,12 +47,20 @@ public class Drivetrain extends SubsystemBase {
   public static final double RIGHT_POSITION_P = 0.065; 
   public static final double LEFT_POSITION_P = 0.01;
 
+  // PID values for autonomous, velocity values 
+  public static final double VELOCITY_P = 0.0175821;
+  public static final double VELOCITY_I = 0.0;
+  public static final double VELOCITY_D = 0.0020951;
+  public static final double VELOCITY_FEED_FORWARD = 0.0; 
+
+  // motors and encoders 
   private CANSparkMax leftFront;
   private CANSparkMax leftRear;
   private CANSparkMax rightFront;
   private CANSparkMax rightRear;
   public static double targetPosition;
   public static Direction targetDirection;
+  
 
   private RelativeEncoder leftEncoder;
   private RelativeEncoder rightEncoder;
@@ -108,7 +117,6 @@ public class Drivetrain extends SubsystemBase {
 
     leftFront.set(left*1/9);
     rightFront.set(-right*1/9);
-    
   }
 
   public void driveDistance(double inches, Direction direction) {
@@ -198,6 +206,7 @@ public class Drivetrain extends SubsystemBase {
     rightFrontPID.setD(kD);
     rightFrontPID.setFF(kF);
     rightFront.setCANTimeout(100);
+
     SparkMaxPIDController leftFrontPID = leftFront.getPIDController();
     leftFrontPID.setP(kP);
     leftFrontPID.setI(kI);
@@ -218,29 +227,30 @@ public class Drivetrain extends SubsystemBase {
     leftRear.setCANTimeout(100);
   }
 */
- public void resetAngle(){
-     navX.reset();
-   }
 
-   public double getAngle(){
-     return navX.getAngle();
-   }
 
-   public void angleTurn(Direction direction){
-     double speed = 0.2;
-     
-     if (direction == Direction.RIGHT) {
+// angle stuff
+  public double getAngle() {
+		return navX.getAngle();
+	}
+  public void resetAngle() {
+		navX.reset();
+	}
+  public void angleTurn(Direction direction) {
+    double speed = 0.2;
+
+    SmartDashboard.putNumber("angle: ", getAngle());
+    if (direction == Direction.RIGHT) {
       leftFront.set(-speed);
       rightFront.set(speed);
     } else if (direction == Direction.LEFT) {
       leftFront.set(speed);
-      rightFront.set( -speed);
+      rightFront.set(-speed);
     } else {
       leftFront.set(0);
       rightFront.set(0);
     }
   }
-
 
   public void setSlow(boolean val) {
     slow = val;

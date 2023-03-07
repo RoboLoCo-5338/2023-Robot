@@ -4,13 +4,12 @@
 
 package frc.robot;
 
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.Direction;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.Autos;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.ConeTipperCommands;
 import frc.robot.commands.EffectorCommands;
@@ -40,7 +39,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-
   public static final Elevator m_Elevator = new Elevator();
   public static ElevatorCommands m_ElevatorCommands;
   public static final Drivetrain drivetrain = new Drivetrain();
@@ -199,7 +197,14 @@ public class RobotContainer {
    // m_Elevator.setDefaultCommand(defaultElev);
   }
 
-
-
-
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  // public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    //REPLACE
+    // return AutoCommands.moveForward(60);
+  // }
 }
