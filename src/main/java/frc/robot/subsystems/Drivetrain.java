@@ -12,7 +12,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 
 import frc.robot.Constants;
 import frc.robot.Direction;
-// import com.kauailabs.navx.frc.AHRS;
+@SuppressWarnings("Serial Warnings")
 
 public class Drivetrain extends SubsystemBase {
   private boolean slow = false;
@@ -28,7 +28,6 @@ public class Drivetrain extends SubsystemBase {
   private static final double GEAR_RATIO = 8.8984;
   private static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
 
-  /* 
   // PID values for teleop.
   public static final double VELOCITY_P = 0.0110;
   public static final double VELOCITY_I = 0.0;
@@ -40,25 +39,26 @@ public class Drivetrain extends SubsystemBase {
   public static final double POSITION_I = 0.0;
   public static final double POSITION_D = 0.0020951;
   public static final double POSITION_FEED_FORWARD = 0.0;
-  */
 
   private CANSparkMax leftFront;
   private CANSparkMax leftRear;
   private CANSparkMax rightFront;
   private CANSparkMax rightRear;
+  
   public static double targetPosition;
   public static Direction targetDirection;
   //public AHRS navX;
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
-    // Motor controller initialization and settings.
-    leftFront = new CANSparkMax(Constants.MOTOR_ID_3, MotorType.kBrushless);
-    leftRear = new CANSparkMax(Constants.MOTOR_ID_2, MotorType.kBrushless);
+    leftFront = new CANSparkMax(Constants.LEFTFRONT_MOTOR, MotorType.kBrushless);
+    leftRear = new CANSparkMax(Constants.LEFTREAR_MOTOR, MotorType.kBrushless);
+    leftFront.setInverted(true);
     leftRear.follow(leftFront);
 
-    rightFront = new CANSparkMax(Constants.MOTOR_ID_1, MotorType.kBrushless);
-    rightRear = new CANSparkMax(Constants.MOTOR_ID_0, MotorType.kBrushless);
+    rightFront = new CANSparkMax(Constants.RIGHTFRONT_MOTOR, MotorType.kBrushless);
+    rightRear = new CANSparkMax(Constants.RIGHTREAR_MOTOR, MotorType.kBrushless);
+    rightFront.setInverted(true);
     rightRear.follow(rightFront);
 
     configAllControllers(POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
@@ -189,21 +189,18 @@ public class Drivetrain extends SubsystemBase {
     rightFrontPID.setD(kD);
     rightFrontPID.setFF(kF);
     rightFront.setCANTimeout(100);
-
     SparkMaxPIDController leftFrontPID = leftFront.getPIDController();
     leftFrontPID.setP(kP);
     leftFrontPID.setI(kI);
     leftFrontPID.setD(kD);
     leftFrontPID.setFF(kF);
     leftFront.setCANTimeout(100);
-
     SparkMaxPIDController rightRearPID = rightRear.getPIDController();
     rightRearPID.setP(kP);
     rightRearPID.setI(kI);
     rightRearPID.setD(kD);
     rightFrontPID.setFF(kF);
     rightFront.setCANTimeout(100);
-
     SparkMaxPIDController leftRearPID = leftRear.getPIDController();
     leftRearPID.setP(kP);
     leftRearPID.setI(kI);

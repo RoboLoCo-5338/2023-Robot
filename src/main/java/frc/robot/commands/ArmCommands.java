@@ -30,12 +30,19 @@ public class ArmCommands extends CommandBase {
   public void end(boolean interrupted) {}
 
   // Move arm to preset height and stop when the height is reached.
-  public static Command setArm(Elevator elevator, int preset){
+  public static Command setArm(int preset){
     return new FunctionalCommand(
       () -> RobotContainer.m_Elevator.setArmChange(preset),
       () -> RobotContainer.m_Elevator.setArm(),
       (interrupt) -> RobotContainer.m_Elevator.stopArm(),
-      () -> Math.abs(RobotContainer.m_Elevator.getArmPosition()) >= Math.abs(RobotContainer.m_Elevator.armChange+RobotContainer.m_Elevator.getArmPosition()-0.1),
+      () -> Math.abs(RobotContainer.m_Elevator.getArmPosition()) >= Math.abs(Elevator.armChange+RobotContainer.m_Elevator.getArmPosition()-0.1),
+      RobotContainer.m_Elevator);
+  }
+
+
+  public static Command moveArm(double speed){
+    return new InstantCommand(
+      () -> RobotContainer.m_Elevator.moveArm(speed),
       RobotContainer.m_Elevator);
   }
 
@@ -54,7 +61,7 @@ public class ArmCommands extends CommandBase {
     );
   }
 
-  public static Command stop(Elevator elevator){
+  public static Command stopArm(){
     return new InstantCommand(
       () -> RobotContainer.m_Elevator.stopArm(),
       RobotContainer.m_Elevator

@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -14,36 +15,41 @@ import com.revrobotics.RelativeEncoder;
 import frc.robot.Constants;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 
+@SuppressWarnings("Serial Warnings")
 public class Elevator extends SubsystemBase {
   private CANSparkMax elevatorMotor;
   private RelativeEncoder elevatorEncoder;
   private SparkMaxPIDController elevatorController;
-  private double[] elevatorHeights = new double[5];
+  private double[] elevatorHeights = new double[6];
   public static double elevatorChange=0;
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
   private SparkMaxPIDController armController;
-  private double[] armHeights = new double[5]; // TODO Add preset arm heights.
+  private double[] armHeights = new double[6];
+  public static double armChange = 0;
 
-  public static double elevatorP = 0.1;
-  public static double elevatorI = 0.0;
-  public static double elevatorD = 0.0;
-  public static double elevator_Forward = 0.0;
+  //untested PID
+  public static double elevatorP=0.1;
+  public static double elevatorI=0.0;
+  public static double elevatorD=0.0;
+  public static double elevator_Forward=0.0;
 
-  public static double armP = 0.1;
-  public static double armI = 0.0;
-  public static double armD = 0.0;
-  public static double armFeed_Forward = 0.0;
+  public static double armP=0.1;
+  public static double armI=0.0;
+  public static double armD=0.0;
+  public static double armFeed_Forward=0.0;
 
   public Elevator() {
-      // Init.
-      elevatorMotor = new CANSparkMax(Constants.MOTOR_ID_4, MotorType.kBrushless);
+      elevatorMotor = new CANSparkMax(Constants.ELEVATOR_MOTOR, MotorType.kBrushless);
+      elevatorMotor.setIdleMode(IdleMode.kBrake);
       elevatorEncoder = elevatorMotor.getEncoder();
       elevatorController = elevatorMotor.getPIDController();
       elevatorController.setOutputRange(-0.1, 0.1);
       elevatorEncoder.setPositionConversionFactor(1);
-      armMotor = new CANSparkMax(Constants.MOTOR_ID_5, MotorType.kBrushless);
+      armMotor = new CANSparkMax(Constants.ARM_MOTOR, MotorType.kBrushless);
+      armMotor.setIdleMode(IdleMode.kBrake);
       armEncoder = armMotor.getEncoder();
       armController = armMotor.getPIDController();
       armController.setOutputRange(-0.1, 0.1);
@@ -52,34 +58,35 @@ public class Elevator extends SubsystemBase {
       configController();
       
     }
+  
     public void setElevatorChange(int preset) {
       double current = elevatorEncoder.getPosition();
+      SmartDashboard.putNumber("Elevator Position", preset);
       elevatorChange = elevatorHeights[preset] - current;
     }
+  
     public void setElevatorHeight(){
       elevatorController.setReference(elevatorChange, ControlType.kPosition);
-     // double current = elevatorMotor.getEncoder().getPosition();
-     // double change = height[preset] - current;
-    //  current = height[preset];
-     // elevatorMotor.getPIDController().setReference(change, ControlType.kPosition);
-     // elevatorMotor.getEncoder().setPosition(0);
-      // TODO 2/18
     }
+  
     public void moveElevator(double speed){
+      SmartDashboard.putNumber("Elevator Position", getElevatorPosition());
       elevatorMotor.set(speed);
     }
     public void resetElevator(){
       elevatorEncoder.setPosition(0);
     }
-
-    // Set arm heights based on presets.
-    public void setArm(int preset){
+    public void setArmChange(int preset){
       double current = armEncoder.getPosition();
-      double change = armHeights[preset] - current;
-      armController.setReference(change, ControlType.kPosition);
+      SmartDashboard.putNumber("Arm Position", preset);
+      armChange = armHeights[preset] - current;
+    }
+    public void setArm(){
+      armController.setReference(armChange, ControlType.kPosition);
     }
   
     public void moveArm(double speed){
+      SmartDashboard.putNumber("Arm Position", getArmPosition());
       armMotor.set(speed);
     }
 
@@ -107,7 +114,7 @@ public class Elevator extends SubsystemBase {
       return elevatorEncoder.getPosition();
 
     }
-
+    
     private void configController(){
     
     // PID config for the elevator
@@ -121,8 +128,5 @@ public class Elevator extends SubsystemBase {
     armController.setI(armI);
     armController.setD(armD);
     armController.setFF(armFeed_Forward);
-    
   }
-   
 }
-
