@@ -89,7 +89,8 @@ public class Drivetrain extends SubsystemBase {
     leftFrontPID.setOutputRange(-0.1, 0.1);
     rightFrontPID.setOutputRange(-0.1, 0.1);
 
-    configAllControllers(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
+    setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
+    setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
 
     navX = new AHRS(SPI.Port.kMXP);
   }
@@ -112,18 +113,20 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void driveDistance(double inches, Direction direction) {
-    // Change position sign based on direction
     targetDirection = direction;
     if (direction == Direction.FORWARD) {
-      targetPosition = -inches * TICKS_PER_INCH * GEAR_RATIO;
+      targetPosition = -inches;
     } else if (direction == Direction.BACKWARD) {
-      targetPosition = inches * TICKS_PER_INCH * GEAR_RATIO;
+      targetPosition = inches;
     } else {
       targetPosition = 0;
     }
-    //    leftFront.set(ControlMode.Position, targetPosition);
-    //    rightFront.set(ControlMode.Position, targetPosition);
-    tankDrive(targetPosition, targetPosition);
+
+    SmartDashboard.putNumber("SetPoint", targetPosition);
+    SmartDashboard.putNumber( "Left Position", leftEncoder.getPosition());
+    SmartDashboard.putNumber( "Right Position", rightEncoder.getPosition());
+    //rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+    //leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
   }
 
   public void configAllControllers(double kP, double kI, double kD, double kF) {
@@ -173,7 +176,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getPosition() {
-    return rightFront.getEncoder().getPosition();
+    return (leftEncoder.getPosition() + rightEncoder.getPosition())/2;
   }
 
   public double getVelocity() {
@@ -188,6 +191,38 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetVelocity() {
+    rightFrontPID.setReference(0, CANSparkMax.ControlType.kVelocity);
+    leftFrontPID.setReference(0, CANSparkMax.ControlType.kVelocity);
+  }
+
+  public void setPositionPID(double kPR, double kPL, double kI, double kD, double kF) {
+
+    rightFrontPID.setP(kPR);
+    rightFrontPID.setI(kI);
+    rightFrontPID.setD(kD);
+    rightFrontPID.setFF(kF);
+    rightFront.setCANTimeout(100);
+
+    leftFrontPID.setP(kPL);
+    leftFrontPID.setI(kI);
+    leftFrontPID.setD(kD);
+    leftFrontPID.setFF(kF);
+    leftFront.setCANTimeout(100);
+  }
+
+  public void setVelocityPID(double kP, double kI, double kD, double kF) {
+
+    rightFrontPID.setP(kP);
+    rightFrontPID.setI(kI);
+    rightFrontPID.setD(kD);
+    rightFrontPID.setFF(kF);
+    rightFront.setCANTimeout(100);
+
+    leftFrontPID.setP(kP);
+    leftFrontPID.setI(kI);
+    leftFrontPID.setD(kD);
+    leftFrontPID.setFF(kF);
+    leftFront.setCANTimeout(100);
   }
 
 /* 
@@ -240,18 +275,4 @@ public class Drivetrain extends SubsystemBase {
       rightFront.set(0);
     }
   }
-
-
-  public void setSlow(boolean val) {
-    slow = val;
-  }
-
-  public void setStraight(boolean val) {
-    straight = val;
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  } 
 }
