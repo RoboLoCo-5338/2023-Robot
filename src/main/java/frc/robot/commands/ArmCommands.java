@@ -11,24 +11,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Elevator;
 
-public class ArmCommands extends CommandBase {
+public class ArmCommands  {
   /** Creates a new ArmCommands. */
   public ArmCommands() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
+ 
   // Move arm to preset height and stop when the height is reached.
   public static Command setArm(int preset){
     return new FunctionalCommand(
@@ -68,9 +57,5 @@ public class ArmCommands extends CommandBase {
     );
   }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+
 }

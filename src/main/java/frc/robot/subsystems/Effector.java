@@ -15,17 +15,18 @@ import com.revrobotics.CANSparkMax.IdleMode;
 public class Effector extends SubsystemBase{
 
     private CANSparkMax outerMotor;
-    private double speed = 0.5;
+    private double speed = 0.8;
     private SparkMaxPIDController effectorController;
     //untested PID
     public static double effectorP=0.1;
     public static double effectorI=0.0;
     public static double effectorD=0.0;
     public static double effector_Forward=0.0;
-   
+    
     public Effector() {
         outerMotor = new CANSparkMax(Constants.EFFECTOR_MOTOR, MotorType.kBrushless);
         outerMotor.setIdleMode(IdleMode.kCoast);
+        outerMotor.setSmartCurrentLimit(30);
        // outerMotor.setInverted(true);
         //configController();
     }

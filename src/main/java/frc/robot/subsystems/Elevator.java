@@ -22,7 +22,7 @@ public class Elevator extends SubsystemBase {
   private CANSparkMax elevatorMotor;
   private RelativeEncoder elevatorEncoder;
   private SparkMaxPIDController elevatorController;
-  private double[] elevatorHeights = new double[6];
+  private double[] elevatorHeights = {-20};
   public static double elevatorChange=0;
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
@@ -46,14 +46,16 @@ public class Elevator extends SubsystemBase {
       elevatorMotor.setIdleMode(IdleMode.kBrake);
       elevatorEncoder = elevatorMotor.getEncoder();
       elevatorController = elevatorMotor.getPIDController();
-      elevatorController.setOutputRange(-0.1, 0.1);
-      elevatorEncoder.setPositionConversionFactor(1);
+      elevatorController.setOutputRange(-0.2, 0.2);
+      //elevatorEncoder.setPositionConversionFactor(1);
+      elevatorMotor.setSmartCurrentLimit(40);
       armMotor = new CANSparkMax(Constants.ARM_MOTOR, MotorType.kBrushless);
       armMotor.setIdleMode(IdleMode.kBrake);
       armEncoder = armMotor.getEncoder();
       armController = armMotor.getPIDController();
-      armController.setOutputRange(-0.1, 0.1);
-      armEncoder.setPositionConversionFactor(1);
+      armController.setOutputRange(-0.2, 0.2);
+      //armEncoder.setPositionConversionFactor(1);
+      armMotor.setSmartCurrentLimit(40);
 
       configController();
       

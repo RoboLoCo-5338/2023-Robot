@@ -52,12 +52,16 @@ public class Drivetrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     leftFront = new CANSparkMax(Constants.LEFTFRONT_MOTOR, MotorType.kBrushless);
+    leftFront.setSmartCurrentLimit(40);
     leftRear = new CANSparkMax(Constants.LEFTREAR_MOTOR, MotorType.kBrushless);
+    leftRear.setSmartCurrentLimit(40);
     leftFront.setInverted(true);
     leftRear.follow(leftFront);
 
     rightFront = new CANSparkMax(Constants.RIGHTFRONT_MOTOR, MotorType.kBrushless);
+    rightFront.setSmartCurrentLimit(40);
     rightRear = new CANSparkMax(Constants.RIGHTREAR_MOTOR, MotorType.kBrushless);
+    rightRear.setSmartCurrentLimit(40);
     rightFront.setInverted(true);
     rightRear.follow(rightFront);
 
