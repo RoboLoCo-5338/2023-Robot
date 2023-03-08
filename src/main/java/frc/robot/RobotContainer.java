@@ -4,15 +4,20 @@
 
 package frc.robot;
 
+import frc.robot.commands.AutoCommands;
+import frc.robot.commands.Direction;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.Autos;
 
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutoCommands;
+import frc.robot.commands.ConeTipperCommands;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.LimeLight;
 import frc.robot.subsystems.ConeTipper;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj.Joystick;
@@ -40,6 +45,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+
   public static final Elevator m_Elevator = new Elevator();
   public static ElevatorCommands m_ElevatorCommands;
   public static final Drivetrain drivetrain = new Drivetrain();
@@ -68,7 +74,6 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
-  // Drive using the joysticks.
   public Command defaultDrive = new RunCommand(
       () -> {
         if(reverseModifier<0){
@@ -146,7 +151,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
     JoystickButton backwardEffector = new JoystickButton(controller1, Constants.LBBUTTON);
     JoystickButton limeLight = new JoystickButton(controller1, Constants.ABUTTON);
@@ -221,15 +225,12 @@ public class RobotContainer {
 
     
     // coneTipperCycleUp.onTrue(ConeTipperCommands.setConeTipper());
+
   }
 
 
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(defaultDrive);
    // m_Elevator.setDefaultCommand(defaultElev);
-  }
-
-  public Command getAutonomousCommand(){
-     return ElevatorCommands.setElevatorHeight(0);
   }
 }
