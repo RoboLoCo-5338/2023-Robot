@@ -12,6 +12,7 @@ import frc.robot.commands.Direction;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.LimeLight;
+import frc.robot.commands.PIDTurnCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import frc.robot.subsystems.Elevator;
@@ -231,6 +232,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.driveDistanceCommand(10, Direction.FORWARD);
+    return AutoCommands.driveDistanceCommand(20, Direction.FORWARD);
   }
 }

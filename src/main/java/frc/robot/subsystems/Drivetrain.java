@@ -84,15 +84,15 @@ public class Drivetrain extends SubsystemBase {
     rightRear.follow(rightFront);
 
     leftEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
-    leftEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    //leftEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
     rightEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
-    rightEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    //rightEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
 
     rightFrontPID = leftFront.getPIDController();
     leftFrontPID = rightFront.getPIDController();
 
-    leftFrontPID.setOutputRange(-0.1, 0.1);
-    rightFrontPID.setOutputRange(-0.1, 0.1);
+    leftFrontPID.setOutputRange(-0.3, 0.3);
+    rightFrontPID.setOutputRange(-0.3, 0.3);
 
     setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
     setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
@@ -130,8 +130,8 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("SetPoint", targetPosition);
     SmartDashboard.putNumber( "Left Position", leftEncoder.getPosition());
     SmartDashboard.putNumber( "Right Position", rightEncoder.getPosition());
-    //rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
-    //leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+    rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+    leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
   }
 
   public void configAllControllers(double kP, double kI, double kD, double kF) {

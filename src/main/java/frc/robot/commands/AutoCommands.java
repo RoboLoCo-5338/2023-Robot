@@ -19,14 +19,14 @@ public class AutoCommands {
       () -> RobotContainer.drivetrain.resetPosition(),
       () -> RobotContainer.drivetrain.driveDistance(distance, direction),
       (interrupt) -> RobotContainer.drivetrain.tankDrive(0, 0),
-      () -> Math.abs(RobotContainer.drivetrain.getPosition()) >= Math.abs(RobotContainer.drivetrain.targetPosition) - 1000,
+      () -> Math.abs(RobotContainer.drivetrain.getPosition()) >= Math.abs(RobotContainer.drivetrain.targetPosition) - 0.1,
       RobotContainer.drivetrain
     );
   }
   public static Command driveVelocityCommand(double distance, double leftVelocity, double rightVelocity){
     return new FunctionalCommand( 
       () -> RobotContainer.drivetrain.resetVelocity(),
-      () -> RobotContainer.drivetrain.tankDrive(leftVelocity, rightVelocity),
+      () -> RobotContainer.drivetrain.tankDriveVelocity(leftVelocity, rightVelocity),
       (interrupt) -> RobotContainer.drivetrain.tankDriveVelocity(0, 0),
       () -> Math.abs(RobotContainer.drivetrain.getPosition())>= Math.abs(distance) - 0.1,
       RobotContainer.drivetrain
@@ -34,15 +34,15 @@ public class AutoCommands {
   }
 
 
-public static Command PIDTurnCommand(double angle, Direction direction){
-  return new PIDCommand(
-    new PIDController(0, 0, 0),
-    () -> Math.abs(RobotContainer.drivetrain.getAngle()),
-    () -> angle,
-    (output) -> RobotContainer.drivetrain.tankDrive(direction==Direction.RIGHT ? -output : output, direction==Direction.RIGHT ? output : -output),
-    RobotContainer.drivetrain
-  );
-}
+// public static Command PIDTurnCommand(double angle, Direction direction){
+//   return new PIDCommand(
+//     new PIDController(0.07, 0, 0),
+//     () -> Math.abs(RobotContainer.drivetrain.getAngle()),
+//     () -> angle,
+//     (output) -> RobotContainer.drivetrain.tankDrive(direction==Direction.RIGHT ? -output : output, direction==Direction.RIGHT ? output : -output),
+//     RobotContainer.drivetrain
+//   );
+// }
 
 
   public static Command sampleAuto() {
@@ -71,9 +71,9 @@ public static Command PIDTurnCommand(double angle, Direction direction){
       //turn and score cube?
       driveVelocityCommand(56.75, 1, 1),
       driveVelocityCommand(40, 1, 1),
-      PIDTurnCommand(90, Direction.LEFT),
+      //PIDTurnCommand(90, Direction.LEFT),
       driveVelocityCommand(22, 1, 1),
-      PIDTurnCommand(90, Direction.LEFT),
+     // PIDTurnCommand(90, Direction.LEFT),
       driveVelocityCommand(38.0625, 1, 1)
       //engange on charging station?
     );
