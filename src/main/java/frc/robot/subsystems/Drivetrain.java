@@ -67,6 +67,7 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain() {
     leftFront = new CANSparkMax(Constants.LEFTFRONT_MOTOR, MotorType.kBrushless);
     leftFront.setSmartCurrentLimit(40);
+    leftEncoder = leftFront.getEncoder();
     leftRear = new CANSparkMax(Constants.LEFTREAR_MOTOR, MotorType.kBrushless);
     leftRear.setSmartCurrentLimit(40);
     leftFront.setInverted(true);
@@ -111,8 +112,8 @@ public class Drivetrain extends SubsystemBase {
 
     // */
 
-    leftFront.set(left*1/9);
-    rightFront.set(-right*1/9);
+    leftFront.set(left);
+    rightFront.set(right);
     
   }
 

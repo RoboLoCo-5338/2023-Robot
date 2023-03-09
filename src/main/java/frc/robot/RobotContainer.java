@@ -16,6 +16,7 @@ import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.HIDType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -43,6 +44,9 @@ public class RobotContainer {
   public static double percent = 0.3;
   public static int coneOffset =0;
 
+  private static int reverseModifier=1;
+  private static double speedMod=0;
+
   //public static int coneTipperPreset=0;
 
   // controllers
@@ -59,16 +63,7 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
-  // Drive using the joysticks.
-  public Command defaultDrive = new RunCommand(
-      () -> drivetrain.tankDrive(
-        // controller1.getRawAxis(1)*(percent+controller1.getRawAxis(3)*(1-percent)),
-        // controller1.getRawAxis(5)*(percent+controller1.getRawAxis(3)*(1-percent))
-        controller1.getRawAxis(5) * 0.3,
-        controller1.getRawAxis(1) * 0.3
-      ),
-      drivetrain
-    );
+
 
     // public Command defaultElevator = new RunCommand(//left joystick
     //   () -> m_Elevator.moveElevator(
@@ -84,6 +79,29 @@ public class RobotContainer {
     //   m_Elevator
     // );
 
+    // Drive using the joysticks.
+  public Command defaultDrive = new RunCommand(
+    () -> {
+      if(reverseModifier<0){
+        drivetrain.tankDrive(
+          // controller1.getRawAxis(1)*(percent+controller1.getRawAxis(3)*(1-percent)),
+          // controller1.getRawAxis(5)*(percent+controller1.getRawAxis(3)*(1-percent))
+          (controller1.getRawAxis(1)+Math.signum(controller1.getRawAxis(1))*speedMod) * 0.4*reverseModifier,
+          (controller1.getRawAxis(5)+Math.signum(controller1.getRawAxis(5))*speedMod) * 0.4*reverseModifier
+        );
+      }else{
+        drivetrain.tankDrive(
+          // controller1.getRawAxis(1)*(percent+controller1.getRawAxis(3)*(1-percent)),
+          // controller1.getRawAxis(5)*(percent+controller1.getRawAxis(3)*(1-percent))
+          (controller1.getRawAxis(5)+Math.signum(controller1.getRawAxis(5))*speedMod) * 0.4*reverseModifier,
+          (controller1.getRawAxis(1)+Math.signum(controller1.getRawAxis(1))*speedMod) * 0.4*reverseModifier
+        );
+      }
+      
+     },
+    drivetrain
+  );
+
     public Command coneSwitchCommand = new InstantCommand(//switches to the cone heights (indexes for the list)
       () -> {coneOffset=2;}
     );
@@ -97,6 +115,30 @@ public class RobotContainer {
 
     public Command swapPipeline = new InstantCommand(//changes Limelight
     () -> LimeLight.setPipeline());
+
+
+    public Command reverse = new InstantCommand(
+      () -> { reverseModifier*=-1;}
+   );
+
+ 
+   public Command speedBoost = new InstantCommand(
+     () -> {speedMod=controller1.getRawAxis(3)*1.3;}
+   );
+
+   public Command speedOff = new InstantCommand(
+     () -> {speedMod=0;}
+   );
+
+   public static Command moveMechanismPID(int preset){
+    return new SequentialCommandGroup(
+      ElevatorCommands.setElevatorHeight(preset), 
+      ArmCommands.setArm(preset)
+     );
+   }
+   
+
+
 
     /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -116,33 +158,51 @@ public class RobotContainer {
     JoystickButton bottomHeight = new JoystickButton(controller2, Constants.ABUTTON);
     JoystickButton mediumHeight = new JoystickButton(controller2, Constants.XBUTTON);
     JoystickButton highHeight = new JoystickButton(controller2, Constants.YBUTTON);
-    double leftJoystick =  controller2.getRawAxis(5); 
-    double rightJoystick = controller2.getRawAxis(1);
-    JoystickButton cubeSwitch = new JoystickButton(controller2, Constants.RBBUTTON);
-    JoystickButton coneSwitch = new JoystickButton(controller2, Constants.LBBUTTON);
+
+    // JoystickButton cubeSwitch = new JoystickButton(controller2, Constants.RBBUTTON);
+    // JoystickButton coneSwitch = new JoystickButton(controller2, Constants.LBBUTTON);
 
     Trigger forwardEffector2 = new Trigger(() -> controller2.getRawAxis(3)>0.5);
     Trigger backwardEffector2 = new Trigger(() -> controller2.getRawAxis(2)>0.5);
 
-    Trigger moveElevator = new Trigger(() -> rightJoystick > 0.1 || rightJoystick < -0.1);//checks whether joystick is either greater than 0.1 or less that -0.1
+    Trigger moveElevatorUp = new Trigger(() -> controller2.getRawAxis(1) > 0.1);//checks whether joystick is either greater than 0.1 or less that -0.1
     //Trigger moveArm = new Trigger(() -> Math.abs(controller2.getRawAxis(5)) > 0.1);
-   Trigger moveArm = new Trigger(() -> leftJoystick > 0.1 || leftJoystick < -0.1);
+   Trigger moveArmUp = new Trigger(() -> controller2.getRawAxis(5) > 0.1 );
+   Trigger moveArmDown = new Trigger(() ->  controller2.getRawAxis(5)< -0.1);
     
+   Trigger moveElevatorDown  = new Trigger(() ->  controller2.getRawAxis(1) < -0.1);
+
+   
+   Trigger revTrigger = new  Trigger(() -> controller1.getRawAxis(2)>0.5);
+
+   Trigger speed = new Trigger(() -> controller1.getRawAxis(3)>0.1);
+
+   speed.whileTrue(speedBoost);
+ 
+
+   revTrigger.onTrue(reverse);
+   speed.onFalse(speedOff);
+  
      //TEMPORARY
     // intakeHeight.whileTrue(ElevatorCommands.moveElevator(0.1));//b-button makes this work
     // bottomHeight.whileTrue(ElevatorCommands.moveElevator(-0.1));//a button makes this work
     // intakeHeight.onFalse(ElevatorCommands.stopElevator());//driver (is it?)
     // bottomHeight.onFalse(ElevatorCommands.stopElevator());//driver (is it?)
-  
-    mediumHeight.whileTrue(ArmCommands.moveArm(0.2));
-    highHeight.whileTrue(ArmCommands.moveArm(-0.2));
-    mediumHeight.onFalse(ArmCommands.stopArm());//driver
-    highHeight.onFalse(ArmCommands.stopArm());//driver
+    
+    bottomHeight.onTrue(ArmCommands.setArm(0));
+    mediumHeight.onTrue(ArmCommands.setArm(1));
+  //  highHeight.whileTrue(ArmCommands.moveArm(-0.2));
+   // mediumHeight.onFalse(ArmCommands.stopArm());//;\driver
+   // highHeight.onFalse(ArmCommands.stopArm());//driver
 
-    moveElevator.whileTrue(ElevatorCommands.moveElevator(rightJoystick>0 ? 0.1 : -0.1));
-    moveElevator.whileFalse(ElevatorCommands.stopElevator());
-    moveArm.whileTrue(ArmCommands.moveArm(leftJoystick> 0 ? 0.1 : -0.1));
-    moveArm.whileFalse(ArmCommands.stopArm());
+    moveElevatorUp.whileTrue(ElevatorCommands.moveElevator( 0.2 ));
+    moveElevatorDown.whileTrue(ElevatorCommands.moveElevator(-0.2));
+    moveElevatorDown.whileFalse(ElevatorCommands.stopElevator());
+    moveElevatorUp.whileFalse(ElevatorCommands.stopElevator());
+    moveArmUp.whileTrue(ArmCommands.moveArm(-0.2));
+    moveArmDown.whileTrue(ArmCommands.moveArm(0.2));
+    moveArmDown.whileFalse(ArmCommands.stopArm());
+    moveArmUp.whileFalse(ArmCommands.stopArm());
 
     // forwardEffector.whileTrue(EffectorCommands.effectorForward());
     // backwardEffector.whileTrue(EffectorCommands.effectorReverse());
@@ -166,5 +226,9 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(defaultDrive);
    // m_Elevator.setDefaultCommand(defaultElev);
+  }
+
+  public Command getAutonomousCommand(){
+    return ArmCommands.setArm(0);
   }
 }
