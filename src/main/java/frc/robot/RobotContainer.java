@@ -6,7 +6,9 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmCommands;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.Autos;
+import frc.robot.commands.Direction;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.LimeLight;
@@ -116,7 +118,7 @@ public class RobotContainer {
     public Command swapPipeline = new InstantCommand(//changes Limelight
     () -> LimeLight.setPipeline());
 
-
+    
     public Command reverse = new InstantCommand(
       () -> { reverseModifier*=-1;}
    );
@@ -169,26 +171,26 @@ public class RobotContainer {
     //Trigger moveArm = new Trigger(() -> Math.abs(controller2.getRawAxis(5)) > 0.1);
    Trigger moveArmUp = new Trigger(() -> controller2.getRawAxis(5) > 0.1 );
    Trigger moveArmDown = new Trigger(() ->  controller2.getRawAxis(5)< -0.1);
-    
+
    Trigger moveElevatorDown  = new Trigger(() ->  controller2.getRawAxis(1) < -0.1);
 
-   
+
    Trigger revTrigger = new  Trigger(() -> controller1.getRawAxis(2)>0.5);
 
    Trigger speed = new Trigger(() -> controller1.getRawAxis(3)>0.1);
 
    speed.whileTrue(speedBoost);
- 
+
 
    revTrigger.onTrue(reverse);
    speed.onFalse(speedOff);
-  
+   
      //TEMPORARY
     // intakeHeight.whileTrue(ElevatorCommands.moveElevator(0.1));//b-button makes this work
     // bottomHeight.whileTrue(ElevatorCommands.moveElevator(-0.1));//a button makes this work
     // intakeHeight.onFalse(ElevatorCommands.stopElevator());//driver (is it?)
     // bottomHeight.onFalse(ElevatorCommands.stopElevator());//driver (is it?)
-    
+
     bottomHeight.onTrue(ArmCommands.setArm(0));
     mediumHeight.onTrue(ArmCommands.setArm(1));
   //  highHeight.whileTrue(ArmCommands.moveArm(-0.2));
@@ -229,6 +231,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return ArmCommands.setArm(0);
+    return AutoCommands.driveDistanceCommand(10, Direction.FORWARD);
   }
 }
