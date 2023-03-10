@@ -21,10 +21,10 @@ public class ArmCommands  {
   // Move arm to preset height and stop when the height is reached.
   public static Command setArm(int preset){
     return new FunctionalCommand(
-      () -> RobotContainer.m_Elevator.setArmChange(preset),
-      () -> RobotContainer.m_Elevator.setArm(),
+      () -> {},
+      () -> RobotContainer.m_Elevator.setArm(preset),
       (interrupt) -> RobotContainer.m_Elevator.stopArm(),
-      () -> Math.abs(RobotContainer.m_Elevator.getArmPosition()) >= Math.abs(Elevator.armChange+RobotContainer.m_Elevator.getArmPosition()-0.1),
+      () -> Math.abs(RobotContainer.m_Elevator.armHeights[preset]-RobotContainer.m_Elevator.getArmPosition()) <= 3,
       RobotContainer.m_Elevator);
   }
 

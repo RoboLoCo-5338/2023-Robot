@@ -22,12 +22,12 @@ public class Elevator extends SubsystemBase {
   private CANSparkMax elevatorMotor;
   private RelativeEncoder elevatorEncoder;
   private SparkMaxPIDController elevatorController;
-  private double[] elevatorHeights = {0,0};
+  public double[] elevatorHeights = {0,0};
   public static double elevatorChange=0;
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
   private SparkMaxPIDController armController;
-  private double[] armHeights = {20,70};
+  public double[] armHeights = {20,70};
   public static double armChange = 0;
 
   //untested PID
@@ -61,18 +61,16 @@ public class Elevator extends SubsystemBase {
       
     }
   
-    public void setElevatorChange(int preset) {
-      double current = elevatorEncoder.getPosition();
-      SmartDashboard.putNumber("Elevator Preset", preset);
-      elevatorChange = elevatorHeights[preset] - current;
-    }
   
-    public void setElevatorHeight(){
-      elevatorController.setReference(elevatorChange, ControlType.kPosition);
+  
+    public void setElevatorHeight(int preset){
+      
+      elevatorController.setReference(elevatorHeights[preset],  CANSparkMax.ControlType.kPosition);
+
     }
   
     public void moveElevator(double speed){
-      SmartDashboard.putNumber("Elevator Position", getElevatorPosition());
+      SmartDashboard.putNumber("Elevator Position teleop", getElevatorPosition());
       elevatorMotor.set(speed);
     }
     public void resetElevator(){
@@ -81,16 +79,16 @@ public class Elevator extends SubsystemBase {
     public void setArmChange(int preset){
       double current = armEncoder.getPosition();
       SmartDashboard.putNumber("Arm Preset", preset);
-      SmartDashboard.putNumber("Arm position", armEncoder.getPosition());
+      SmartDashboard.putNumber("Arm position arm change", armEncoder.getPosition());
       armChange = armHeights[preset] - current;
       SmartDashboard.putNumber("Arm change", armChange);
     }
-    public void setArm(){
-      armController.setReference(armChange, ControlType.kPosition);
+    public void setArm(int preset){
+      armController.setReference(armHeights[preset], CANSparkMax.ControlType.kPosition);
     }
   
     public void moveArm(double speed){
-      SmartDashboard.putNumber("Arm Position", getArmPosition());
+      SmartDashboard.putNumber("Arm Position Teleop", getArmPosition());
       armMotor.set(speed);
     }
 
@@ -105,7 +103,7 @@ public class Elevator extends SubsystemBase {
 
     }
 
-    public void stopArm(){
+    public void stopArm(){  
       armMotor.set(0);
     }
 

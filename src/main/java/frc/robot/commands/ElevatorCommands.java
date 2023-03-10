@@ -19,10 +19,10 @@ public class ElevatorCommands {
   
   public static Command setElevatorHeight(int preset) {
     return new FunctionalCommand(
-      () -> RobotContainer.m_Elevator.setElevatorChange(preset),
-      () -> RobotContainer.m_Elevator.setElevatorHeight(),
+      () -> {},
+      () -> RobotContainer.m_Elevator.setElevatorHeight(preset),
       (interrupt) -> RobotContainer.m_Elevator.stopElevator(),
-      () -> Math.abs(RobotContainer.m_Elevator.getElevatorPosition()) >= Math.abs(Elevator.elevatorChange+RobotContainer.m_Elevator.getElevatorPosition()-0.1),
+      () ->  Math.abs(RobotContainer.m_Elevator.elevatorHeights[preset]-RobotContainer.m_Elevator.getElevatorPosition())<=3,
       RobotContainer.m_Elevator
     );
   }

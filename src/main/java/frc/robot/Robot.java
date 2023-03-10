@@ -87,6 +87,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putString("Dino Rivets ftw","HELLO");
+
+    SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
+    SmartDashboard.putNumber("Arm Position", RobotContainer.m_Elevator.getArmPosition());
   }
 
   @Override

@@ -130,12 +130,15 @@ public class RobotContainer {
      () -> {speedMod=0;}
    );
 
-   public static Command moveMechanismPID(int preset){
+   public static SequentialCommandGroup moveMechanismPID(int preset){
     return new SequentialCommandGroup(
       ElevatorCommands.setElevatorHeight(preset), 
       ArmCommands.setArm(preset)
      );
+
    }
+
+
    
 
 
@@ -189,8 +192,8 @@ public class RobotContainer {
     // intakeHeight.onFalse(ElevatorCommands.stopElevator());//driver (is it?)
     // bottomHeight.onFalse(ElevatorCommands.stopElevator());//driver (is it?)
     
-    bottomHeight.onTrue(ArmCommands.setArm(0));
-    mediumHeight.onTrue(ArmCommands.setArm(1));
+    bottomHeight.onTrue(moveMechanismPID(0));
+    mediumHeight.onTrue(moveMechanismPID(1));
   //  highHeight.whileTrue(ArmCommands.moveArm(-0.2));
    // mediumHeight.onFalse(ArmCommands.stopArm());//;\driver
    // highHeight.onFalse(ArmCommands.stopArm());//driver
