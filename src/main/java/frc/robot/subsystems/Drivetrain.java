@@ -84,15 +84,15 @@ public class Drivetrain extends SubsystemBase {
     rightRear.follow(rightFront);
 
     leftEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
-    leftEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    //leftEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
     rightEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
-    rightEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    //rightEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
 
     rightFrontPID = leftFront.getPIDController();
     leftFrontPID = rightFront.getPIDController();
 
-    leftFrontPID.setOutputRange(-0.1, 0.1);
-    rightFrontPID.setOutputRange(-0.1, 0.1);
+    leftFrontPID.setOutputRange(-0.3, 0.3);
+    rightFrontPID.setOutputRange(-0.3, 0.3);
 
     setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
     setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
@@ -130,8 +130,8 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("SetPoint", targetPosition);
     SmartDashboard.putNumber( "Left Position", leftEncoder.getPosition());
     SmartDashboard.putNumber( "Right Position", rightEncoder.getPosition());
-    //rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
-    //leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+    rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+    leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
   }
 
   public void configAllControllers(double kP, double kI, double kD, double kF) {
@@ -153,25 +153,30 @@ public class Drivetrain extends SubsystemBase {
   }
 
   // creates a PID velocity robot. Uses PID settings to determine speeds
-  public void tankDriveVelocity(double left, double right) {
-    double targetLeft;
-    double targetRight;
+//   public void tankDriveVelocity(double left, double right) {
+//     double targetLeft;
+//     double targetRight;
 
-    // max rpm of wheels desired
-    double targetVelocity = slow ? SLOW_VELOCITY : MAX_VELOCITY;
+//     // max rpm of wheels desired
+//     double targetVelocity = slow ? SLOW_VELOCITY : MAX_VELOCITY;
 
-    // target speed in encoder units based on joystick position
-    targetLeft = (left + 0.0078125) * targetVelocity * TICKS_PER_INCH;
-    targetRight = (right + 0.0078125) * targetVelocity * TICKS_PER_INCH;
+//     // target speed in encoder units based on joystick position
+//     targetLeft = (left + 0.0078125) * targetVelocity * TICKS_PER_INCH;
+//     targetRight = (right + 0.0078125) * targetVelocity * TICKS_PER_INCH;
 
-    // set target speeds to motors
-    leftFront.getPIDController().setReference(targetLeft, ControlType.kVelocity);
-    rightFront.getPIDController().setReference(targetRight, ControlType.kVelocity);
+//     // set target speeds to motors
+//     leftFront.getPIDController().setReference(targetLeft, ControlType.kVelocity);
+//     rightFront.getPIDController().setReference(targetRight, ControlType.kVelocity);
 
-    // SmartDashboard.putNumber("left:", getPosition());
-    // SmartDashboard.putNumber("right:", getPosition());
-}
+//     // SmartDashboard.putNumber("left:", getPosition());
+//     // SmartDashboard.putNumber("right:", getPosition());
+// }
   
+public void tankDriveVelocity(double leftVelocity, double rightVelocity){
+  rightFrontPID.setReference(rightVelocity, CANSparkMax.ControlType.kVelocity);
+  leftFrontPID.setReference(leftVelocity, CANSparkMax.ControlType.kVelocity);
+}
+
   public void tankPercent(double left, double right) {
     tankDriveVelocity(left * 0.75, right * 0.75);
   }  
