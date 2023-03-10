@@ -60,11 +60,12 @@ public class Drivetrain extends SubsystemBase {
 
   public AHRS navX;
 
-
   //navXAhrs = new AHRS(SPI.Port.kMXP);
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
+
+    // setting left and right motors with a motor controller 
     leftFront = new CANSparkMax(Constants.LEFTFRONT_MOTOR, MotorType.kBrushless);
     leftFront.setSmartCurrentLimit(40);
     leftEncoder = leftFront.getEncoder();
@@ -72,10 +73,6 @@ public class Drivetrain extends SubsystemBase {
     leftRear.setSmartCurrentLimit(40);
     leftFront.setInverted(true);
     leftRear.follow(leftFront);
-
-    leftFront.setInverted(true);
-
-
     rightFront = new CANSparkMax(Constants.RIGHTFRONT_MOTOR, MotorType.kBrushless);
     rightFront.setSmartCurrentLimit(40);
     rightEncoder = rightFront.getEncoder();
@@ -83,11 +80,13 @@ public class Drivetrain extends SubsystemBase {
     rightRear.setSmartCurrentLimit(40);
     rightRear.follow(rightFront);
 
+    // conversion factors for the enconders 
     leftEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
     //leftEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
     rightEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
     //rightEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
 
+    // setting PID for 
     rightFrontPID = leftFront.getPIDController();
     leftFrontPID = rightFront.getPIDController();
 
@@ -130,19 +129,12 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("SetPoint", targetPosition);
     SmartDashboard.putNumber( "Left Position", leftEncoder.getPosition());
     SmartDashboard.putNumber( "Right Position", rightEncoder.getPosition());
+
     rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
     leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
   }
 
-  public void configAllControllers(double kP, double kI, double kD, double kF) {
-    configController(rightFront, kP, kI, kD, kF);
-    configController(rightRear, kP, kI, kD, kF);
-    configController(leftFront, kP, kI, kD, kF);
-    configController(leftRear, kP, kI, kD, kF);
-  }
-
-  private void configController(CANSparkMax sparkMax, double kP, double kI, double kD, double kF)
-  {
+  private void configController(CANSparkMax sparkMax, double kP, double kI, double kD, double kF){
     SparkMaxPIDController controller = sparkMax.getPIDController();
     controller.setP(kP);
     controller.setI(kI);
@@ -150,6 +142,13 @@ public class Drivetrain extends SubsystemBase {
     controller.setFF(kF);
     controller.setOutputRange(-peakOutput, peakOutput);
     sparkMax.setCANTimeout(100);
+  }
+
+  public void configAllControllers(double kP, double kI, double kD, double kF) {
+    configController(rightFront, kP, kI, kD, kF);
+    configController(rightRear, kP, kI, kD, kF);
+    configController(leftFront, kP, kI, kD, kF);
+    configController(leftRear, kP, kI, kD, kF);
   }
 
   // creates a PID velocity robot. Uses PID settings to determine speeds
@@ -206,7 +205,6 @@ public void tankDriveVelocity(double leftVelocity, double rightVelocity){
   }
 
   public void setPositionPID(double kPR, double kPL, double kI, double kD, double kF) {
-
     rightFrontPID.setP(kPR);
     rightFrontPID.setI(kI);
     rightFrontPID.setD(kD);
@@ -221,7 +219,6 @@ public void tankDriveVelocity(double leftVelocity, double rightVelocity){
   }
 
   public void setVelocityPID(double kP, double kI, double kD, double kF) {
-
     rightFrontPID.setP(kP);
     rightFrontPID.setI(kI);
     rightFrontPID.setD(kD);

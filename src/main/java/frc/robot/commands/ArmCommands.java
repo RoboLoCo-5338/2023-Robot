@@ -5,19 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+// import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Elevator;
 
 public class ArmCommands  {
+
   /** Creates a new ArmCommands. */
   public ArmCommands() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
- 
   // Move arm to preset height and stop when the height is reached.
   public static Command setArm(int preset){
     return new FunctionalCommand(
@@ -28,7 +28,7 @@ public class ArmCommands  {
       RobotContainer.m_Elevator);
   }
 
-
+// command to set speed for arm
   public static Command moveArm(double speed){
     return new InstantCommand(
       () -> RobotContainer.m_Elevator.moveArm(speed),
@@ -50,12 +50,12 @@ public class ArmCommands  {
     );
   }
 
+// stop arm from moving 
   public static Command stopArm(){
     return new InstantCommand(
       () -> RobotContainer.m_Elevator.stopArm(),
       RobotContainer.m_Elevator
     );
   }
-
 
 }

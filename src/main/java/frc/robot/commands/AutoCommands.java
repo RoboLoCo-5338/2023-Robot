@@ -14,6 +14,8 @@ import frc.robot.RobotContainer;
 
 
 public class AutoCommands {
+
+// drives a certain distance 
   public static Command driveDistanceCommand(double distance, Direction direction){
     return new FunctionalCommand(
       () -> RobotContainer.drivetrain.resetPosition(),
@@ -23,6 +25,8 @@ public class AutoCommands {
       RobotContainer.drivetrain
     );
   }
+
+  // sets the velocity given a distance 
   public static Command driveVelocityCommand(double distance, double leftVelocity, double rightVelocity){
     return new FunctionalCommand( 
       () -> RobotContainer.drivetrain.resetVelocity(),
@@ -33,24 +37,26 @@ public class AutoCommands {
     );
   }
 
+// turn command using PID
+public static Command PIDTurnCommand(double angle, Direction direction){
+  return new PIDCommand(
+    new PIDController(0.07, 0, 0),
+    () -> Math.abs(RobotContainer.drivetrain.getAngle()),
+    () -> angle,
+    (output) -> RobotContainer.drivetrain.tankDrive(direction==Direction.RIGHT ? -output : output, direction==Direction.RIGHT ? output : -output),
+    RobotContainer.drivetrain
+  );
+}
 
-// public static Command PIDTurnCommand(double angle, Direction direction){
-//   return new PIDCommand(
-//     new PIDController(0.07, 0, 0),
-//     () -> Math.abs(RobotContainer.drivetrain.getAngle()),
-//     () -> angle,
-//     (output) -> RobotContainer.drivetrain.tankDrive(direction==Direction.RIGHT ? -output : output, direction==Direction.RIGHT ? output : -output),
-//     RobotContainer.drivetrain
-//   );
-// }
-
-
+// sample auto sequential command group 
   public static Command sampleAuto() {
     return new SequentialCommandGroup(
       driveDistanceCommand(20, Direction.FORWARD),
       driveVelocityCommand(20, 20, 20)
     );
   }
+
+  // auto sequential command group for middle in community 
   public static Command middleAuto() {
     return new SequentialCommandGroup(
       driveVelocityCommand(10, -1, -1),
@@ -65,6 +71,7 @@ public class AutoCommands {
     );
   }
 
+  // sequential command group for bottom of community 
   public static Command rightAuto(){
     return new SequentialCommandGroup(
       driveVelocityCommand(10, -1, -1),

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 
 public class EffectorCommands {
+  
     public static Command effectorReverse() {
       return new InstantCommand(
         () -> RobotContainer.effector.effectorReverse(),
