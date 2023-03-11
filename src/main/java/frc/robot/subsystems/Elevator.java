@@ -58,12 +58,8 @@ public class Elevator extends SubsystemBase {
       
     }
   
-  
-  
     public void setElevatorHeight(int preset){
-      
       elevatorController.setReference(elevatorHeights[preset],  CANSparkMax.ControlType.kPosition);
-
     }
   
     public void moveElevator(double speed){
@@ -94,10 +90,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public double getArmPosition(){
-
       return armEncoder.getPosition();
-    
-
     }
 
     public void stopArm(){  
