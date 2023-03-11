@@ -44,7 +44,7 @@ public class RobotContainer {
   public static int coneOffset =0;
 
   private static int reverseModifier=1;
-  private static double speedMod=0;
+  private static double speedMod=0.5; //not sure what this should be?? 
 
   // controllers
   private static Joystick controller1 = new Joystick(0); //driver
@@ -165,12 +165,12 @@ public class RobotContainer {
     stow.onTrue(ElevatorCommands.stowCommand());
     unstow.onTrue(ElevatorCommands.unStowCommand());
 
-    moveElevatorUp.whileTrue(ElevatorCommands.moveElevator( 0.2 ));
-    moveElevatorDown.whileTrue(ElevatorCommands.moveElevator(-0.2));
+    moveElevatorUp.whileTrue(ElevatorCommands.moveElevator( 0.4 ));
+    moveElevatorDown.whileTrue(ElevatorCommands.moveElevator(-0.4));
     moveElevatorDown.whileFalse(ElevatorCommands.stopElevator());
     moveElevatorUp.whileFalse(ElevatorCommands.stopElevator());
-    moveArmUp.whileTrue(ArmCommands.moveArm(-0.2));
-    moveArmDown.whileTrue(ArmCommands.moveArm(0.2));
+    moveArmUp.whileTrue(ArmCommands.moveArm(-0.4));
+    moveArmDown.whileTrue(ArmCommands.moveArm(0.4));
     moveArmDown.whileFalse(ArmCommands.stopArm());
     moveArmUp.whileFalse(ArmCommands.stopArm());
 
