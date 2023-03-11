@@ -59,9 +59,14 @@ public static Command PIDTurnCommand(double angle, Direction direction){
   // auto sequential command group for middle in community 
   public static Command middleAuto() {
     return new SequentialCommandGroup(
+      // get out of the community line 
       driveVelocityCommand(10, -1, -1),
-      //turn and score cube?
+      //turn and score cube
+      PIDTurnCommand(180, Direction.RIGHT),
       driveVelocityCommand(60.69, 1, 1),
+      ElevatorCommands.setElevatorHeight(70), // place holder for now 
+      ArmCommands.setArm(30), // place holder for now 
+      EffectorCommands.effectorForward(),
       //mount charging station?
       driveVelocityCommand(76.125, 1, 1),
       driveVelocityCommand(40, 1, 1),
