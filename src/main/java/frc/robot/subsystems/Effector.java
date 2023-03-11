@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
 import frc.robot.Constants;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -14,9 +16,10 @@ import com.revrobotics.CANSparkMax.IdleMode;
 @SuppressWarnings("Serial Warnings")
 public class Effector extends SubsystemBase{
 
-    private CANSparkMax outerMotor;
+    private CANSparkMax effectorMotor;
     private double speed = 0.8;
     private SparkMaxPIDController effectorController;
+    private RelativeEncoder effectorEncoder;
     //untested PID
     public static double effectorP=0.1;
     public static double effectorI=0.0;
@@ -24,31 +27,42 @@ public class Effector extends SubsystemBase{
     public static double effector_Forward=0.0;
     
     public Effector() {
-        outerMotor = new CANSparkMax(Constants.EFFECTOR_MOTOR, MotorType.kBrushless);
-        outerMotor.setIdleMode(IdleMode.kCoast);
-        outerMotor.setSmartCurrentLimit(30);
+        effectorMotor = new CANSparkMax(Constants.EFFECTOR_MOTOR, MotorType.kBrushless);
+        effectorMotor.setIdleMode(IdleMode.kCoast);
+        effectorMotor.setSmartCurrentLimit(30);
+        effectorController = effectorMotor.getPIDController();
+        effectorEncoder = effectorMotor.getEncoder();
+        effectorController.setOutputRange(-0.2, 0.2);
+        configController();
        // outerMotor.setInverted(true);
         //configController();
     }
 
-
     public void effectorForward() {
-        outerMotor.set(speed);
+        effectorMotor.set(speed);
     }
 
     public void effectorReverse()
     {
-        outerMotor.set(-speed);
+        effectorMotor.set(-speed);
     }
 
     public void effectorStop() {
-        outerMotor.set(0);
+        effectorMotor.set(0);
     }
-     private void configController(){
-    effectorController.setP(effectorP);
-    effectorController.setI(effectorI);
-    effectorController.setD(effectorD);
-    effectorController.setFF(effector_Forward);
-}
+    private void configController(){
+        effectorController.setP(effectorP);
+        effectorController.setI(effectorI);
+        effectorController.setD(effectorD);
+        effectorController.setFF(effector_Forward);
+    }   
+
+    public void setEffectorRef(int setpoint){
+        effectorController.setReference(setpoint,  CANSparkMax.ControlType.kPosition);
+    }
+
+    public double getEffectorPosition(){
+        return effectorEncoder.getPosition();
+    }
 
 }
