@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -14,7 +12,6 @@ import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 @SuppressWarnings("Serial Warnings")
@@ -22,12 +19,12 @@ public class Elevator extends SubsystemBase {
   private CANSparkMax elevatorMotor;
   private RelativeEncoder elevatorEncoder;
   private SparkMaxPIDController elevatorController;
-  public double[] elevatorHeights = {0,0};
+  public double[] elevatorHeights = {0,0,-10,0,0}; //presets 2-4 for stow/unstow
   public static double elevatorChange=0;
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
   private SparkMaxPIDController armController;
-  public double[] armHeights = {20,70};
+  public double[] armHeights = {30,100,-4,30,0}; //presets 2-4 for stow/unstow, DOUBLE CHECK 0 & 1
   public static double armChange = 0;
 
   //untested PID

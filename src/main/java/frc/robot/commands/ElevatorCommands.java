@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Elevator;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -55,11 +54,20 @@ public class ElevatorCommands {
   }
   
   //todo might want to use a different method, maybe one that is timed instead of using a preset for this
-  public static Command startMechanism(){
+  public static Command unStowCommand(){
     return new SequentialCommandGroup(
-      setElevatorHeight(1),
-      ArmCommands.setArm(1),
-      setElevatorHeight(0)
+      ArmCommands.setArm(2), //kickstand
+      setElevatorHeight(2), //elevator up
+      ArmCommands.setArm(3), //arm out
+      setElevatorHeight(3) //elevator down
+    );
+  }
+
+  public static Command stowCommand(){
+    return new SequentialCommandGroup(
+      setElevatorHeight(3), //elevator up
+      ArmCommands.setArm(4), //arm in
+      setElevatorHeight(4) //elevator down
     );
   }
 }
