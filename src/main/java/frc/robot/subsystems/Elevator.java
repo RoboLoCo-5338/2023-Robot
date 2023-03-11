@@ -19,12 +19,12 @@ public class Elevator extends SubsystemBase {
   private CANSparkMax elevatorMotor;
   private RelativeEncoder elevatorEncoder;
   private SparkMaxPIDController elevatorController;
-  public double[] elevatorHeights = {0,0,-10,0,0,-45}; //presets 2-4 for stow/unstow
+  public double[] elevatorHeights = {0,0,-10,-10,0,-45}; //presets 2-4 for stow/unstow
   public static double elevatorChange=0;
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
   private SparkMaxPIDController armController;
-  public double[] armHeights = {30,100,-4,30,0,100}; //presets 2-4 for stow/unstow, DOUBLE CHECK 0 & 1
+  public double[] armHeights = {30,100,-4,35,0,100}; //presets 2-4 for stow/unstow, DOUBLE CHECK 0 & 1
   public static double armChange = 0;
 
   //untested PID
@@ -63,7 +63,11 @@ public class Elevator extends SubsystemBase {
     }
   
     public void moveElevator(double speed){
-      if(getArmPosition() > -50 && getArmPosition() > -10) { //CHANGE MAYBE
+      if(speed < 0 && getElevatorPosition() > -50) { //CHANGE MAYBE
+        SmartDashboard.putNumber("Elevator Position teleop", getElevatorPosition());
+        elevatorMotor.set(speed);
+      }
+      else {
         SmartDashboard.putNumber("Elevator Position teleop", getElevatorPosition());
         elevatorMotor.set(speed);
       }
@@ -79,11 +83,16 @@ public class Elevator extends SubsystemBase {
       SmartDashboard.putNumber("Arm change", armChange);
     }
     public void setArm(int preset){
+      SmartDashboard.putString("unstow", "unstow");
       armController.setReference(armHeights[preset], CANSparkMax.ControlType.kPosition);
     }
   
     public void moveArm(double speed){
-      if(getArmPosition() > -8 && getArmPosition() < 110) { //CHANGE MAYBE
+      if(getArmPosition() > -20 && speed < 0) { //CHANGE MAYBE
+        SmartDashboard.putNumber("Arm Position Teleop", getArmPosition());
+        armMotor.set(speed);
+      }
+      if(getArmPosition() < 100 && speed > 0) { //CHANGE MAYBE
         SmartDashboard.putNumber("Arm Position Teleop", getArmPosition());
         armMotor.set(speed);
       }

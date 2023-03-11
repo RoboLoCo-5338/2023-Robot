@@ -44,7 +44,7 @@ public class RobotContainer {
   public static int coneOffset =0;
 
   private static int reverseModifier=1;
-  private static double speedMod=0.5; //not sure what this should be?? 
+  private static double speedMod=0; //not sure what this should be?? 
 
   // controllers
   private static Joystick controller1 = new Joystick(0); //driver
@@ -79,7 +79,6 @@ public class RobotContainer {
           (controller1.getRawAxis(1)+Math.signum(controller1.getRawAxis(1))*speedMod) * 0.4*reverseModifier
         );
       }
-      
      },
     drivetrain
   );
@@ -103,8 +102,8 @@ public class RobotContainer {
       () -> { reverseModifier*=-1;}
    );
  
-   public Command speedBoost = new InstantCommand(
-     () -> {speedMod=controller1.getRawAxis(3)*1.3;}
+   public Command speedBoost = new RunCommand(
+     () -> {speedMod=controller1.getRawAxis(3)*0.7;}
    );
 
    public Command speedOff = new InstantCommand(
@@ -159,11 +158,11 @@ public class RobotContainer {
     //operator presets
     bottomHeight.onTrue(moveMechanismPID(0));
     mediumHeight.onTrue(moveMechanismPID(1));
-    //  highHeight.onTrue(moveMechanismPID(5)); //ADD PRESETS
-    // intakeHeight.onTrue(moveMechanismPID(6)); //ADD PRESETS
+    highHeight.onTrue(moveMechanismPID(5)); //ADD PRESETS
+    intakeHeight.onTrue(moveMechanismPID(6)); //ADD PRESETS
 
-    stow.onTrue(ElevatorCommands.stowCommand());
     unstow.onTrue(ElevatorCommands.unStowCommand());
+    stow.onTrue(ElevatorCommands.stowCommand());
 
     moveElevatorUp.whileTrue(ElevatorCommands.moveElevator( 0.4 ));
     moveElevatorDown.whileTrue(ElevatorCommands.moveElevator(-0.4));
@@ -201,6 +200,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.driveDistanceCommand(20, Direction.FORWARD);
+    return AutoCommands.driveDistanceCommand(75, Direction.FORWARD);
   }
 }
+    

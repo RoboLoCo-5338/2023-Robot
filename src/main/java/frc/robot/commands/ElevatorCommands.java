@@ -60,7 +60,7 @@ public class ElevatorCommands {
       ArmCommands.setArm(2), //kickstand
       setElevatorHeight(2), //elevator up
       ArmCommands.setArm(3), //arm out
-      setElevatorHeight(3) //elevator down
+      setElevatorHeight(4) //elevator down
     );
   }
 
