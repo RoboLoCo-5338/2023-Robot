@@ -76,11 +76,7 @@ public static Command PIDTurnCommand(double angle, Direction direction){
       // get out of the community line 
       driveVelocityCommand(10, -1, -1),
       //turn and score cube
-      PIDTurnCommand(180, Direction.RIGHT),
-      driveVelocityCommand(60.69, 1, 1),
-      ElevatorCommands.setElevatorHeight(70), // place holder for now 
-      ArmCommands.setArm(30), // place holder for now 
-      EffectorCommands.effectorForward(),
+      scoreAndMove(),
       //mount charging station?
       driveVelocityCommand(76.125, 1, 1),
       driveVelocityCommand(40, 1, 1),
@@ -94,7 +90,8 @@ public static Command PIDTurnCommand(double angle, Direction direction){
   public static Command rightAuto(){
     return new SequentialCommandGroup(
       driveVelocityCommand(10, -1, -1),
-      //turn and score cube?
+      //turn and score cube
+      scoreAndMove(),
       driveVelocityCommand(56.75, 1, 1),
       driveVelocityCommand(40, 1, 1),
       //PIDTurnCommand(90, Direction.LEFT),
