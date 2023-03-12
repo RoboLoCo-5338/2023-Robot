@@ -12,9 +12,9 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
 
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.commands.Direction;
 @SuppressWarnings("Serial Warnings")
 
@@ -58,7 +58,7 @@ public class Drivetrain extends SubsystemBase {
   private SparkMaxPIDController rightFrontPID;
   private SparkMaxPIDController leftFrontPID;
 
-  public AHRS navX;
+
 
   //navXAhrs = new AHRS(SPI.Port.kMXP);
 
@@ -90,30 +90,16 @@ public class Drivetrain extends SubsystemBase {
     rightFrontPID = leftFront.getPIDController();
     leftFrontPID = rightFront.getPIDController();
 
-    leftFrontPID.setOutputRange(-0.3, 0.3);
-    rightFrontPID.setOutputRange(-0.3, 0.3);
+    leftFrontPID.setOutputRange(-0.5, 0.5);
+    rightFrontPID.setOutputRange(-0.5, 0.5);
 
     setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
     setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
-
-    navX = new AHRS(SPI.Port.kMXP);
   }
 
   public void tankDrive(double left, double right) {
-    /*
-    if (Math.abs(left) > 0.1){
-      left = Math.signum(left)*0.1;
-    }
-
-    // if (Math.abs(right) > 0.1){
-    //   right = Math.signum(right)*0.1;
-    // }
-
-    // */
-
     leftFront.set(left);
     rightFront.set(right);
-    
   }
 
   public void driveDistance(double inches, Direction direction) {
@@ -232,6 +218,15 @@ public void tankDriveVelocity(double leftVelocity, double rightVelocity){
     leftFront.setCANTimeout(100);
   }
 
+  public void balanceOnStation() {
+    if(RobotContainer.navX.getPitch() < -5) {
+      tankDrive(0.4, 0.4);
+    }
+    else if(RobotContainer.navX.getPitch() > 5) {
+      tankDrive(-0.4, -0.4);
+    }
+  }
+
 /* 
   public void setPID(double kP, double kI, double kD, double kF) {
     SparkMaxPIDController rightFrontPID = rightFront.getPIDController();
@@ -261,12 +256,11 @@ public void tankDriveVelocity(double leftVelocity, double rightVelocity){
   }
 */
  public void resetAngle(){
-     navX.reset();
+     RobotContainer.navX.reset();
    }
 
    public double getAngle(){
-     return navX.getAngle();
-    
+     return RobotContainer.navX.getAngle();
    }
 
    public void angleTurn(Direction direction){

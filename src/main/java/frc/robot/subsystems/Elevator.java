@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -14,7 +12,6 @@ import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 @SuppressWarnings("Serial Warnings")
@@ -22,12 +19,12 @@ public class Elevator extends SubsystemBase {
   private CANSparkMax elevatorMotor;
   private RelativeEncoder elevatorEncoder;
   private SparkMaxPIDController elevatorController;
-  public double[] elevatorHeights = {0,0,-44};
+  public double[] elevatorHeights = {0,0,-10,-10,0,-45}; //presets 2-4 for stow/unstow
   public static double elevatorChange=0;
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
   private SparkMaxPIDController armController;
-  public double[] armHeights = {50,100,91};
+  public double[] armHeights = {30,100,-4,35,0,100}; //presets 2-4 for stow/unstow, DOUBLE CHECK 0 & 1
   public static double armChange = 0;
 
   //untested PID
@@ -46,14 +43,14 @@ public class Elevator extends SubsystemBase {
       elevatorMotor.setIdleMode(IdleMode.kBrake);
       elevatorEncoder = elevatorMotor.getEncoder();
       elevatorController = elevatorMotor.getPIDController();
-      elevatorController.setOutputRange(-0.2, 0.2);
+      elevatorController.setOutputRange(-0.4, 0.4);
       //elevatorEncoder.setPositionConversionFactor(1);
       elevatorMotor.setSmartCurrentLimit(40);
       armMotor = new CANSparkMax(Constants.ARM_MOTOR, MotorType.kBrushless);
       armMotor.setIdleMode(IdleMode.kBrake);
       armEncoder = armMotor.getEncoder();
       armController = armMotor.getPIDController();
-      armController.setOutputRange(-0.2, 0.2);
+      armController.setOutputRange(-0.4, 0.4);
       //armEncoder.setPositionConversionFactor(1);
       armMotor.setSmartCurrentLimit(40);
 
@@ -61,18 +58,20 @@ public class Elevator extends SubsystemBase {
       
     }
   
-  
-  
     public void setElevatorHeight(int preset){
-      
       elevatorController.setReference(elevatorHeights[preset],  CANSparkMax.ControlType.kPosition);
-
     }
     
   
     public void moveElevator(double speed){
-      SmartDashboard.putNumber("Elevator Position teleop", getElevatorPosition());
-      elevatorMotor.set(speed);
+      if(speed < 0 && getElevatorPosition() > -50) { //CHANGE MAYBE
+        SmartDashboard.putNumber("Elevator Position teleop", getElevatorPosition());
+        elevatorMotor.set(speed);
+      }
+      else {
+        SmartDashboard.putNumber("Elevator Position teleop", getElevatorPosition());
+        elevatorMotor.set(speed);
+      }
     }
     public void resetElevator(){
       elevatorEncoder.setPosition(0);
@@ -86,12 +85,19 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setArm(int preset){
+      SmartDashboard.putString("unstow", "unstow");
       armController.setReference(armHeights[preset], CANSparkMax.ControlType.kPosition);
     }
   
     public void moveArm(double speed){
-      SmartDashboard.putNumber("Arm Position Teleop", getArmPosition());
-      armMotor.set(speed);
+      if(getArmPosition() > -20 && speed < 0) { //CHANGE MAYBE
+        SmartDashboard.putNumber("Arm Position Teleop", getArmPosition());
+        armMotor.set(speed);
+      }
+      if(getArmPosition() < 100 && speed > 0) { //CHANGE MAYBE
+        SmartDashboard.putNumber("Arm Position Teleop", getArmPosition());
+        armMotor.set(speed);
+      }
     }
 
     public void resetArm(){
@@ -99,10 +105,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public double getArmPosition(){
-
       return armEncoder.getPosition();
-    
-
     }
 
     public void stopArm(){  

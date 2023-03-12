@@ -4,10 +4,8 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.AutoCommands;
-import frc.robot.commands.Autos;
 import frc.robot.commands.Direction;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
@@ -16,10 +14,12 @@ import frc.robot.commands.PIDTurnCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import frc.robot.subsystems.Elevator;
+
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.HIDType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -44,20 +44,19 @@ public class RobotContainer {
   public static final Drivetrain drivetrain = new Drivetrain();
   public static final LimeLight LimeLight = new LimeLight();
   public static final Effector effector = new Effector();
+  public static AHRS navX = new AHRS(SPI.Port.kMXP);
   public static double percent = 0.3;
   public static int coneOffset =0;
 
   private static int reverseModifier=1;
-  private static double speedMod=0;
-
-  //public static int coneTipperPreset=0;
+  private static double speedMod=0; //not sure what this should be?? 
 
   // controllers
   private static Joystick controller1 = new Joystick(0); //driver
   private static Joystick controller2 = new Joystick(1); //operator
 
- // private static XboxController controller3 = new XboxController(0); potential driver controller stuff
-  private static XboxController controller4 = new XboxController(1);
+//   private static XboxController controller3 = new XboxController(0); potential driver controller stuff
+//   private static XboxController controller4 = new XboxController(1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -66,21 +65,6 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
-
-
-    // public Command defaultElevator = new RunCommand(//left joystick
-    //   () -> m_Elevator.moveElevator(
-    //    controller2.getRawAxis(1)*0.1
-    //   ),
-    //   m_Elevator
-    // );
-
-    // public Command defaultArm = new RunCommand(//right joystick
-    //   () -> m_Elevator.moveArm(
-    //    controller2.getRawAxis(5)*0.1
-    //   ),
-    //   m_Elevator
-    // );
 
     // Drive using the joysticks.
   public Command defaultDrive = new RunCommand(
@@ -100,7 +84,6 @@ public class RobotContainer {
           (controller1.getRawAxis(1)+Math.signum(controller1.getRawAxis(1))*speedMod) * 0.4*reverseModifier
         );
       }
-      
      },
     drivetrain
   );
@@ -123,10 +106,9 @@ public class RobotContainer {
     public Command reverse = new InstantCommand(
       () -> { reverseModifier*=-1;}
    );
-
  
-   public Command speedBoost = new InstantCommand(
-     () -> {speedMod=controller1.getRawAxis(3)*1.3;}
+   public Command speedBoost = new RunCommand(
+     () -> {speedMod=controller1.getRawAxis(3)*1.0;}
    );
 
    public Command speedOff = new InstantCommand(
@@ -160,10 +142,16 @@ public class RobotContainer {
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
     JoystickButton backwardEffector = new JoystickButton(controller1, Constants.LBBUTTON);
     JoystickButton limeLight = new JoystickButton(controller1, Constants.ABUTTON);
+
+    //presets
     JoystickButton intakeHeight = new JoystickButton(controller2, Constants.BBUTTON);
     JoystickButton bottomHeight = new JoystickButton(controller2, Constants.ABUTTON);
     JoystickButton mediumHeight = new JoystickButton(controller2, Constants.XBUTTON);
     JoystickButton highHeight = new JoystickButton(controller2, Constants.YBUTTON);
+
+    //stow buttons
+    JoystickButton stow = new JoystickButton(controller2, Constants.LBBUTTON);
+    JoystickButton unstow = new JoystickButton(controller2, Constants.RBBUTTON);
 
     // JoystickButton cubeSwitch = new JoystickButton(controller2, Constants.RBBUTTON);
     // JoystickButton coneSwitch = new JoystickButton(controller2, Constants.LBBUTTON);
@@ -173,22 +161,21 @@ public class RobotContainer {
 
     Trigger moveElevatorUp = new Trigger(() -> controller2.getRawAxis(1) > 0.1);//checks whether joystick is either greater than 0.1 or less that -0.1
     //Trigger moveArm = new Trigger(() -> Math.abs(controller2.getRawAxis(5)) > 0.1);
-   Trigger moveArmUp = new Trigger(() -> controller2.getRawAxis(5) > 0.1 );
-   Trigger moveArmDown = new Trigger(() ->  controller2.getRawAxis(5)< -0.1);
+    Trigger moveArmUp = new Trigger(() -> controller2.getRawAxis(5) > 0.1 );
+    Trigger moveArmDown = new Trigger(() ->  controller2.getRawAxis(5)< -0.1);
 
    Trigger moveElevatorDown  = new Trigger(() ->  controller2.getRawAxis(1) < -0.1);
-
-
    Trigger revTrigger = new  Trigger(() -> controller1.getRawAxis(2)>0.5);
 
    Trigger speed = new Trigger(() -> controller1.getRawAxis(3)>0.1);
 
-   speed.whileTrue(speedBoost);
+    speed.whileTrue(speedBoost);
 
 
-   revTrigger.onTrue(reverse);
-   speed.onFalse(speedOff);
+    revTrigger.onTrue(reverse);
+    speed.onFalse(speedOff);
    
+    //operator presets
     //TEMPORARY
     // intakeHeight.whileTrue(ElevatorCommands.moveElevator(0.1));//b-button makes this work
     // bottomHeight.whileTrue(ElevatorCommands.moveElevator(-0.1));//a button makes this work
@@ -197,21 +184,27 @@ public class RobotContainer {
     
     bottomHeight.onTrue(moveMechanismPID(0));
     mediumHeight.onTrue(moveMechanismPID(1));
+    highHeight.onTrue(moveMechanismPID(5)); //ADD PRESETS
+    intakeHeight.onTrue(moveMechanismPID(6)); //ADD PRESETS
+
+    unstow.onTrue(ElevatorCommands.unStowCommand());
+    stow.onTrue(ElevatorCommands.stowCommand());
     //TODO check
     highHeight.onTrue(moveMechanismPID(2));
    //  highHeight.whileTrue(ArmCommands.moveArm(-0.2));
    // mediumHeight.onFalse(ArmCommands.stopArm());//;\driver
    // highHeight.onFalse(ArmCommands.stopArm());//driver
 
-    moveElevatorUp.whileTrue(ElevatorCommands.moveElevator( 0.2 ));
-    moveElevatorDown.whileTrue(ElevatorCommands.moveElevator(-0.2));
+    moveElevatorUp.whileTrue(ElevatorCommands.moveElevator( 0.4 ));
+    moveElevatorDown.whileTrue(ElevatorCommands.moveElevator(-0.4));
     moveElevatorDown.whileFalse(ElevatorCommands.stopElevator());
     moveElevatorUp.whileFalse(ElevatorCommands.stopElevator());
-    moveArmUp.whileTrue(ArmCommands.moveArm(-0.2));
-    moveArmDown.whileTrue(ArmCommands.moveArm(0.2));
+    moveArmUp.whileTrue(ArmCommands.moveArm(-0.4));
+    moveArmDown.whileTrue(ArmCommands.moveArm(0.4));
     moveArmDown.whileFalse(ArmCommands.stopArm());
     moveArmUp.whileFalse(ArmCommands.stopArm());
 
+    // limeLight.whileTrue(runLimeLight);
     // forwardEffector.whileTrue(EffectorCommands.effectorForward());
     // backwardEffector.whileTrue(EffectorCommands.effectorReverse());
     // forwardEffector.onFalse(EffectorCommands.effectorStop());//driver
@@ -224,26 +217,26 @@ public class RobotContainer {
     // cubeSwitch.onTrue(cubeSwitchCommand);
     // coneSwitch.onTrue(coneSwitchCommand);
 
+    //operator
     forwardEffector2.whileTrue(EffectorCommands.effectorForward());
-    backwardEffector2.whileTrue(EffectorCommands.effectorReverse());//operator
+    backwardEffector2.whileTrue(EffectorCommands.effectorReverse());
     forwardEffector2.onFalse(EffectorCommands.effectorStop());
-    backwardEffector2.onFalse(EffectorCommands.effectorStop());//operator
+    backwardEffector2.onFalse(EffectorCommands.effectorStop());
 
-
-    //TODO check
+    //driver
     forwardEffector.whileTrue(EffectorCommands.effectorForward());
-    backwardEffector.whileTrue(EffectorCommands.effectorReverse());//driver
+    backwardEffector.whileTrue(EffectorCommands.effectorReverse());
     forwardEffector.onFalse(EffectorCommands.effectorStop());
-    backwardEffector.onFalse(EffectorCommands.effectorStop());//driver
+    backwardEffector.onFalse(EffectorCommands.effectorStop());
   }
 
 
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(defaultDrive);
-   // m_Elevator.setDefaultCommand(defaultElev);
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.driveDistanceCommand(20, Direction.FORWARD);
+    return AutoCommands.driveDistanceCommand(75, Direction.BACKWARD);
+    //return AutoCommands.scoreAndMove();
   }
 }

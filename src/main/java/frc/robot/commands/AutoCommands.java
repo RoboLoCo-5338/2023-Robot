@@ -56,12 +56,27 @@ public static Command PIDTurnCommand(double angle, Direction direction){
     );
   }
 
+  public static Command scoreAndMove() {
+    return new SequentialCommandGroup(
+      ElevatorCommands.unStowCommand(),
+      EffectorCommands.autoEffector(-5) 
+      // RobotContainer.moveMechanismPID(5),
+      // driveDistanceCommand(10, Direction.FORWARD),
+      // EffectorCommands.autoEffector(10), 
+      // RobotContainer.moveMechanismPID(5),
+      // driveDistanceCommand(12, Direction.BACKWARD),
+      // ElevatorCommands.stowCommand(),  
+      // driveDistanceCommand(120, Direction.BACKWARD)
+    );
+  }
+
   // auto sequential command group for middle in community 
   public static Command middleAuto() {
     return new SequentialCommandGroup(
+      // get out of the community line 
       driveVelocityCommand(10, -1, -1),
-      //turn and score cube?
-      driveVelocityCommand(60.69, 1, 1),
+      //turn and score cube
+      scoreAndMove(),
       //mount charging station?
       driveVelocityCommand(76.125, 1, 1),
       driveVelocityCommand(40, 1, 1),
@@ -75,7 +90,8 @@ public static Command PIDTurnCommand(double angle, Direction direction){
   public static Command rightAuto(){
     return new SequentialCommandGroup(
       driveVelocityCommand(10, -1, -1),
-      //turn and score cube?
+      //turn and score cube
+      scoreAndMove(),
       driveVelocityCommand(56.75, 1, 1),
       driveVelocityCommand(40, 1, 1),
       //PIDTurnCommand(90, Direction.LEFT),
@@ -83,6 +99,23 @@ public static Command PIDTurnCommand(double angle, Direction direction){
      // PIDTurnCommand(90, Direction.LEFT),
       driveVelocityCommand(38.0625, 1, 1)
       //engange on charging station?
+    );
+  }
+
+  public static Command engageAuto() {
+    return new FunctionalCommand(
+      () -> {},
+      () -> RobotContainer.drivetrain.balanceOnStation(),
+      (interrupt) -> RobotContainer.drivetrain.tankDrive(0, 0),
+      () -> Math.abs(RobotContainer.navX.getPitch()) < 5,
+      RobotContainer.drivetrain
+    );
+  }
+
+  public static Command driveAndEngage() {
+    return new SequentialCommandGroup(
+      driveDistanceCommand(50, Direction.BACKWARD),
+      engageAuto()
     );
   }
 }
