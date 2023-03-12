@@ -22,12 +22,12 @@ public class Elevator extends SubsystemBase {
   private CANSparkMax elevatorMotor;
   private RelativeEncoder elevatorEncoder;
   private SparkMaxPIDController elevatorController;
-  public double[] elevatorHeights = {0,0};
+  public double[] elevatorHeights = {0,0,-44};
   public static double elevatorChange=0;
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
   private SparkMaxPIDController armController;
-  public double[] armHeights = {20,70};
+  public double[] armHeights = {50,100,91};
   public static double armChange = 0;
 
   //untested PID
@@ -68,6 +68,7 @@ public class Elevator extends SubsystemBase {
       elevatorController.setReference(elevatorHeights[preset],  CANSparkMax.ControlType.kPosition);
 
     }
+    
   
     public void moveElevator(double speed){
       SmartDashboard.putNumber("Elevator Position teleop", getElevatorPosition());
@@ -83,6 +84,7 @@ public class Elevator extends SubsystemBase {
       armChange = armHeights[preset] - current;
       SmartDashboard.putNumber("Arm change", armChange);
     }
+
     public void setArm(int preset){
       armController.setReference(armHeights[preset], CANSparkMax.ControlType.kPosition);
     }

@@ -26,6 +26,9 @@ public class ElevatorCommands {
       RobotContainer.m_Elevator
     );
   }
+
+  
+
   public static Command moveElevator(double speed){
     return new InstantCommand(
       () -> RobotContainer.m_Elevator.moveElevator(speed),
@@ -53,6 +56,7 @@ public class ElevatorCommands {
       RobotContainer.m_Elevator
     );
   }
+
   
   //todo might want to use a different method, maybe one that is timed instead of using a preset for this
   public static Command startMechanism(){

@@ -138,8 +138,8 @@ public class RobotContainer {
       ElevatorCommands.setElevatorHeight(preset), 
       ArmCommands.setArm(preset)
      );
-
    }
+
 
 
    
@@ -189,7 +189,7 @@ public class RobotContainer {
    revTrigger.onTrue(reverse);
    speed.onFalse(speedOff);
    
-     //TEMPORARY
+    //TEMPORARY
     // intakeHeight.whileTrue(ElevatorCommands.moveElevator(0.1));//b-button makes this work
     // bottomHeight.whileTrue(ElevatorCommands.moveElevator(-0.1));//a button makes this work
     // intakeHeight.onFalse(ElevatorCommands.stopElevator());//driver (is it?)
@@ -197,7 +197,9 @@ public class RobotContainer {
     
     bottomHeight.onTrue(moveMechanismPID(0));
     mediumHeight.onTrue(moveMechanismPID(1));
-  //  highHeight.whileTrue(ArmCommands.moveArm(-0.2));
+    //TODO check
+    highHeight.onTrue(moveMechanismPID(2));
+   //  highHeight.whileTrue(ArmCommands.moveArm(-0.2));
    // mediumHeight.onFalse(ArmCommands.stopArm());//;\driver
    // highHeight.onFalse(ArmCommands.stopArm());//driver
 
@@ -214,7 +216,7 @@ public class RobotContainer {
     // backwardEffector.whileTrue(EffectorCommands.effectorReverse());
     // forwardEffector.onFalse(EffectorCommands.effectorStop());//driver
     // backwardEffector.onFalse(EffectorCommands.effectorStop());
-   // limeLight.whileTrue(runLimeLight);
+    // limeLight.whileTrue(runLimeLight);
     // intakeHeight.onTrue(ElevatorCommands.setElevatorHeight(0));
     // bottomHeight.onTrue(ElevatorCommands.setElevatorHeight(1));
     // mediumHeight.onTrue(ElevatorCommands.setElevatorHeight(2+coneOffset));
@@ -226,6 +228,13 @@ public class RobotContainer {
     backwardEffector2.whileTrue(EffectorCommands.effectorReverse());//operator
     forwardEffector2.onFalse(EffectorCommands.effectorStop());
     backwardEffector2.onFalse(EffectorCommands.effectorStop());//operator
+
+
+    //TODO check
+    forwardEffector.whileTrue(EffectorCommands.effectorForward());
+    backwardEffector.whileTrue(EffectorCommands.effectorReverse());//driver
+    forwardEffector.onFalse(EffectorCommands.effectorStop());
+    backwardEffector.onFalse(EffectorCommands.effectorStop());//driver
   }
 
 

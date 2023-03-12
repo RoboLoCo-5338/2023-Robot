@@ -266,6 +266,7 @@ public void tankDriveVelocity(double leftVelocity, double rightVelocity){
 
    public double getAngle(){
      return navX.getAngle();
+    
    }
 
    public void angleTurn(Direction direction){
