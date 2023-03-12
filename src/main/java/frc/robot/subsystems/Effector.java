@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -32,7 +33,7 @@ public class Effector extends SubsystemBase{
         effectorMotor.setSmartCurrentLimit(30);
         effectorController = effectorMotor.getPIDController();
         effectorEncoder = effectorMotor.getEncoder();
-        effectorController.setOutputRange(-0.2, 0.2);
+        effectorController.setOutputRange(-0.7, 0.7);
         configController();
        // outerMotor.setInverted(true);
         //configController();
@@ -59,6 +60,7 @@ public class Effector extends SubsystemBase{
 
     public void setEffectorRef(int setpoint){
         effectorController.setReference(setpoint,  CANSparkMax.ControlType.kPosition);
+        SmartDashboard.putNumber("effector", getEffectorPosition());
     }
 
     public double getEffectorPosition(){
