@@ -14,6 +14,10 @@ import frc.robot.commands.PIDTurnCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import frc.robot.subsystems.Elevator;
+
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,6 +44,7 @@ public class RobotContainer {
   public static final Drivetrain drivetrain = new Drivetrain();
   public static final LimeLight LimeLight = new LimeLight();
   public static final Effector effector = new Effector();
+  public static AHRS navX = new AHRS(SPI.Port.kMXP);
   public static double percent = 0.3;
   public static int coneOffset =0;
 
@@ -103,7 +108,7 @@ public class RobotContainer {
    );
  
    public Command speedBoost = new RunCommand(
-     () -> {speedMod=controller1.getRawAxis(3)*0.7;}
+     () -> {speedMod=controller1.getRawAxis(3)*1.0;}
    );
 
    public Command speedOff = new InstantCommand(
@@ -200,7 +205,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.driveDistanceCommand(75, Direction.FORWARD);
+    return AutoCommands.driveDistanceCommand(75, Direction.BACKWARD);
+    //return AutoCommands.scoreAndMove();
   }
 }
-    
