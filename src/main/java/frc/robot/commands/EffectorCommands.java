@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -38,8 +39,9 @@ public class EffectorCommands {
       );
     }
 
-    // public static Command timeEffector(double time) {
-    //   double start=getMatchTime
-    //   return new FunctionalCommand(
-    // }
+  //   public static Command timeEffector(double time) {
+  //     Timer timer= new Timer();
+  //     double start= timer.getMatchTime();
+  //     return new FunctionalCommand(
+  //   }
   }

@@ -30,10 +30,11 @@ public class AutoCommands {
   public static Command driveVelocityCommand(double distance, double leftVelocity, double rightVelocity){
     return new FunctionalCommand( 
       () -> RobotContainer.drivetrain.resetVelocity(),
-      () -> RobotContainer.drivetrain.tankDriveVelocity(leftVelocity, rightVelocity),
+      () -> RobotContainer.drivetrain.tankDriveVelocity(-leftVelocity, -rightVelocity),
       (interrupt) -> RobotContainer.drivetrain.tankDriveVelocity(0, 0),
       () -> Math.abs(RobotContainer.drivetrain.getPosition())>= Math.abs(distance) - 0.1,
       RobotContainer.drivetrain
+      
     );
   }
 
@@ -59,14 +60,14 @@ public static Command PIDTurnCommand(double angle, Direction direction){
   public static Command scoreAndMove() {
     return new SequentialCommandGroup(
       ElevatorCommands.unStowCommand(),
-      EffectorCommands.autoEffector(-5) 
-      // RobotContainer.moveMechanismPID(5),
-      // driveDistanceCommand(10, Direction.FORWARD),
-      // EffectorCommands.autoEffector(10), 
-      // RobotContainer.moveMechanismPID(5),
-      // driveDistanceCommand(12, Direction.BACKWARD),
-      // ElevatorCommands.stowCommand(),  
-      // driveDistanceCommand(120, Direction.BACKWARD)
+      EffectorCommands.autoEffector(-20), //not sure sign
+      driveVelocityCommand(10, -1, -1),
+      RobotContainer.moveMechanismPID(1),
+      driveDistanceCommand(12, Direction.FORWARD),
+      EffectorCommands.autoEffector(20), //not sure sign
+      driveDistanceCommand(12, Direction.BACKWARD),
+      ElevatorCommands.stowCommand(),
+      driveDistanceCommand(100, Direction.BACKWARD)
     );
   }
 
@@ -102,20 +103,15 @@ public static Command PIDTurnCommand(double angle, Direction direction){
     );
   }
 
-  public static Command engageAuto() {
-    return new FunctionalCommand(
-      () -> {},
-      () -> RobotContainer.drivetrain.balanceOnStation(),
-      (interrupt) -> RobotContainer.drivetrain.tankDrive(0, 0),
-      () -> Math.abs(RobotContainer.navX.getPitch()) < 5,
-      RobotContainer.drivetrain
-    );
-  }
+  // move forward, unstow, preset elevator, move more forward, drop cone, move back, stow, move back (out of community line)
 
-  public static Command driveAndEngage() {
+  public static Command leftAuto(){
     return new SequentialCommandGroup(
-      driveDistanceCommand(50, Direction.BACKWARD),
-      engageAuto()
+      driveVelocityCommand(0, 0, 0),
+      ElevatorCommands.unStowCommand(),
+      RobotContainer.moveMechanismPID(5),
+      driveVelocityCommand(0, 0, 0)
+
     );
   }
 }
