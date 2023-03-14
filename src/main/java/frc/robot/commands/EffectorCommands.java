@@ -37,4 +37,9 @@ public class EffectorCommands {
         RobotContainer.effector
       );
     }
-}
+
+    // public static Command timeEffector(double time) {
+    //   double start=getMatchTime
+    //   return new FunctionalCommand(
+    // }
+  }

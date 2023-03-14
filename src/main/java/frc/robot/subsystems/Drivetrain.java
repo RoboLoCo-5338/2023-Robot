@@ -82,9 +82,9 @@ public class Drivetrain extends SubsystemBase {
 
     // conversion factors for the enconders 
     leftEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
-    //leftEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    leftEncoder.setVelocityConversionFactor((WHEEL_CIRCUMFERENCE/GEAR_RATIO)/60);
     rightEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
-    //rightEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    rightEncoder.setVelocityConversionFactor((WHEEL_CIRCUMFERENCE/GEAR_RATIO)/60);
 
     // setting PID for 
     rightFrontPID = leftFront.getPIDController();
