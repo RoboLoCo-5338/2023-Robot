@@ -39,6 +39,9 @@ public final class Constants {
   public static final int LEFTSTICKBUTTON = 9; 
   public static final int RIGHTSTICKBUTTON = 10;
 
+  public static final double MAX_ARM_HEIGHT = 100;
+  public static final double MIN_ARM_HEIGHT = -20;
+
   // Height presets.
   public static final int Height = 3;
   public static final int height1 = 1;

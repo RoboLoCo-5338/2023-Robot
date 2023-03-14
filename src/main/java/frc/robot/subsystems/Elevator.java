@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -22,7 +24,7 @@ public class Elevator extends SubsystemBase {
   public double[] elevatorHeights = {0,0,-10,-10,0,-45}; //presets 2-4 for stow/unstow
   public static double elevatorChange=0;
   private CANSparkMax armMotor;
-  private RelativeEncoder armEncoder;
+  private AbsoluteEncoder armEncoder;
   private SparkMaxPIDController armController;
   public double[] armHeights = {30,100,-4,35,0,100}; //presets 2-4 for stow/unstow, DOUBLE CHECK 0 & 1
   public static double armChange = 0;
@@ -48,14 +50,14 @@ public class Elevator extends SubsystemBase {
       elevatorMotor.setSmartCurrentLimit(40);
       armMotor = new CANSparkMax(Constants.ARM_MOTOR, MotorType.kBrushless);
       armMotor.setIdleMode(IdleMode.kBrake);
-      armEncoder = armMotor.getEncoder();
+      armEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
       armController = armMotor.getPIDController();
-      armController.setOutputRange(-0.4, 0.4);
+      armController.setOutputRange(0.5,0.5);
       //armEncoder.setPositionConversionFactor(1);
       armMotor.setSmartCurrentLimit(40);
 
       configController();
-      
+      resetArm();
     }
   
     public void setElevatorHeight(int preset){
@@ -90,6 +92,12 @@ public class Elevator extends SubsystemBase {
     }
   
     public void moveArm(double speed){
+      if (getArmPosition() >= Constants.MAX_ARM_HEIGHT || getArmPosition() <= Constants.MIN_ARM_HEIGHT)
+      {
+        armMotor.set(0);
+        return;
+      }
+
       if(getArmPosition() > -20 && speed < 0) { //CHANGE MAYBE
         SmartDashboard.putNumber("Arm Position Teleop", getArmPosition());
         armMotor.set(speed);
@@ -100,9 +108,10 @@ public class Elevator extends SubsystemBase {
       }
     }
 
-    public void resetArm(){
-      armEncoder.setPosition(0);
+    public void resetArm() {
+      armEncoder.setZeroOffset(armEncoder.getPosition());
     }
+
 
     public double getArmPosition(){
       return armEncoder.getPosition();
@@ -135,5 +144,9 @@ public class Elevator extends SubsystemBase {
     armController.setI(armI);
     armController.setD(armD);
     armController.setFF(armFeed_Forward);
+
+    // Burn configuration to controller to keep settings in the event a controller browns out during operation.
+    elevatorMotor.burnFlash();
+    armMotor.burnFlash();
   }
 }

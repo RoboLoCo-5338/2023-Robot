@@ -95,6 +95,12 @@ public class Drivetrain extends SubsystemBase {
 
     setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
     setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
+
+    // Burn configuration to controllers to prevent losing configuration from brown outs.
+    leftFront.burnFlash();
+    rightFront.burnFlash();
+    leftRear.burnFlash();
+    rightRear.burnFlash();
   }
 
   public void tankDrive(double left, double right) {

@@ -37,6 +37,8 @@ public class Effector extends SubsystemBase{
         configController();
        // outerMotor.setInverted(true);
         //configController();
+        // Prevent losing configuration to brown outs.
+        effectorMotor.burnFlash();
     }
 
     public void effectorForward() {
