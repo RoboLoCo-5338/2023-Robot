@@ -34,7 +34,7 @@ public class AutoCommands {
       (interrupt) -> RobotContainer.drivetrain.tankDriveVelocity(0, 0),
       () -> Math.abs(RobotContainer.drivetrain.getPosition())>= Math.abs(distance) - 0.1,
       RobotContainer.drivetrain
-      
+
     );
   }
 
@@ -105,13 +105,17 @@ public static Command PIDTurnCommand(double angle, Direction direction){
 
   // move forward, unstow, preset elevator, move more forward, drop cone, move back, stow, move back (out of community line)
 
+  // top auto sequential command group, need to calculate values for distances and actual set point
   public static Command leftAuto(){
     return new SequentialCommandGroup(
       driveVelocityCommand(0, 0, 0),
       ElevatorCommands.unStowCommand(),
       RobotContainer.moveMechanismPID(5),
+      driveVelocityCommand(0, 0, 0),
+      EffectorCommands.autoEffector(20),
+      driveVelocityCommand(0, 0, 0),
+      ElevatorCommands.stowCommand(),
       driveVelocityCommand(0, 0, 0)
-
     );
   }
 }
