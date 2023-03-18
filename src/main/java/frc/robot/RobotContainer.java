@@ -22,8 +22,11 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -42,11 +45,23 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+private static Joystick controller1 = new Joystick(0);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    configureDefaultCommands();
   }
+
+  public Command defaultDrive = new RunCommand(
+    () -> driveSystem.tankPercent(
+     controller1.getRawAxis(5)*0.2,
+     controller1.getRawAxis(1)*0.2
+    ),
+    driveSystem
+  );
+  
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -65,6 +80,14 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+  }
+
+  private void configureDefaultCommands() {
+    //driveSystem.setDefaultCommand(defaultDrive);
+    CommandScheduler scheduler = CommandScheduler.getInstance();
+    scheduler.setDefaultCommand(driveSystem, defaultDrive);
+
+   
   }
 
   /**
@@ -99,9 +122,9 @@ public class RobotContainer {
             // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
             // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            List.of(new Translation2d(1,0)),
             // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(10, 0, new Rotation2d(0)),
+            new Pose2d(2, 0, new Rotation2d(0)),
             // Pass config
             config);
 
@@ -126,7 +149,7 @@ public class RobotContainer {
     driveSystem.resetOdometry(trajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() ->  driveSystem.tankDriveVolts(0, 0));
+    return ramseteCommand;
   }
   }
 

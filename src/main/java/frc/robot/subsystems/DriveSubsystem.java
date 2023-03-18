@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import javax.print.attribute.standard.MediaSize.NA;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
@@ -60,10 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
     Navx= new AHRS(SPI.Port.kMXP);
     configureTalon();
     
-    m_leftMotors=
-    new MotorControllerGroup(
-       leftRear,
-        leftFront);
+    m_leftMotors= new MotorControllerGroup(leftRear,leftFront);
 
     m_rightMotors=
     new MotorControllerGroup(
@@ -75,7 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
     resetEncoders();
     m_odometry =
         new DifferentialDriveOdometry(
-            new Rotation2d(Navx.getAngle()),leftFront.getSelectedSensorPosition(), rightFront.getSelectedSensorPosition());
+            new Rotation2d(Navx.getAngle()),leftFront.getSelectedSensorPosition()/2048/GEAR_RATIO*0.1524*Math.PI, rightFront.getSelectedSensorPosition()/2048/GEAR_RATIO*0.1524*Math.PI);
   }
 
   
@@ -86,7 +84,7 @@ public class DriveSubsystem extends SubsystemBase {
     rightFront.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 100);
 		rightFront.configNeutralDeadband(0.001, 0);
     rightFront.configClosedLoopPeakOutput(0, PEAK_OUTPUT, 100);
-   // rightFront.setInverted(true);
+    //rightFront.setInverted(true);
     rightFront.configPeakOutputForward(PEAK_OUTPUT);
 		rightFront.configPeakOutputReverse(-PEAK_OUTPUT);
     rightFront.configNominalOutputForward(0, 30);
@@ -107,7 +105,7 @@ public class DriveSubsystem extends SubsystemBase {
 		rightRear.configNeutralDeadband(0.001, 0);
     rightRear.configClosedLoopPeakOutput(0, PEAK_OUTPUT, 100);
     rightRear.follow(rightFront, FollowerType.AuxOutput1);
-    rightRear.setInverted(true);
+    //rightRear.setInverted(true);
     rightRear.configPeakOutputForward(PEAK_OUTPUT);
 		rightRear.configPeakOutputReverse(-PEAK_OUTPUT);
     rightRear.configNominalOutputForward(0, 30);
@@ -134,7 +132,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-      new Rotation2d(Navx.getAngle()), leftFront.getSelectedSensorPosition(), rightFront.getSelectedSensorPosition());
+      new Rotation2d(Navx.getAngle()), leftFront.getSelectedSensorPosition()/2048/GEAR_RATIO*0.1524*Math.PI, rightFront.getSelectedSensorPosition()/2048/GEAR_RATIO*0.1524*Math.PI);
   }
 
   /**
@@ -234,7 +232,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
-    Navx.reset();;
+    Navx.reset();
   }
 
   /**
@@ -253,5 +251,10 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return -Navx.getRate();
+  }
+
+  public void tankPercent(double left, double right) {
+    leftFront.set(ControlMode.PercentOutput, left );
+    rightFront.set(ControlMode.PercentOutput, right );
   }
 }
