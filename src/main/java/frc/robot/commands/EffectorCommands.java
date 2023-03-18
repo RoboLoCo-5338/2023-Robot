@@ -39,9 +39,25 @@ public class EffectorCommands {
       );
     }
 
-  //   public static Command timeEffector(double time) {
-  //     Timer timer= new Timer();
-  //     double start= timer.getMatchTime();
-  //     return new FunctionalCommand(
-  //   }
+    // 
+    public static Command timeEffectorForward(double time) {
+      Long startingTime = System.currentTimeMillis();
+      return new FunctionalCommand(
+        () -> {},
+        () -> RobotContainer.effector.effectorForward(),
+        (interrupt) -> RobotContainer.effector.effectorStop(),
+        () -> System.currentTimeMillis() - startingTime > time 
+      );
+    }
+
+    public static Command timeEffectorReverse(double time) {
+      long startingTime = System.currentTimeMillis();
+      return new FunctionalCommand(
+        () -> {},
+        () -> RobotContainer.effector.effectorReverse(),
+        (interrupt) -> RobotContainer.effector.effectorStop(),
+        () -> System.currentTimeMillis() - startingTime > time 
+      );
+    }
+
   }

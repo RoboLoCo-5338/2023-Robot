@@ -43,6 +43,7 @@ public class Effector extends SubsystemBase{
         effectorMotor.set(speed);
     }
 
+  
     public void effectorReverse()
     {
         effectorMotor.set(-speed);

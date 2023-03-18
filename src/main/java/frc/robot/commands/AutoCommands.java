@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 
 
@@ -71,7 +72,23 @@ public static Command PIDTurnCommand(double angle, Direction direction){
     );
   }
 
-  // auto sequential command group for middle in community 
+    // // sequential command group for bottom of community 
+    // public static Command rightAuto(){
+    //   return new SequentialCommandGroup(
+    //     driveVelocityCommand(10, -1, -1),
+    //     //turn and score cube
+    //     scoreAndMove(),
+    //     driveVelocityCommand(56.75, 1, 1),
+    //     driveVelocityCommand(40, 1, 1),
+    //     //PIDTurnCommand(90, Direction.LEFT),
+    //     driveVelocityCommand(22, 1, 1),
+    //    // PIDTurnCommand(90, Direction.LEFT),
+    //     driveVelocityCommand(38.0625, 1, 1)
+    //     //engange on charging station?
+    //   );
+    // }
+
+  // auto sequential command group for middle in community (dock and engage)
   public static Command middleAuto() {
     return new SequentialCommandGroup(
       // get out of the community line 
@@ -87,35 +104,23 @@ public static Command PIDTurnCommand(double angle, Direction direction){
     );
   }
 
-  // sequential command group for bottom of community 
-  public static Command rightAuto(){
-    return new SequentialCommandGroup(
-      driveVelocityCommand(10, -1, -1),
-      //turn and score cube
-      scoreAndMove(),
-      driveVelocityCommand(56.75, 1, 1),
-      driveVelocityCommand(40, 1, 1),
-      //PIDTurnCommand(90, Direction.LEFT),
-      driveVelocityCommand(22, 1, 1),
-     // PIDTurnCommand(90, Direction.LEFT),
-      driveVelocityCommand(38.0625, 1, 1)
-      //engange on charging station?
-    );
-  }
-
   // move forward, unstow, preset elevator, move more forward, drop cone, move back, stow, move back (out of community line)
 
-  // top auto sequential command group, need to calculate values for distances and actual set point
+  // top auto sequential command group, need to calculate values for distances and actual set point (score and move out of the community line )
   public static Command leftAuto(){
     return new SequentialCommandGroup(
-      driveVelocityCommand(0, 0, 0),
+      driveVelocityCommand(30.345, 40, 40),
       ElevatorCommands.unStowCommand(),
       RobotContainer.moveMechanismPID(5),
-      driveVelocityCommand(0, 0, 0),
-      EffectorCommands.autoEffector(20),
-      driveVelocityCommand(0, 0, 0),
+      driveVelocityCommand(10, 20, 20),
+      EffectorCommands.timeEffectorReverse(0), // to do
+      EffectorCommands.effectorStop(),
+      RobotContainer.moveMechanismPID(5),
+      driveVelocityCommand(10, 20, 20),
       ElevatorCommands.stowCommand(),
-      driveVelocityCommand(0, 0, 0)
+      driveVelocityCommand(96.75, 40, 40)
     );
   }
+
+
 }
