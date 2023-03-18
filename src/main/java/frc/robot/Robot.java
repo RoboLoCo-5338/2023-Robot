@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -62,6 +66,9 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    RobotContainer.driveSystem.resetOdometry(new Pose2d(new Translation2d(0,0), new Rotation2d(0)));
+    RobotContainer.driveSystem.resetEncoders();
+    //RobotContainer.driveSystem.resetEncoders();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -72,6 +79,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     DifferentialDriveWheelSpeeds ddws = RobotContainer.driveSystem.getWheelSpeeds();
+    Pose2d pose = RobotContainer.driveSystem.getPose();
+
+    SmartDashboard.putNumber("X Position", pose.getX());
+    SmartDashboard.putNumber("Y Position", pose.getY());
+    SmartDashboard.putNumber("Robot Rotation", pose.getRotation().getDegrees());
     SmartDashboard.putNumber("Right wheel speeds", ddws.rightMetersPerSecond);
     SmartDashboard.putNumber("Left wheel speeds", ddws.leftMetersPerSecond);
   }

@@ -56,8 +56,8 @@ private static Joystick controller1 = new Joystick(0);
 
   public Command defaultDrive = new RunCommand(
     () -> driveSystem.tankPercent(
-     controller1.getRawAxis(5)*0.4,
-     controller1.getRawAxis(1)*0.4
+     controller1.getRawAxis(5)*0.6,
+     controller1.getRawAxis(1)*0.6
     ),
     driveSystem
   );

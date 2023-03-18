@@ -160,9 +160,13 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    m_odometry.resetPosition(
-      new Rotation2d(Navx.getAngle()),leftFront.getSelectedSensorPosition()/2048/GEAR_RATIO*0.1524*Math.PI,rightFront.getSelectedSensorPosition()/2048/GEAR_RATIO*0.1524*Math.PI, pose);
-  }
+  //   m_odometry.resetPosition(
+  //     new Rotation2d(Navx.getAngle()),leftFront.getSelectedSensorPosition()/2048/GEAR_RATIO*0.1524*Math.PI,rightFront.getSelectedSensorPosition()/2048/GEAR_RATIO*0.1524*Math.PI, pose);
+  // }
+
+  m_odometry.resetPosition(
+    new Rotation2d(Navx.getAngle()),0,0, pose);
+}
 
   /**
    * Drives the robot using arcade controls.
