@@ -6,11 +6,9 @@ package frc.robot;
 
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.AutoCommands;
-import frc.robot.commands.Direction;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.LimeLight;
-import frc.robot.commands.PIDTurnCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import frc.robot.subsystems.Elevator;
@@ -19,7 +17,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -46,7 +43,7 @@ public class RobotContainer {
   public static final Effector effector = new Effector();
   public static AHRS navX = new AHRS(SPI.Port.kMXP);
   public static double percent = 0.3;
-  public static int coneOffset =0;
+  public static int coneOffset = 0;
 
   private static int reverseModifier=1;
   private static double speedMod=0; //not sure what this should be?? 
@@ -66,7 +63,8 @@ public class RobotContainer {
   }
 
 
-    // Drive using the joysticks.
+// Drive using the joysticks
+
   public Command defaultDrive = new RunCommand(
     () -> {
       if(reverseModifier<0){
@@ -137,6 +135,7 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+  
   private void configureBindings() {
     //variables 
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);

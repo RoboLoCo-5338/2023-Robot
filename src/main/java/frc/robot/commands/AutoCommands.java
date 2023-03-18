@@ -61,11 +61,11 @@ public static Command PIDTurnCommand(double angle, Direction direction){
   public static Command scoreAndMove() {
     return new SequentialCommandGroup(
       ElevatorCommands.unStowCommand(),
-      EffectorCommands.autoEffector(-20), //not sure sign
+      //EffectorCommands.autoEffector(-20), //not sure sign
       driveVelocityCommand(10, -1, -1),
       RobotContainer.moveMechanismPID(1),
       driveDistanceCommand(12, Direction.FORWARD),
-      EffectorCommands.autoEffector(20), //not sure sign
+      //EffectorCommands.autoEffector(20), //not sure sign
       driveDistanceCommand(12, Direction.BACKWARD),
       ElevatorCommands.stowCommand(),
       driveDistanceCommand(100, Direction.BACKWARD)

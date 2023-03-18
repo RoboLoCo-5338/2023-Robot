@@ -19,8 +19,8 @@ public class Effector extends SubsystemBase{
 
     private CANSparkMax effectorMotor;
     private double speed = 0.8;
-    private SparkMaxPIDController effectorController;
-    private RelativeEncoder effectorEncoder;
+    // private SparkMaxPIDController effectorController;
+    // private RelativeEncoder effectorEncoder;
     //untested PID
     public static double effectorP=0.1;
     public static double effectorI=0.0;
@@ -28,13 +28,13 @@ public class Effector extends SubsystemBase{
     public static double effector_Forward=0.0;
     
     public Effector() {
-        effectorMotor = new CANSparkMax(Constants.EFFECTOR_MOTOR, MotorType.kBrushless);
-        effectorMotor.setIdleMode(IdleMode.kCoast);
-        effectorMotor.setSmartCurrentLimit(30);
-        effectorController = effectorMotor.getPIDController();
-        effectorEncoder = effectorMotor.getEncoder();
-        effectorController.setOutputRange(-0.7, 0.7);
-        configController();
+        effectorMotor = new CANSparkMax(Constants.EFFECTOR_MOTOR, MotorType.kBrushed);
+        effectorMotor.setIdleMode(IdleMode.kBrake);
+        effectorMotor.setSmartCurrentLimit(25);
+        // effectorController = effectorMotor.getPIDController();
+        // effectorEncoder = effectorMotor.getEncoder();
+        // effectorController.setOutputRange(-0.7, 0.7);
+        //configController();
        // outerMotor.setInverted(true);
         //configController();
     }
@@ -53,19 +53,19 @@ public class Effector extends SubsystemBase{
         effectorMotor.set(0);
     }
     private void configController(){
-        effectorController.setP(effectorP);
-        effectorController.setI(effectorI);
-        effectorController.setD(effectorD);
-        effectorController.setFF(effector_Forward);
+        // effectorController.setP(effectorP);
+        // effectorController.setI(effectorI);
+        // effectorController.setD(effectorD);
+        // effectorController.setFF(effector_Forward);
     }   
 
-    public void setEffectorRef(int setpoint){
-        effectorController.setReference(setpoint,  CANSparkMax.ControlType.kPosition);
-        SmartDashboard.putNumber("effector", getEffectorPosition());
-    }
+    // public void setEffectorRef(int setpoint){
+    //     effectorController.setReference(setpoint,  CANSparkMax.ControlType.kPosition);
+    //     SmartDashboard.putNumber("effector", getEffectorPosition());
+    // }
 
-    public double getEffectorPosition(){
-        return effectorEncoder.getPosition();
-    }
+    // public double getEffectorPosition(){
+    //     return effectorEncoder.getPosition();
+    // }
 
 }
