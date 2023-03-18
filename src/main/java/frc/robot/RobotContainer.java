@@ -39,7 +39,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final DriveSubsystem driveSystem = new DriveSubsystem();
+  public static final DriveSubsystem driveSystem = new DriveSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -56,8 +56,8 @@ private static Joystick controller1 = new Joystick(0);
 
   public Command defaultDrive = new RunCommand(
     () -> driveSystem.tankPercent(
-     controller1.getRawAxis(5)*0.2,
-     controller1.getRawAxis(1)*0.2
+     controller1.getRawAxis(5)*0.4,
+     controller1.getRawAxis(1)*0.4
     ),
     driveSystem
   );

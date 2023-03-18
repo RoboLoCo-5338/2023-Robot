@@ -150,7 +150,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The current wheel speeds.
    */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(leftFront.getSelectedSensorVelocity() / GEAR_RATIO / 2048, rightFront.getSelectedSensorVelocity() / GEAR_RATIO / 2048*0.1524);
+    return new DifferentialDriveWheelSpeeds(leftFront.getSelectedSensorVelocity() / GEAR_RATIO / 2048*0.1524, rightFront.getSelectedSensorVelocity() / GEAR_RATIO / 2048*0.1524);
   }
 
   /**

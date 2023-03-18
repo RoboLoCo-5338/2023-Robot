@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.DriveSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -66,7 +70,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    DifferentialDriveWheelSpeeds ddws = RobotContainer.driveSystem.getWheelSpeeds();
+    SmartDashboard.putNumber("Right wheel speeds", ddws.rightMetersPerSecond);
+    SmartDashboard.putNumber("Left wheel speeds", ddws.leftMetersPerSecond);
+  }
 
   @Override
   public void teleopInit() {
@@ -81,7 +89,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  
+  }
 
   @Override
   public void testInit() {
