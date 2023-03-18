@@ -28,13 +28,13 @@ public class EffectorCommands {
       );
     }
 
-    public static Command autoEffector(int setpoint) {
-      return new FunctionalCommand(
-        () -> {},
-        () -> RobotContainer.effector.setEffectorRef(setpoint),
-        (interrupt) -> RobotContainer.effector.effectorStop(),
-        () ->  Math.abs(setpoint-RobotContainer.effector.getEffectorPosition())<=1,
-        RobotContainer.effector
-      );
-    }
+    // public static Command autoEffector(int setpoint) {
+    //   return new FunctionalCommand(
+    //     () -> {},
+    //     () -> RobotContainer.effector.setEffectorRef(setpoint),
+    //     (interrupt) -> RobotContainer.effector.effectorStop(),
+    //     () ->  Math.abs(setpoint-RobotContainer.effector.getEffectorPosition())<=1,
+    //     RobotContainer.effector
+    //   );
+    // }
 }

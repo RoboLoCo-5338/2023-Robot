@@ -205,7 +205,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.driveDistanceCommand(75, Direction.BACKWARD);
+    return AutoCommands.driveDistanceCommand(95, Direction.FORWARD);
     //return AutoCommands.scoreAndMove();
   }
 }
