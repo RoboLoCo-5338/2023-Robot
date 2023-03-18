@@ -61,6 +61,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    RobotContainer.drivetrain.resetPosition();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -70,7 +71,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    SmartDashboard.putNumber("Drive train position" , RobotContainer.drivetrain.getPosition());
+    SmartDashboard.putNumber("Drive train left velocity", RobotContainer.drivetrain.leftEncoder.getVelocity());
+    SmartDashboard.putNumber("Drive train right velocity", RobotContainer.drivetrain.rightEncoder.getVelocity());
+  }
 
   @Override
   public void teleopInit() {
@@ -89,7 +94,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putString("Dino Rivets ftw","HELLO");
-
+    
     SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
     SmartDashboard.putNumber("Arm Position", RobotContainer.m_Elevator.getArmPosition());
   }

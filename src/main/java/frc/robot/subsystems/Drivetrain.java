@@ -33,7 +33,7 @@ public class Drivetrain extends SubsystemBase {
   private static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
 
   // PID values for teleop.
-  public static final double VELOCITY_P = 0.0110;
+  public static final double VELOCITY_P = 0.04;
   public static final double VELOCITY_I = 0.0;
   public static final double VELOCITY_D = 0.0;
   public static final double VELOCITY_FEED_FORWARD = 0.0;
@@ -53,10 +53,10 @@ public class Drivetrain extends SubsystemBase {
   public static double targetPosition;
   public static Direction targetDirection;
 
-  private RelativeEncoder leftEncoder;
-  private RelativeEncoder rightEncoder;
-  private SparkMaxPIDController rightFrontPID;
-  private SparkMaxPIDController leftFrontPID;
+  public RelativeEncoder leftEncoder;
+  public RelativeEncoder rightEncoder;
+  public SparkMaxPIDController rightFrontPID;
+  public SparkMaxPIDController leftFrontPID;
 
 
 
@@ -82,9 +82,9 @@ public class Drivetrain extends SubsystemBase {
 
     // conversion factors for the enconders 
     leftEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
-    //leftEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    leftEncoder.setVelocityConversionFactor((WHEEL_CIRCUMFERENCE/GEAR_RATIO)/60);
     rightEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
-    //rightEncoder.setVelocityConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
+    rightEncoder.setVelocityConversionFactor((WHEEL_CIRCUMFERENCE/GEAR_RATIO)/60);
 
     // setting PID for 
     rightFrontPID = leftFront.getPIDController();

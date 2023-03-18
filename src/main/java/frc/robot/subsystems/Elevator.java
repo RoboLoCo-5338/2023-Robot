@@ -61,6 +61,7 @@ public class Elevator extends SubsystemBase {
     public void setElevatorHeight(int preset){
       elevatorController.setReference(elevatorHeights[preset],  CANSparkMax.ControlType.kPosition);
     }
+    
   
     public void moveElevator(double speed){
       if(speed < 0 && getElevatorPosition() > -50) { //CHANGE MAYBE
@@ -82,6 +83,7 @@ public class Elevator extends SubsystemBase {
       armChange = armHeights[preset] - current;
       SmartDashboard.putNumber("Arm change", armChange);
     }
+
     public void setArm(int preset){
       SmartDashboard.putString("unstow", "unstow");
       armController.setReference(armHeights[preset], CANSparkMax.ControlType.kPosition);

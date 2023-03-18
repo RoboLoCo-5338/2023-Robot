@@ -6,11 +6,9 @@ package frc.robot;
 
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.AutoCommands;
-import frc.robot.commands.Direction;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.LimeLight;
-import frc.robot.commands.PIDTurnCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import frc.robot.subsystems.Elevator;
@@ -19,7 +17,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -46,7 +43,7 @@ public class RobotContainer {
   public static final Effector effector = new Effector();
   public static AHRS navX = new AHRS(SPI.Port.kMXP);
   public static double percent = 0.3;
-  public static int coneOffset =0;
+  public static int coneOffset = 0;
 
   private static int reverseModifier=1;
   private static double speedMod=0; //not sure what this should be?? 
@@ -122,6 +119,21 @@ public class RobotContainer {
      );
    }
 
+
+
+   
+
+
+
+    /**
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}.
+   */
   private void configureBindings() {
     //variables 
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
@@ -161,6 +173,12 @@ public class RobotContainer {
     speed.onFalse(speedOff);
    
     //operator presets
+    //TEMPORARY
+    // intakeHeight.whileTrue(ElevatorCommands.moveElevator(0.1));//b-button makes this work
+    // bottomHeight.whileTrue(ElevatorCommands.moveElevator(-0.1));//a button makes this work
+    // intakeHeight.onFalse(ElevatorCommands.stopElevator());//driver (is it?)
+    // bottomHeight.onFalse(ElevatorCommands.stopElevator());//driver (is it?)
+    
     bottomHeight.onTrue(moveMechanismPID(0));
     mediumHeight.onTrue(moveMechanismPID(1));
     highHeight.onTrue(moveMechanismPID(5)); //ADD PRESETS
@@ -168,6 +186,11 @@ public class RobotContainer {
 
     unstow.onTrue(ElevatorCommands.unStowCommand());
     stow.onTrue(ElevatorCommands.stowCommand());
+    //TODO check
+    highHeight.onTrue(moveMechanismPID(2));
+   //  highHeight.whileTrue(ArmCommands.moveArm(-0.2));
+   // mediumHeight.onFalse(ArmCommands.stopArm());//;\driver
+   // highHeight.onFalse(ArmCommands.stopArm());//driver
 
     moveElevatorUp.whileTrue(ElevatorCommands.moveElevator( 0.4 ));
     moveElevatorDown.whileTrue(ElevatorCommands.moveElevator(-0.4));
@@ -178,6 +201,11 @@ public class RobotContainer {
     moveArmDown.whileFalse(ArmCommands.stopArm());
     moveArmUp.whileFalse(ArmCommands.stopArm());
 
+    // limeLight.whileTrue(runLimeLight);
+    // forwardEffector.whileTrue(EffectorCommands.effectorForward());
+    // backwardEffector.whileTrue(EffectorCommands.effectorReverse());
+    // forwardEffector.onFalse(EffectorCommands.effectorStop());//driver
+    // backwardEffector.onFalse(EffectorCommands.effectorStop());
     // limeLight.whileTrue(runLimeLight);
     // intakeHeight.onTrue(ElevatorCommands.setElevatorHeight(0));
     // bottomHeight.onTrue(ElevatorCommands.setElevatorHeight(1));
@@ -205,7 +233,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.driveDistanceCommand(95, Direction.FORWARD);
+    return AutoCommands.driveVelocityCommand(120, 40, 40);
     //return AutoCommands.scoreAndMove();
   }
 }
