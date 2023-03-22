@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Effector;
 
 
 public class AutoCommands {
@@ -109,18 +110,20 @@ public static Command PIDTurnCommand(double angle, Direction direction){
   // top auto sequential command group, need to calculate values for distances and actual set point (score and move out of the community line )
   public static Command leftAuto(){
     return new SequentialCommandGroup(
-      driveVelocityCommand(30.345, 40, 40),
+      EffectorCommands.timeEffectorReverse(1000),
+      driveDistanceCommand(30.345, Direction.FORWARD),
       ElevatorCommands.unStowCommand(),
-      RobotContainer.moveMechanismPID(5),
-      driveVelocityCommand(10, 20, 20),
-      EffectorCommands.timeEffectorReverse(0), // to do
-      EffectorCommands.effectorStop(),
-      RobotContainer.moveMechanismPID(5),
-      driveVelocityCommand(10, 20, 20),
-      ElevatorCommands.stowCommand(),
-      driveVelocityCommand(96.75, 40, 40)
+      EffectorCommands.timeEffectorReverse(1000),
+      new WaitCommand(0.5),
+      RobotContainer.moveMechanismPID(1),
+      new WaitCommand(0.5),
+      EffectorCommands.timeEffectorForward(1000)
+      // driveVelocityCommand(10, 20, 20)
+      // RobotContainer.moveMechanismPID(5),
+      // driveVelocityCommand(10, 20, 20),
+      // ElevatorCommands.stowCommand(),
+      // driveVelocityCommand(96.75, 40, 40)
     );
   }
-
 
 }

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import frc.robot.RobotContainer;
 
 public class EffectorCommands {
+  public static long startingTime;
   
     public static Command effectorReverse() {
       return new InstantCommand(
@@ -50,9 +51,9 @@ public class EffectorCommands {
     }
 
     public static Command timeEffectorReverse(double time) {
-      long startingTime = System.currentTimeMillis();
+     
       return new FunctionalCommand(
-        () -> {},
+        () -> { startingTime = System.currentTimeMillis();},
         () -> RobotContainer.effector.effectorReverse(),
         (interrupt) -> RobotContainer.effector.effectorStop(),
         () -> System.currentTimeMillis() - startingTime > time 

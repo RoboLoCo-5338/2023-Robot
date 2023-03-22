@@ -24,7 +24,7 @@ public class Elevator extends SubsystemBase {
   private CANSparkMax armMotor;
   private RelativeEncoder armEncoder;
   private SparkMaxPIDController armController;
-  public double[] armHeights = {30,100,-4,35,0,100}; //presets 2-4 for stow/unstow, DOUBLE CHECK 0 & 1
+  public double[] armHeights = {30,100,-4,35,0,90}; //presets 2-4 for stow/unstow, DOUBLE CHECK 0 & 1
   public static double armChange = 0;
 
   //untested PID

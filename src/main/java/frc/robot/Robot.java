@@ -32,6 +32,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    RobotContainer.m_Elevator.resetArm();
+    RobotContainer.m_Elevator.resetElevator();
   }
 
   /**
@@ -83,8 +85,6 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    RobotContainer.m_Elevator.resetArm();
-    RobotContainer.m_Elevator.resetElevator();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

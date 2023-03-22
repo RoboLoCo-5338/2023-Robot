@@ -184,15 +184,13 @@ public class RobotContainer {
     bottomHeight.onTrue(moveMechanismPID(0));
     mediumHeight.onTrue(moveMechanismPID(1));
     highHeight.onTrue(moveMechanismPID(5)); //ADD PRESETS
-    intakeHeight.onTrue(moveMechanismPID(6)); //ADD PRESETS
+    // intakeHeight.onTrue(moveMechanismPID(6)); //ADD PRESETS
 
     unstow.onTrue(ElevatorCommands.unStowCommand());
     stow.onTrue(ElevatorCommands.stowCommand());
     //TODO check
-    highHeight.onTrue(moveMechanismPID(2));
-   //  highHeight.whileTrue(ArmCommands.moveArm(-0.2));
-   // mediumHeight.onFalse(ArmCommands.stopArm());//;\driver
-   // highHeight.onFalse(ArmCommands.stopArm());//driver
+
+
 
     moveElevatorUp.whileTrue(ElevatorCommands.moveElevator( 0.4 ));
     moveElevatorDown.whileTrue(ElevatorCommands.moveElevator(-0.4));
@@ -202,19 +200,6 @@ public class RobotContainer {
     moveArmDown.whileTrue(ArmCommands.moveArm(0.4));
     moveArmDown.whileFalse(ArmCommands.stopArm());
     moveArmUp.whileFalse(ArmCommands.stopArm());
-
-    // limeLight.whileTrue(runLimeLight);
-    // forwardEffector.whileTrue(EffectorCommands.effectorForward());
-    // backwardEffector.whileTrue(EffectorCommands.effectorReverse());
-    // forwardEffector.onFalse(EffectorCommands.effectorStop());//driver
-    // backwardEffector.onFalse(EffectorCommands.effectorStop());
-    // limeLight.whileTrue(runLimeLight);
-    // intakeHeight.onTrue(ElevatorCommands.setElevatorHeight(0));
-    // bottomHeight.onTrue(ElevatorCommands.setElevatorHeight(1));
-    // mediumHeight.onTrue(ElevatorCommands.setElevatorHeight(2+coneOffset));
-    // highHeight.onTrue(ElevatorCommands.setElevatorHeight(3+coneOffset));
-    // cubeSwitch.onTrue(cubeSwitchCommand);
-    // coneSwitch.onTrue(coneSwitchCommand);
 
     //operator
     forwardEffector2.whileTrue(EffectorCommands.effectorForward());
@@ -235,7 +220,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.driveVelocityCommand(120, 40, 40);
+    return AutoCommands.leftAuto();
     //return AutoCommands.scoreAndMove();
   }
 }
