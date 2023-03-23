@@ -41,9 +41,8 @@ public class EffectorCommands {
     // }
 
     public static Command timeEffectorForward(double time) {
-      Long startingTime = System.currentTimeMillis();
       return new FunctionalCommand(
-        () -> {},
+        () -> {startingTime = System.currentTimeMillis();},
         () -> RobotContainer.effector.effectorForward(),
         (interrupt) -> RobotContainer.effector.effectorStop(),
         () -> System.currentTimeMillis() - startingTime > time 
@@ -51,9 +50,8 @@ public class EffectorCommands {
     }
 
     public static Command timeEffectorReverse(double time) {
-     
       return new FunctionalCommand(
-        () -> { startingTime = System.currentTimeMillis();},
+        () -> {startingTime = System.currentTimeMillis();},
         () -> RobotContainer.effector.effectorReverse(),
         (interrupt) -> RobotContainer.effector.effectorStop(),
         () -> System.currentTimeMillis() - startingTime > time 

@@ -111,13 +111,15 @@ public static Command PIDTurnCommand(double angle, Direction direction){
   public static Command leftAuto(){
     return new SequentialCommandGroup(
       EffectorCommands.timeEffectorReverse(1000),
-      driveDistanceCommand(30.345, Direction.FORWARD),
       ElevatorCommands.unStowCommand(),
       EffectorCommands.timeEffectorReverse(1000),
       new WaitCommand(0.5),
-      RobotContainer.moveMechanismPID(1),
+      RobotContainer.moveMechanismPID(5),
       new WaitCommand(0.5),
-      EffectorCommands.timeEffectorForward(1000)
+      driveDistanceCommand(18, Direction.FORWARD),
+      EffectorCommands.timeEffectorForward(1000),
+      new WaitCommand(0.5),
+      driveDistanceCommand(18, Direction.BACKWARD)
       // driveVelocityCommand(10, 20, 20)
       // RobotContainer.moveMechanismPID(5),
       // driveVelocityCommand(10, 20, 20),
@@ -125,5 +127,23 @@ public static Command PIDTurnCommand(double angle, Direction direction){
       // driveVelocityCommand(96.75, 40, 40)
     );
   }
+  
+  // negative --> down, using roll 
 
-}
+  // public static Command scoreandEngage(){
+  //   return new SequentialCommandGroup(
+  //     EffectorCommands.timeEffectorReverse(1000),
+  //     driveDistanceCommand(10, Direction.FORWARD),
+  //     ElevatorCommands.unStowCommand(),
+  //     EffectorCommands.timeEffectorReverse(1000),
+  //     new WaitCommand(0.5),
+  //     RobotContainer.moveMechanismPID(1),
+  //     new WaitCommand(0.5),
+  //     EffectorCommands.timeEffectorForward(1000),
+  //     EffectorCommands.effectorStop()
+
+
+  //   );
+  //   }
+    
+  }
