@@ -119,7 +119,9 @@ public static Command PIDTurnCommand(double angle, Direction direction){
       driveDistanceCommand(18, Direction.FORWARD),
       EffectorCommands.timeEffectorForward(1000),
       new WaitCommand(0.5),
-      driveDistanceCommand(18, Direction.BACKWARD)
+      driveDistanceCommand(18, Direction.BACKWARD),
+      ElevatorCommands.stowCommand(),
+      driveDistanceCommand(110, Direction.BACKWARD)
       // driveVelocityCommand(10, 20, 20)
       // RobotContainer.moveMechanismPID(5),
       // driveVelocityCommand(10, 20, 20),
