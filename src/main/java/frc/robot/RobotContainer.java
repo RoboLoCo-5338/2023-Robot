@@ -10,6 +10,7 @@ import frc.robot.commands.Direction;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.LimeLight;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import frc.robot.subsystems.Elevator;
@@ -39,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here... + percent and coneOffset
   public static final Elevator m_Elevator = new Elevator();
+  public static final Arm m_Arm = new Arm();
   public static ElevatorCommands m_ElevatorCommands;
   public static final Drivetrain drivetrain = new Drivetrain();
   public static final LimeLight LimeLight = new LimeLight();
@@ -115,8 +117,8 @@ public class RobotContainer {
      () -> {speedMod=0;}
    );
 
-   public static SequentialCommandGroup moveMechanismPID(int preset){
-    return new SequentialCommandGroup(
+   public static ParallelCommandGroup moveMechanismPID(int preset){
+    return new ParallelCommandGroup(
       ElevatorCommands.setElevatorHeight(preset), 
       ArmCommands.setArm(preset)
      );
