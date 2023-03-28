@@ -100,6 +100,7 @@ public class Robot extends TimedRobot {
     
     SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
     SmartDashboard.putNumber("Arm Position", RobotContainer.m_Elevator.getArmPosition());
+    SmartDashboard.putBoolean("direction", (RobotContainer.reverseModifier > 0));
   }
 
   @Override

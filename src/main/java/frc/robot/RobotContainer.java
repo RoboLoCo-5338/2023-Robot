@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.AutoCommands;
+import frc.robot.commands.Direction;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.LimeLight;
@@ -45,7 +46,7 @@ public class RobotContainer {
   public static double percent = 0.3;
   public static int coneOffset = 0;
 
-  private static int reverseModifier=1;
+  public static int reverseModifier=1;
   private static double speedMod=0; //not sure what this should be?? 
 
   // controllers
@@ -222,5 +223,6 @@ public class RobotContainer {
   public Command getAutonomousCommand(){
     return AutoCommands.leftAuto();
     //return AutoCommands.scoreAndMove();
+    //return AutoCommands.engageAndScore();
   }
 }

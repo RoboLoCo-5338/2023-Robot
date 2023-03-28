@@ -113,12 +113,13 @@ public static Command PIDTurnCommand(double angle, Direction direction){
       EffectorCommands.timeEffectorReverse(1000),
       ElevatorCommands.unStowCommand(),
       EffectorCommands.timeEffectorReverse(1000),
-      new WaitCommand(0.5),
+      new WaitCommand(0.2),
       RobotContainer.moveMechanismPID(5),
-      new WaitCommand(0.5),
+      EffectorCommands.timeEffectorReverse(1000),
+      new WaitCommand(0.2),
       driveDistanceCommand(18, Direction.FORWARD),
       EffectorCommands.timeEffectorForward(1000),
-      new WaitCommand(0.5),
+      new WaitCommand(0.2),
       driveDistanceCommand(18, Direction.BACKWARD),
       ElevatorCommands.stowCommand(),
       driveDistanceCommand(110, Direction.BACKWARD)
@@ -127,6 +128,24 @@ public static Command PIDTurnCommand(double angle, Direction direction){
       // driveVelocityCommand(10, 20, 20),
       // ElevatorCommands.stowCommand(),
       // driveVelocityCommand(96.75, 40, 40)
+    );
+  }
+
+  public static Command engageAndScore(){
+    return new SequentialCommandGroup(
+      EffectorCommands.timeEffectorReverse(750),
+      ElevatorCommands.unStowCommand(),
+      EffectorCommands.timeEffectorReverse(750),
+      new WaitCommand(0.2),
+      RobotContainer.moveMechanismPID(5),
+      EffectorCommands.timeEffectorReverse(750),
+      new WaitCommand(0.2),
+      driveDistanceCommand(18, Direction.FORWARD),
+      EffectorCommands.timeEffectorForward(750),
+      new WaitCommand(0.2),
+      driveDistanceCommand(18, Direction.BACKWARD),
+      ElevatorCommands.stowCommand(),
+      driveDistanceCommand(75, Direction.BACKWARD)
     );
   }
   
