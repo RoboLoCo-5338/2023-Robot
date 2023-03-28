@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.Scanner;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -38,6 +40,16 @@ public final class Constants {
   public static final int STARTBUTTON = 8; 
   public static final int LEFTSTICKBUTTON = 9; 
   public static final int RIGHTSTICKBUTTON = 10;
+
+  public static final class LED {//led constants, change as necessary [taken from the github]
+    public static final int PWMPORT = 0;
+    public static final int BUFFERSIZE = 120;
+}
+
+ public static final class ALLIANCE {//led constants, change as necessary [taken from the github]
+    public static final String BLUE = "blue";
+    public static final String RED = "red";
+}
 
   // Height presets.
   public static final int Height = 3;

@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class LED extends SubsystemBase  {
-    private final AddressableLED m_led = new AddressableLED(Constants.LEDPWMPPORT);
-    private final AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(Constants.LEDBUFFERSIZE);
+    private final AddressableLED m_led = new AddressableLED(Constants.LED.PWMPORT);
+    private final AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(Constants.LED.BUFFERSIZE);
     private int m_rainbowFirstPixelHue;
  
     public LED(){
@@ -21,16 +21,14 @@ public class LED extends SubsystemBase  {
    
     public void periodic(){
 
-         if(Constants.ALLIANCE.equalsIgnoreCase("Blue")){
+       /* if(Constants.ALLIANCE.BLUE == true){
             setLED(0 ,0 ,255);
-        }else if(Constants.ALLIANCE.equalsIgnoreCase("Red")){
+        }else if(Constants.ALLIANCE.RED == true){
             setLED(255,0,0);
-        }
+        }*/
+        //commented this out bc i'm not sure how we could take in values yet? i'll do some digging later
 
      }
-
-
-
 
     public void setLED(int r, int g, int b){
         for(int i=0;i<m_ledBuffer.getLength();i++){
@@ -48,9 +46,6 @@ public void rainbow(){
     m_rainbowFirstPixelHue%=180;
     m_led.setData(m_ledBuffer);
 }
-
-
-
 
 public void preset(int preset){
 	if(preset==0){
