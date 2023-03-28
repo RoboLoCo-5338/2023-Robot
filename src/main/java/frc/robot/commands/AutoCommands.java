@@ -111,7 +111,7 @@ public static Command PIDTurnCommand(double angle, Direction direction){
   public static Command leftAuto(){
     return new SequentialCommandGroup(
       EffectorCommands.timeEffectorReverse(300),
-      ElevatorCommands.unStowCommand(),
+      ElevatorCommands.autoUnStowCommand(),
       EffectorCommands.timeEffectorReverse(300),
       new WaitCommand(0.05),
       RobotContainer.moveMechanismPID(5),
@@ -121,7 +121,7 @@ public static Command PIDTurnCommand(double angle, Direction direction){
       EffectorCommands.timeEffectorForward(300),
       new WaitCommand(0.05),
       driveDistanceCommand(18, Direction.BACKWARD),
-      ElevatorCommands.stowCommand(),
+      RobotContainer.moveMechanismPID(0),
       driveDistanceCommand(110, Direction.BACKWARD)
     );
   }

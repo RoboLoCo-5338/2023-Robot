@@ -63,11 +63,18 @@ public class ElevatorCommands {
     return new SequentialCommandGroup(
       ArmCommands.setArm(2), //kickstand
       setElevatorHeight(2), //elevator up
-      ArmCommands.setArm(3), //arm out
-      setElevatorHeight(4) //elevator down
+      ArmCommands.setArm(3) //arm out
     );
   }
 
+  public static Command autoUnStowCommand(){
+    return new SequentialCommandGroup(
+      ArmCommands.setArm(2), //kickstand
+      setElevatorHeight(2), //elevator up
+      ArmCommands.setArm(3) //arm out
+    );
+  }
+  
   public static Command stowCommand(){
     return new SequentialCommandGroup(
       setElevatorHeight(3), //elevator up
