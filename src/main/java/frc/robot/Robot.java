@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    RobotContainer.m_Elevator.resetArm();
+    RobotContainer.m_Arm.resetArm();
     RobotContainer.m_Elevator.resetElevator();
   }
 
@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Dino Rivets ftw","HELLO");
     
     SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
-    SmartDashboard.putNumber("Arm Position", RobotContainer.m_Elevator.getArmPosition());
+    SmartDashboard.putNumber("Arm Position", RobotContainer.m_Arm.getArmPosition());
     SmartDashboard.putBoolean("direction", (RobotContainer.reverseModifier > 0));
   }
 

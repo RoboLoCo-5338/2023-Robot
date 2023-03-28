@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Arm;
+
 
 public class ArmCommands  {
 
@@ -22,40 +23,40 @@ public class ArmCommands  {
   public static Command setArm(int preset){
     return new FunctionalCommand(
       () -> {},
-      () -> RobotContainer.m_Elevator.setArm(preset),
-      (interrupt) -> RobotContainer.m_Elevator.stopArm(),
-      () -> Math.abs(RobotContainer.m_Elevator.armHeights[preset]-RobotContainer.m_Elevator.getArmPosition()) <= 3,
-      RobotContainer.m_Elevator);
+      () -> RobotContainer.m_Arm.setArm(preset),
+      (interrupt) -> RobotContainer.m_Arm.stopArm(),
+      () -> Math.abs(RobotContainer.m_Arm.armHeights[preset]-RobotContainer.m_Arm.getArmPosition()) <= 3,
+      RobotContainer.m_Arm);
   }
 
 
 // command to set speed for arm
   public static Command moveArm(double speed){
     return new InstantCommand(
-      () -> RobotContainer.m_Elevator.moveArm(speed),
-      RobotContainer.m_Elevator);
+      () -> RobotContainer.m_Arm.moveArm(speed),
+      RobotContainer.m_Arm);
   }
 
   // Command bindings for arm and elevator methods.
-  public static Command moveUp(Elevator elevator){
+  public static Command moveUp(Arm arm){
     return new InstantCommand(
-      () -> RobotContainer.m_Elevator.moveArm(0.1),
-      RobotContainer.m_Elevator
+      () -> RobotContainer.m_Arm.moveArm(0.1),
+      RobotContainer.m_Arm
     );
   }
 
-  public static Command moveDown(Elevator elevator){
+  public static Command moveDown(Arm arm){
     return new InstantCommand(
-      () -> RobotContainer.m_Elevator.moveArm(-0.1),
-      RobotContainer.m_Elevator
+      () -> RobotContainer.m_Arm.moveArm(-0.1),
+      RobotContainer.m_Arm
     );
   }
 
 // stop arm from moving 
   public static Command stopArm(){
     return new InstantCommand(
-      () -> RobotContainer.m_Elevator.stopArm(),
-      RobotContainer.m_Elevator
+      () -> RobotContainer.m_Arm.stopArm(),
+      RobotContainer.m_Arm
     );
   }
 
