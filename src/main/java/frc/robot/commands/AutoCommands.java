@@ -110,38 +110,33 @@ public static Command PIDTurnCommand(double angle, Direction direction){
   // top auto sequential command group, need to calculate values for distances and actual set point (score and move out of the community line )
   public static Command leftAuto(){
     return new SequentialCommandGroup(
-      EffectorCommands.timeEffectorReverse(1000),
+      EffectorCommands.timeEffectorReverse(300),
       ElevatorCommands.unStowCommand(),
-      EffectorCommands.timeEffectorReverse(1000),
-      new WaitCommand(0.2),
+      EffectorCommands.timeEffectorReverse(300),
+      new WaitCommand(0.05),
       RobotContainer.moveMechanismPID(5),
-      EffectorCommands.timeEffectorReverse(1000),
-      new WaitCommand(0.2),
+      EffectorCommands.timeEffectorReverse(300),
+      new WaitCommand(0.05),
       driveDistanceCommand(18, Direction.FORWARD),
-      EffectorCommands.timeEffectorForward(1000),
-      new WaitCommand(0.2),
+      EffectorCommands.timeEffectorForward(300),
+      new WaitCommand(0.05),
       driveDistanceCommand(18, Direction.BACKWARD),
       ElevatorCommands.stowCommand(),
       driveDistanceCommand(110, Direction.BACKWARD)
-      // driveVelocityCommand(10, 20, 20)
-      // RobotContainer.moveMechanismPID(5),
-      // driveVelocityCommand(10, 20, 20),
-      // ElevatorCommands.stowCommand(),
-      // driveVelocityCommand(96.75, 40, 40)
     );
   }
 
   public static Command engageAndScore(){
     return new SequentialCommandGroup(
-      EffectorCommands.timeEffectorReverse(750),
+      EffectorCommands.timeEffectorReverse(500),
       ElevatorCommands.unStowCommand(),
-      EffectorCommands.timeEffectorReverse(750),
+      EffectorCommands.timeEffectorReverse(500),
       new WaitCommand(0.2),
       RobotContainer.moveMechanismPID(5),
-      EffectorCommands.timeEffectorReverse(750),
+      EffectorCommands.timeEffectorReverse(500),
       new WaitCommand(0.2),
       driveDistanceCommand(18, Direction.FORWARD),
-      EffectorCommands.timeEffectorForward(750),
+      EffectorCommands.timeEffectorForward(500),
       new WaitCommand(0.2),
       driveDistanceCommand(18, Direction.BACKWARD),
       ElevatorCommands.stowCommand(),
