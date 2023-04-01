@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-<<<<<<< Updated upstream
-=======
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -14,18 +12,17 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
->>>>>>> Stashed changes
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
 import frc.robot.Constants;
 import frc.robot.Direction;
 
 public class Drivetrain extends SubsystemBase {
-<<<<<<< Updated upstream
-=======
   private boolean slow = false;
   private boolean straight = false;
   private static final double MAX_VELOCITY = 350;
@@ -34,7 +31,6 @@ public class Drivetrain extends SubsystemBase {
   private static final int DEFAULT_TIMEOUT = 30;
   
 
->>>>>>> Stashed changes
   // TODO Placeholder constants.
   private static final double TICKS_PER_REVOLUTION = 42;
   private static final double WHEEL_DIAMETER = 5.0;
@@ -42,19 +38,22 @@ public class Drivetrain extends SubsystemBase {
   private static final double GEAR_RATIO = 8.8984;
   private static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
 
-  /* 
+  
   // PID values for teleop.
   public static final double VELOCITY_P = 0.0110;
   public static final double VELOCITY_I = 0.0;
   public static final double VELOCITY_D = 0.0;
   public static final double VELOCITY_FEED_FORWARD = 0.0;
 
+
+  public static final double RIGHT_POSITION_P = 0.1;
+  public static final double LEFT_POSITION_P = 0.1;
   // PID values for autonomous.
   public static final double POSITION_P = 0.0175821;
   public static final double POSITION_I = 0.0;
   public static final double POSITION_D = 0.0020951;
   public static final double POSITION_FEED_FORWARD = 0.0;
-  */
+  
 
   private CANSparkMax leftFront;
   private CANSparkMax leftRear;
@@ -63,12 +62,6 @@ public class Drivetrain extends SubsystemBase {
   public static double targetPosition;
   public static Direction targetDirection;
 
-<<<<<<< Updated upstream
-  /** Creates a new Drivetrain. */
-  public Drivetrain() {
-    leftFront = new CANSparkMax(Constants.MOTOR_ID_3, MotorType.kBrushless);
-    leftRear = new CANSparkMax(Constants.MOTOR_ID_2, MotorType.kBrushless);
-=======
   public RelativeEncoder leftEncoder;
   public RelativeEncoder rightEncoder;
   public SparkMaxPIDController rightFrontPID;
@@ -102,15 +95,11 @@ public class Drivetrain extends SubsystemBase {
     leftRear = new CANSparkMax(Constants.LEFTREAR_MOTOR, MotorType.kBrushless);
     leftRear.setSmartCurrentLimit(40);
     leftFront.setInverted(true);
->>>>>>> Stashed changes
     leftRear.follow(leftFront);
 
     rightFront = new CANSparkMax(Constants.MOTOR_ID_1, MotorType.kBrushless);
     rightRear = new CANSparkMax(Constants.MOTOR_ID_0, MotorType.kBrushless);
     rightRear.follow(rightFront);
-<<<<<<< Updated upstream
-  }
-=======
 
     // conversion factors for the enconders 
     leftEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
@@ -125,8 +114,8 @@ public class Drivetrain extends SubsystemBase {
     leftFrontPID.setOutputRange(-0.5, 0.5);
     rightFrontPID.setOutputRange(-0.5, 0.5);
 
-    setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
-    setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
+   // setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
+   // setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
 
     Navx= new AHRS(SPI.Port.kMXP);
 
@@ -146,7 +135,6 @@ public class Drivetrain extends SubsystemBase {
         new Rotation2d(Navx.getAngle()),leftEncoder.getPosition()*0.0254*Math.PI, rightEncoder.getPosition()*0.0254*Math.PI);
 
           }
->>>>>>> Stashed changes
 
   public void tankDrive(double left, double right) {
     /*
@@ -212,13 +200,7 @@ public class Drivetrain extends SubsystemBase {
 */
 
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-<<<<<<< Updated upstream
-}
-=======
+
 
   
   @Override
@@ -354,4 +336,3 @@ public class Drivetrain extends SubsystemBase {
  
 
 }
->>>>>>> Stashed changes
