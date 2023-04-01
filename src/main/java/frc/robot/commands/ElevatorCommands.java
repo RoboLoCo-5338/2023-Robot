@@ -36,14 +36,14 @@ public class ElevatorCommands {
     );
   }
   
-  public static Command moveUpElevator(Elevator elevator){
+  public static Command moveUpElevator(){
     return new InstantCommand(
       () -> RobotContainer.m_Elevator.moveElevator(0.1),
       RobotContainer.m_Elevator
     );
   }
   
-  public static Command moveDownElevator(Elevator elevator){
+  public static Command moveDownElevator(){
     return new InstantCommand(
       () -> RobotContainer.m_Elevator.moveElevator(-0.1),
       RobotContainer.m_Elevator

@@ -4,10 +4,11 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Arm;
 
@@ -26,6 +27,15 @@ public class ArmCommands  {
       () -> RobotContainer.m_Arm.setArm(preset),
       (interrupt) -> RobotContainer.m_Arm.stopArm(),
       () -> Math.abs(RobotContainer.m_Arm.armHeights[preset]-RobotContainer.m_Arm.getArmPosition()) <= 3,
+      RobotContainer.m_Arm);
+  }
+
+  public static Command setArmAbsolute(double setpoint) {
+    return new PIDCommand(
+      new PIDController(0.01, 0, 0), 
+      () -> RobotContainer.effector.armAbsEncoder.getPosition(),
+      setpoint,
+      output -> {RobotContainer.m_Arm.moveArm(output);},
       RobotContainer.m_Arm);
   }
 

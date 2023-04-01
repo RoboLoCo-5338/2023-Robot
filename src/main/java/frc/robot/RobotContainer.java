@@ -45,6 +45,7 @@ public class RobotContainer {
   public static final Drivetrain drivetrain = new Drivetrain();
   public static final LimeLight LimeLight = new LimeLight();
   public static final Effector effector = new Effector();
+
   public static AHRS navX = new AHRS(SPI.Port.kMXP);
   public static double percent = 0.3;
   public static int coneOffset = 0;
@@ -179,22 +180,15 @@ public class RobotContainer {
     speed.onFalse(speedOff);
    
     //operator presets
-    //TEMPORARY
-    // intakeHeight.whileTrue(ElevatorCommands.moveElevator(0.1));//b-button makes this work
-    // bottomHeight.whileTrue(ElevatorCommands.moveElevator(-0.1));//a button makes this work
-    // intakeHeight.onFalse(ElevatorCommands.stopElevator());//driver (is it?)
-    // bottomHeight.onFalse(ElevatorCommands.stopElevator());//driver (is it?)
     
     bottomHeight.onTrue(moveMechanismPID(0));
     mediumHeight.onTrue(moveMechanismPID(1));
+    //mediumHeight.onTrue(ArmCommands.setArmAbsolute(0.5));
     highHeight.onTrue(moveMechanismPID(5)); //ADD PRESETS
     // intakeHeight.onTrue(moveMechanismPID(6)); //ADD PRESETS
 
     unstow.onTrue(ElevatorCommands.unStowCommand());
     stow.onTrue(ElevatorCommands.stowCommand());
-    //TODO check
-
-
 
     moveElevatorUp.whileTrue(ElevatorCommands.moveElevator( 0.4 ));
     moveElevatorDown.whileTrue(ElevatorCommands.moveElevator(-0.4));

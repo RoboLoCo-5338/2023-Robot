@@ -7,8 +7,11 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 import frc.robot.Constants;
 import com.revrobotics.SparkMaxPIDController;
@@ -18,7 +21,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 public class Effector extends SubsystemBase{
 
     private CANSparkMax effectorMotor;
-    public RelativeEncoder effectorEncoder;
+    public SparkMaxAbsoluteEncoder armAbsEncoder;
     private double speed = 0.8;
     // private SparkMaxPIDController effectorController;
     // private RelativeEncoder effectorEncoder;
@@ -29,12 +32,11 @@ public class Effector extends SubsystemBase{
     public static double effector_Forward=0.0;
     
     public Effector() {
-        effectorMotor = new CANSparkMax(Constants.EFFECTOR_MOTOR, MotorType.kBrushless);
+        effectorMotor = new CANSparkMax(Constants.EFFECTOR_MOTOR, MotorType.kBrushed);
         effectorMotor.setIdleMode(IdleMode.kBrake);
         effectorMotor.setSmartCurrentLimit(25);
-        
+        armAbsEncoder = effectorMotor.getAbsoluteEncoder(Type.kDutyCycle);
         // effectorController = effectorMotor.getPIDController();
-        // effectorEncoder = effectorMotor.getEncoder();
         // effectorController.setOutputRange(-0.7, 0.7);
         //configController();
        // outerMotor.setInverted(true);
@@ -54,20 +56,5 @@ public class Effector extends SubsystemBase{
     public void effectorStop() {
         effectorMotor.set(0);
     }
-    private void configController(){
-        // effectorController.setP(effectorP);
-        // effectorController.setI(effectorI);
-        // effectorController.setD(effectorD);
-        // effectorController.setFF(effector_Forward);
-    }   
-
-    // public void setEffectorRef(int setpoint){
-    //     effectorController.setReference(setpoint,  CANSparkMax.ControlType.kPosition);
-    //     SmartDashboard.putNumber("effector", getEffectorPosition());
-    // }
-
-    // public double getEffectorPosition(){
-    //     return effectorEncoder.getPosition();
-    // }
 
 }

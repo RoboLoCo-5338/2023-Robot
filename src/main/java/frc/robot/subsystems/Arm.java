@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import frc.robot.Constants;
 
@@ -47,10 +49,9 @@ public class Arm extends SubsystemBase {
         armController.setD(armD);
         armController.setFF(armFeed_Forward);
       }
-
     
       public void resetArm(){
-        armEncoder.setPosition(0);
+       // armEncoder.setPosition(0);
       }
   
       public double getArmPosition(){
@@ -67,23 +68,16 @@ public class Arm extends SubsystemBase {
       }
     
       public void moveArm(double speed){
-        if(getArmPosition() > -20 && speed < 0) { //CHANGE MAYBE
-          SmartDashboard.putNumber("Arm Position Teleop", getArmPosition());
-          armMotor.set(speed);
-        }
-        if(getArmPosition() < 100 && speed > 0) { //CHANGE MAYBE
-          SmartDashboard.putNumber("Arm Position Teleop", getArmPosition());
-          armMotor.set(speed);
-        }
+        armMotor.set(speed);
       }
       
-      public void setArmChange(int preset){
-        double current = armEncoder.getPosition();
-        SmartDashboard.putNumber("Arm Preset", preset);
-        SmartDashboard.putNumber("Arm position arm change", armEncoder.getPosition());
-        armChange = armHeights[preset] - current;
-        SmartDashboard.putNumber("Arm change", armChange);
-      }
+      // public void setArmChange(int preset){
+      //   double current = armEncoder.getPosition();
+      //   SmartDashboard.putNumber("Arm Preset", preset);
+      //   SmartDashboard.putNumber("Arm position arm change", armEncoder.getPosition());
+      //   armChange = armHeights[preset] - current;
+      //   SmartDashboard.putNumber("Arm change", armChange);
+      // }
   
     
 }
