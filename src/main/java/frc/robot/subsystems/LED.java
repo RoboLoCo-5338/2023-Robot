@@ -9,12 +9,13 @@ import frc.robot.Constants;
 
 
 public class LED extends SubsystemBase  {
-    private final AddressableLED m_led = new AddressableLED(Constants.LEDPWMPPORT);
-    private final AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(Constants.LEDBUFFERSIZE);
+    private final AddressableLED m_led = new AddressableLED(Constants.PWMPORT);
+    private final AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(Constants.BUFFERSIZE);
     private int m_rainbowFirstPixelHue;
  
     public LED(){
         m_led.setLength(m_ledBuffer.getLength());
+        setLED(0 ,0 ,255);
         m_led.setData(m_ledBuffer);
         m_led.start();
   m_rainbowFirstPixelHue=1;
@@ -26,11 +27,13 @@ public class LED extends SubsystemBase  {
 
 
 
-    if(Constants.ALLIANCE.equalsIgnoreCase("Blue")){
-        setLED(0 ,0 ,255);
-    }else if(Constants.ALLIANCE.equalsIgnoreCase("Red")){
-        setLED(255,0,0);
-    }
+    //if(Constants.ALLIANCE.equalsIgnoreCase("Blue")){
+         setLED(0 ,0 ,255);
+         m_led.setData(m_ledBuffer);
+         m_led.start();
+    // }else if(Constants.ALLIANCE.equalsIgnoreCase("Red")){
+    //     setLED(255,0,0);
+    // }
 
 
  }
