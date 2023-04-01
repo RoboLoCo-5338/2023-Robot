@@ -122,7 +122,7 @@ public static Command PIDTurnCommand(double angle, Direction direction){
       new WaitCommand(0.05),
       driveDistanceCommand(18, Direction.BACKWARD),
       RobotContainer.moveMechanismPID(0),
-      driveDistanceCommand(110, Direction.BACKWARD)
+      driveDistanceCommand(120, Direction.BACKWARD)
     );
   }
 
@@ -143,7 +143,22 @@ public static Command PIDTurnCommand(double angle, Direction direction){
       driveDistanceCommand(75, Direction.BACKWARD)
     );
   }
-  
+  public static Command scoreAuto(){
+    return new SequentialCommandGroup(
+      driveDistanceCommand(24, Direction.BACKWARD),
+      EffectorCommands.timeEffectorReverse(300),
+      ElevatorCommands.autoUnStowCommand(),
+      EffectorCommands.timeEffectorReverse(300),
+      new WaitCommand(0.05),
+      RobotContainer.moveMechanismPID(5),
+      EffectorCommands.timeEffectorReverse(300),
+      new WaitCommand(0.05),
+      EffectorCommands.timeEffectorForward(300),
+      new WaitCommand(0.05),
+      RobotContainer.moveMechanismPID(0),
+      driveDistanceCommand(120, Direction.BACKWARD)
+    );
+  }
   // negative --> down, using roll 
 
   // public static Command scoreandEngage(){

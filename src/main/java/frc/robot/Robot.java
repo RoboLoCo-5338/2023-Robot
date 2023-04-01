@@ -78,8 +78,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // SmartDashboard.putNumber("Drive train position" , RobotContainer.drivetrain.getPosition());
-    // SmartDashboard.putNumber("Drive train left velocity", RobotContainer.drivetrain.leftEncoder.getVelocity());
-    // SmartDashboard.putNumber("Drive train right velocity", RobotContainer.drivetrain.rightEncoder.getVelocity());
+    SmartDashboard.putNumber("Drive train left velocity", RobotContainer.drivetrain.leftEncoder.getVelocity());
+    SmartDashboard.putNumber("Drive train right velocity", RobotContainer.drivetrain.rightEncoder.getVelocity());
   }
 
   @Override
@@ -100,7 +100,9 @@ public class Robot extends TimedRobot {
     
     SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
     SmartDashboard.putNumber("Arm Position", RobotContainer.m_Arm.getArmPosition());
+    SmartDashboard.putNumber("Arm Encoder position", RobotContainer.m_Arm.armEncoder.getPosition());
     SmartDashboard.putBoolean("direction", (RobotContainer.reverseModifier > 0));
+    SmartDashboard.putNumber("Effector Encoder position", RobotContainer.effector.effectorEncoder.getPosition());
   }
 
   @Override

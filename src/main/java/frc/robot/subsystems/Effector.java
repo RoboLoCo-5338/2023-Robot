@@ -18,6 +18,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 public class Effector extends SubsystemBase{
 
     private CANSparkMax effectorMotor;
+    public RelativeEncoder effectorEncoder;
     private double speed = 0.8;
     // private SparkMaxPIDController effectorController;
     // private RelativeEncoder effectorEncoder;
@@ -28,9 +29,10 @@ public class Effector extends SubsystemBase{
     public static double effector_Forward=0.0;
     
     public Effector() {
-        effectorMotor = new CANSparkMax(Constants.EFFECTOR_MOTOR, MotorType.kBrushed);
+        effectorMotor = new CANSparkMax(Constants.EFFECTOR_MOTOR, MotorType.kBrushless);
         effectorMotor.setIdleMode(IdleMode.kBrake);
         effectorMotor.setSmartCurrentLimit(25);
+        
         // effectorController = effectorMotor.getPIDController();
         // effectorEncoder = effectorMotor.getEncoder();
         // effectorController.setOutputRange(-0.7, 0.7);

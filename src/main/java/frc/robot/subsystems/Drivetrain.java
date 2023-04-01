@@ -33,7 +33,7 @@ public class Drivetrain extends SubsystemBase {
   private static final double TICKS_PER_INCH = (TICKS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
 
   // PID values for teleop.
-  public static final double VELOCITY_P = 0.03;
+  public static final double VELOCITY_P = 0.05;
   public static final double VELOCITY_I = 0.0;
   public static final double VELOCITY_D = 0.0;
   public static final double VELOCITY_FEED_FORWARD = 0.0;
@@ -85,16 +85,18 @@ public class Drivetrain extends SubsystemBase {
     leftEncoder.setVelocityConversionFactor((WHEEL_CIRCUMFERENCE/GEAR_RATIO)/60);
     rightEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
     rightEncoder.setVelocityConversionFactor((WHEEL_CIRCUMFERENCE/GEAR_RATIO)/60);
-
+    
     // setting PID for 
     rightFrontPID = leftFront.getPIDController();
     leftFrontPID = rightFront.getPIDController();
-
-    leftFrontPID.setOutputRange(-0.5, 0.5);
-    rightFrontPID.setOutputRange(-0.5, 0.5);
+    // leftFront.setOpenLoopRampRate(0.3);
+    // rightFront.setOpenLoopRampRate(0.3);
+    leftFrontPID.setOutputRange(-0.7, 0.7);
+    rightFrontPID.setOutputRange(-0.7, 0.7);
 
     setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
     setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
+    
   }
 
   public void tankDrive(double left, double right) {
@@ -160,6 +162,7 @@ public class Drivetrain extends SubsystemBase {
 public void tankDriveVelocity(double leftVelocity, double rightVelocity){
   rightFrontPID.setReference(rightVelocity, CANSparkMax.ControlType.kVelocity);
   leftFrontPID.setReference(leftVelocity, CANSparkMax.ControlType.kVelocity);
+  SmartDashboard.putNumber("Setpoint velocity", rightVelocity);
 }
 
   public void tankPercent(double left, double right) {

@@ -224,7 +224,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.leftAuto();
+    return AutoCommands.driveVelocityCommand(120, 40, 40);
     //return AutoCommands.scoreAndMove();
     //return AutoCommands.engageAndScore();
   }
