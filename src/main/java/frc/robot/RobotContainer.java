@@ -27,7 +27,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public static final LED led = new LED();
   // public static final Drivetrain drivetrain = new Drivetrain();
-
+  public static double startTime = System.currentTimeMillis();
   // controllers
   private static Joystick controller1 = new Joystick(0); //driver
   private static Joystick controller2 = new Joystick(1); //operator
