@@ -76,6 +76,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Drive train position" , RobotContainer.drivetrain.getPosition());
     SmartDashboard.putNumber("Drive train left velocity", RobotContainer.drivetrain.leftEncoder.getVelocity());
     SmartDashboard.putNumber("Drive train right velocity", RobotContainer.drivetrain.rightEncoder.getVelocity());
+    SmartDashboard.putNumber("Autonomous Effector Encoder Position", RobotContainer.effector.armAbsEncoder.getPosition());
   }
 
   @Override

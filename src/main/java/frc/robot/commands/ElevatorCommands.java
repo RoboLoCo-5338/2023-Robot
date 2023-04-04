@@ -62,7 +62,8 @@ public class ElevatorCommands {
     return new SequentialCommandGroup(
       ArmCommands.setArm(2), //kickstand
       setElevatorHeight(2), //elevator up
-      ArmCommands.setArm(3) //arm out
+      ArmCommands.setArm(3), //arm out
+      setElevatorHeight(4)
     );
   }
 

@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -30,14 +31,15 @@ public class ArmCommands  {
       RobotContainer.m_Arm);
   }
 
-  public static Command setArmAbsolute(double setpoint) {
-    return new PIDCommand(
-      new PIDController(0.01, 0, 0), 
-      () -> RobotContainer.effector.armAbsEncoder.getPosition(),
-      setpoint,
-      output -> {RobotContainer.m_Arm.moveArm(output);},
-      RobotContainer.m_Arm);
-  }
+  // public static Command setArmAbsolute(double setpoint) {
+  //   return new PIDCommand(
+  //     new PIDController(2, 0, 0), 
+  //     () -> RobotContainer.effector.armAbsEncoder.getPosition(),
+  //     RobotContainer.m_Arm.armHeights[(int)setpoint],
+  //     output -> {RobotContainer.m_Arm.moveArm(output*2);},
+  //     //() -> Math.abs(RobotContainer.m_Arm.armHeights[preset]-RobotContainer.m_Effector.getEffectorPosition()) <= 0.1,
+  //     RobotContainer.m_Arm);
+  // }
 
 
 // command to set speed for arm

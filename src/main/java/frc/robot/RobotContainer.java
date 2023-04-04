@@ -9,6 +9,7 @@ import frc.robot.commands.AutoCommands;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.LimeLight;
+import frc.robot.commands.SetArmAbsolute;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
@@ -119,14 +120,9 @@ public class RobotContainer {
    public static ParallelCommandGroup moveMechanismPID(int preset){
     return new ParallelCommandGroup(
       ElevatorCommands.setElevatorHeight(preset), 
-      ArmCommands.setArm(preset)
+      new SetArmAbsolute(preset)
      );
    }
-
-
-
-   
-
 
 
     /**
@@ -215,8 +211,9 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.driveVelocityCommand(120, 40, 40);
+    return AutoCommands.leftAuto();
     //return AutoCommands.scoreAndMove();
+
     //return AutoCommands.engageAndScore();
   }
 }
