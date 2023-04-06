@@ -8,6 +8,8 @@ import frc.robot.commands.ArmCommands;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
+import frc.robot.commands.LEDCommands;
+import frc.robot.subsystems.LED;
 import frc.robot.commands.LimeLight;
 import frc.robot.commands.SetArmAbsolute;
 import frc.robot.subsystems.Arm;
@@ -44,6 +46,7 @@ public class RobotContainer {
   public static final Drivetrain drivetrain = new Drivetrain();
   public static final LimeLight LimeLight = new LimeLight();
   public static final Effector effector = new Effector();
+  public static final LED led = new LED();
 
   public static AHRS navX = new AHRS(SPI.Port.kMXP);
   public static double percent = 0.3;
@@ -105,12 +108,12 @@ public class RobotContainer {
     () -> LimeLight.setPipeline());
 
     
-    public Command reverse = new InstantCommand(
+    public Command reverseCommand = new InstantCommand(
       () -> { reverseModifier*=-1;}
    );
  
    public Command speedBoost = new RunCommand(
-     () -> {speedMod=controller1.getRawAxis(3)*1.0;}
+     () -> {speedMod=controller1.getRawAxis(3)*1.2;}
    );
 
    public Command speedOff = new InstantCommand(
@@ -120,9 +123,11 @@ public class RobotContainer {
    public static ParallelCommandGroup moveMechanismPID(int preset){
     return new ParallelCommandGroup(
       ElevatorCommands.setElevatorHeight(preset), 
-      new SetArmAbsolute(preset)
+      ArmCommands.setArm(preset)
      );
    }
+
+   
 
 
     /**
@@ -163,14 +168,21 @@ public class RobotContainer {
     Trigger moveArmDown = new Trigger(() ->  controller2.getRawAxis(5)< -0.1);
 
    Trigger moveElevatorDown  = new Trigger(() ->  controller2.getRawAxis(1) < -0.1);
-   Trigger revTrigger = new  Trigger(() -> controller1.getRawAxis(2)>0.5);
+   Trigger revTrigger = new  Trigger(() -> controller1.getRawAxis(2)>0.2);
 
    Trigger speed = new Trigger(() -> controller1.getRawAxis(3)>0.1);
+
+  //  JoystickButton partyMode = new JoystickButton(controller2, Constants.BBUTTON);
+  //  partyMode.onTrue(LEDCommands.party());
+   //partyMode.whileFalse( LEDCommands.periodic());
 
     speed.whileTrue(speedBoost);
 
 
-    revTrigger.onTrue(reverse);
+    //revTrigger.onTrue(LEDCommands.reverse());
+   // revTrigger.whileFalse(LEDCommands.update());
+    revTrigger.onTrue(reverseCommand);
+    
     speed.onFalse(speedOff);
    
     //operator presets   

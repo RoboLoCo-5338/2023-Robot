@@ -46,4 +46,9 @@ public final class Constants {
   public static final int height3 = 3;
   public static final int height4 = 4;
   public static final int height5 = 5;
+
+  //LEDs
+  public static final int PWMPORT=1;
+  public static final int PWMPORT2=0;
+  public static final int BUFFERSIZE=58;
 }

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.LEDCommands;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -47,6 +48,8 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+   // LEDCommands.party();
+   
     SmartDashboard.putNumber("Pitch", RobotContainer.navX.getPitch());
     SmartDashboard.putNumber("Roll", RobotContainer.navX.getRoll());
   }
@@ -85,6 +88,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    RobotContainer.reverseModifier=1;
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -94,6 +98,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // SmartDashboard.putString("Dino Rivets ftw","HELLO");
+    
     SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
     SmartDashboard.putNumber("Arm Position", RobotContainer.m_Arm.getArmPosition());
     SmartDashboard.putNumber("effector Encoder position", RobotContainer.effector.armAbsEncoder.getPosition());
