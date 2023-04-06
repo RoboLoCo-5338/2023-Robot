@@ -35,6 +35,6 @@ public class SetArmAbsolute extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Math.abs(RobotContainer.m_Arm.armHeights[setPoint]-RobotContainer.effector.armAbsEncoder.getPosition()) <= 0.1);
+    return (Math.abs(RobotContainer.m_Arm.armHeights[setPoint]-RobotContainer.effector.armAbsEncoder.getPosition()) <= 0.02);
   }
 }
