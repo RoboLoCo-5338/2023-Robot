@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.LED;
 
@@ -23,9 +24,9 @@ public class LEDCommands  {
 
   //LED rainbow hopefully
   public static Command party() {
-      return new InstantCommand(
-        () -> RobotContainer.LED.rainbow(),
-        RobotContainer.party
+      return new RunCommand(
+        () -> RobotContainer.led.rainbow(),
+        RobotContainer.led
       );
     }
 
