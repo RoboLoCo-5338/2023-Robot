@@ -31,10 +31,10 @@ public class LED extends SubsystemBase {
             alliance();
         }
 
-        if (System.currentTimeMillis() - RobotContainer.startTime >= 120000) {
+       /* if (System.currentTimeMillis() - RobotContainer.startTime >= 120000) {
             rainbow();
             // codes rainbow lights for endgame
-        }
+        }*/
 
         m_led.setData(m_ledBuffer);
         m_led.start();
@@ -50,6 +50,8 @@ public class LED extends SubsystemBase {
             // red alliange lights
         }
     }
+    
+ 
 
     public void setLED(int r, int g, int b) {
         for (int i = 0; i < m_ledBuffer.getLength(); i++) {
