@@ -47,6 +47,18 @@ public class LED extends SubsystemBase {
     
     }
 
+    public void updateRainbow(){
+        if (reverse>0) {
+            setLED(255, 255, 0);
+            // green leds when the robot is in reverse
+        } else {
+            alliance();
+        }
+    
+        m_led.setData(m_ledBuffer);
+        m_led.start();
+    
+    }
     public void reverse(){
         reverse *= -1;
     }
@@ -76,7 +88,7 @@ public class LED extends SubsystemBase {
 
     public void rainbow() {
        // rainbow*=-1;
-        if(rainbow>0){
+        //if(rainbow>0){
         for (int i = 0; i < m_ledBuffer.getLength(); i++) {
             int hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
 
@@ -84,9 +96,9 @@ public class LED extends SubsystemBase {
         }
         m_rainbowFirstPixelHue += 3;
         m_rainbowFirstPixelHue %= 180;
-    }else{
-        setLED(0, 0, 0);
-    }
+   // }else{
+        //setLED(0, 0, 0);
+   // }
         m_led.setData(m_ledBuffer);
 
     }

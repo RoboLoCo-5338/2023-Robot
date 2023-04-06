@@ -34,11 +34,17 @@ public class LEDCommands  {
     public static Command update(){
       return new RunCommand(() -> RobotContainer.led.update(), RobotContainer.led);
     }
+    public static Command rainbow(){
+      return new RunCommand(() -> RobotContainer.led.updateRainbow(), RobotContainer.led);
+    }
 
     public static Command teamColors(){
       return new RunCommand(() -> RobotContainer.led.teamColors(),RobotContainer.led);
     }
 
+    public static Command alliance(){
+      return new RunCommand(()-> RobotContainer.led.alliance(), RobotContainer.led);
+    }
   
  
 

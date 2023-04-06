@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -108,7 +109,7 @@ public class RobotContainer {
     () -> LimeLight.setPipeline());
 
     
-    public Command reverseCommand = new InstantCommand(
+    public static Command reverseCommand = new InstantCommand(
       () -> { reverseModifier*=-1;}
    );
  
@@ -120,6 +121,13 @@ public class RobotContainer {
      () -> {speedMod=0;}
    );
 
+     public static ParallelCommandGroup revGroup(){
+      return new ParallelCommandGroup(
+        reverseCommand,
+        LEDCommands.reverse()
+      );
+     }
+
    public static ParallelCommandGroup moveMechanismPID(int preset){
     return new ParallelCommandGroup(
       ElevatorCommands.setElevatorHeight(preset), 
@@ -127,8 +135,8 @@ public class RobotContainer {
      );
    }
 
-   
 
+   
 
     /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -169,19 +177,21 @@ public class RobotContainer {
 
    Trigger moveElevatorDown  = new Trigger(() ->  controller2.getRawAxis(1) < -0.1);
    Trigger revTrigger = new  Trigger(() -> controller1.getRawAxis(2)>0.2);
+   Trigger revTrigger2 = new  Trigger(() -> controller1.getRawAxis(2)>0.2);
 
    Trigger speed = new Trigger(() -> controller1.getRawAxis(3)>0.1);
 
-  //  JoystickButton partyMode = new JoystickButton(controller2, Constants.BBUTTON);
-  //  partyMode.onTrue(LEDCommands.party());
+    JoystickButton partyMode = new JoystickButton(controller2, Constants.BBUTTON);
+    partyMode.onTrue(LEDCommands.party());
    //partyMode.whileFalse( LEDCommands.periodic());
 
     speed.whileTrue(speedBoost);
 
-
-    //revTrigger.onTrue(LEDCommands.reverse());
-   // revTrigger.whileFalse(LEDCommands.update());
+    
     revTrigger.onTrue(reverseCommand);
+    //revTrigger2.whileTrue(LEDCommands.reverse());
+   // revTrigger.whileFalse(LEDCommands.update());
+
     
     speed.onFalse(speedOff);
    

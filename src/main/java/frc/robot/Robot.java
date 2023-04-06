@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
    // LEDCommands.party();
-   
+   //LEDCommands.update();
     SmartDashboard.putNumber("Pitch", RobotContainer.navX.getPitch());
     SmartDashboard.putNumber("Roll", RobotContainer.navX.getRoll());
   }
@@ -89,6 +89,7 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     RobotContainer.reverseModifier=1;
+    LEDCommands.alliance();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -98,7 +99,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // SmartDashboard.putString("Dino Rivets ftw","HELLO");
-    
+   
     SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
     SmartDashboard.putNumber("Arm Position", RobotContainer.m_Arm.getArmPosition());
     SmartDashboard.putNumber("effector Encoder position", RobotContainer.effector.armAbsEncoder.getPosition());
