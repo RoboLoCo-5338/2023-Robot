@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     RobotContainer.m_Arm.resetArm();
     RobotContainer.m_Elevator.resetElevator();
+    LEDCommands.rainbow();
   }
 
   /**
@@ -49,6 +50,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     SmartDashboard.putNumber("Pitch", RobotContainer.navX.getPitch());
     SmartDashboard.putNumber("Roll", RobotContainer.navX.getRoll());
+    LEDCommands.update();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -61,6 +63,8 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    LEDCommands.rainbow();
+    LEDCommands.teamColors();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     RobotContainer.drivetrain.resetPosition();
 
@@ -73,6 +77,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+      LEDCommands.update();
     // SmartDashboard.putNumber("Drive train position" , RobotContainer.drivetrain.getPosition());
     SmartDashboard.putNumber("Drive train left velocity", RobotContainer.drivetrain.leftEncoder.getVelocity());
     SmartDashboard.putNumber("Drive train right velocity", RobotContainer.drivetrain.rightEncoder.getVelocity());
@@ -81,6 +86,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+      LEDCommands.rainbow();
+      
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -94,7 +101,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // SmartDashboard.putString("Dino Rivets ftw","HELLO");
-    
+    LEDCommands.update();
     SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
     SmartDashboard.putNumber("Arm Position", RobotContainer.m_Arm.getArmPosition());
     SmartDashboard.putNumber("effector Encoder position", RobotContainer.effector.armAbsEncoder.getPosition());

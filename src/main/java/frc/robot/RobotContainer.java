@@ -124,6 +124,13 @@ public class RobotContainer {
      );
    }
 
+   public SequentialCommandGroup reverseRobot(){
+    return new SequentialCommandGroup(
+      reverse(),
+      LEDCommands.reverse()
+    );
+   }
+
 
     /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -136,6 +143,9 @@ public class RobotContainer {
    */
   
   private void configureBindings() {
+
+    Button button= new JoystickButton(Joystick, 1);
+    button.toggleWhenPressed();
     //variables 
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
     JoystickButton backwardEffector = new JoystickButton(controller1, Constants.LBBUTTON);
@@ -167,10 +177,19 @@ public class RobotContainer {
 
    Trigger speed = new Trigger(() -> controller1.getRawAxis(3)>0.1);
 
+   Button dpad = new Button(() -> Math.abs(controller1.getPov()) != 0);
+
+   dpad.onTrue(LEDCommands.teamColors);
+ 
+
+   JoystickButton partyMode = new JoystickButton(controller1, Constants.XBUTTON);
+    
+    partyMode.onTrue(LEDCommands.party());
+
     speed.whileTrue(speedBoost);
 
 
-    revTrigger.onTrue(reverse);
+    revTrigger.onTrue(reverseRobot());
     speed.onFalse(speedOff);
    
     //operator presets   
