@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.LEDCommands;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -50,7 +51,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     SmartDashboard.putNumber("Pitch", RobotContainer.navX.getPitch());
     SmartDashboard.putNumber("Roll", RobotContainer.navX.getRoll());
-    LEDCommands.update();
+    LEDCommands.updateLED();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -77,7 +78,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-      LEDCommands.update();
+      LEDCommands.updateLED();
     // SmartDashboard.putNumber("Drive train position" , RobotContainer.drivetrain.getPosition());
     SmartDashboard.putNumber("Drive train left velocity", RobotContainer.drivetrain.leftEncoder.getVelocity());
     SmartDashboard.putNumber("Drive train right velocity", RobotContainer.drivetrain.rightEncoder.getVelocity());
@@ -101,7 +102,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // SmartDashboard.putString("Dino Rivets ftw","HELLO");
-    LEDCommands.update();
+    LEDCommands.updateLED();
     SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
     SmartDashboard.putNumber("Arm Position", RobotContainer.m_Arm.getArmPosition());
     SmartDashboard.putNumber("effector Encoder position", RobotContainer.effector.armAbsEncoder.getPosition());

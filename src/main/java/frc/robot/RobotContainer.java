@@ -8,21 +8,24 @@ import frc.robot.commands.ArmCommands;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
+import frc.robot.commands.LEDCommands;
 import frc.robot.commands.LimeLight;
 import frc.robot.commands.SetArmAbsolute;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.LED;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
-
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -44,6 +47,7 @@ public class RobotContainer {
   public static final Drivetrain drivetrain = new Drivetrain();
   public static final LimeLight LimeLight = new LimeLight();
   public static final Effector effector = new Effector();
+  public static final LED led = new LED();
 
   public static AHRS navX = new AHRS(SPI.Port.kMXP);
   public static double percent = 0.3;
@@ -126,7 +130,7 @@ public class RobotContainer {
 
    public SequentialCommandGroup reverseRobot(){
     return new SequentialCommandGroup(
-      reverse(),
+      reverse,
       LEDCommands.reverse()
     );
    }
@@ -144,8 +148,7 @@ public class RobotContainer {
   
   private void configureBindings() {
 
-    Button button= new JoystickButton(Joystick, 1);
-    button.toggleWhenPressed();
+  
     //variables 
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
     JoystickButton backwardEffector = new JoystickButton(controller1, Constants.LBBUTTON);
@@ -177,14 +180,14 @@ public class RobotContainer {
 
    Trigger speed = new Trigger(() -> controller1.getRawAxis(3)>0.1);
 
-   Button dpad = new Button(() -> Math.abs(controller1.getPov()) != 0);
+   Trigger dpad = new Trigger(() -> Math.abs(controller1.getPOV())>0);
 
-   dpad.onTrue(LEDCommands.teamColors);
+   dpad.onTrue(LEDCommands.teamColors());
  
 
    JoystickButton partyMode = new JoystickButton(controller1, Constants.XBUTTON);
     
-    partyMode.onTrue(LEDCommands.party());
+    partyMode.onTrue(LEDCommands.rainbow());
 
     speed.whileTrue(speedBoost);
 

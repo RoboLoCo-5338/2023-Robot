@@ -23,7 +23,7 @@ public class LEDCommands  {
   }
 
   //LED rainbow hopefully
-  public static Command party() {
+  public static Command rainbow() {
       return new RunCommand(
         () -> RobotContainer.led.rainbow(),
         RobotContainer.led

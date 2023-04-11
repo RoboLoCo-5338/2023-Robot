@@ -18,10 +18,9 @@ public class LED extends SubsystemBase {
     private boolean rainbowBool;
     private boolean teamColorsBool;
 
-    public LED {
-        reverse
+    public LED() {
         m_led.setLength(m_ledBuffer.getLength());
-        setLED(0, 0, 255);
+        setColor(0, 0, 255);
         m_led.setData(m_ledBuffer);
         m_led.start();
         m_rainbowFirstPixelHue = 1;
@@ -37,7 +36,7 @@ public class LED extends SubsystemBase {
 
         }else if(rainbowBool){
            for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-            int hue = (m_teamColorFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+            int hue = (m_teamColorsFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
 
             m_ledBuffer.setHSV(i, hue, 255, 128);
             }
@@ -45,16 +44,16 @@ public class LED extends SubsystemBase {
             m_teamColorsFirstPixelHue += 3;
             m_teamColorsFirstPixelHue %= 180;
 
-        }else if(teamColorBool){
+        }else if(teamColorsBool){
             //60 to 250
              for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-            int hue = (m_teamColorFirstPixelHue + (i * 190 / m_ledBuffer.getLength())) % 190;
+            int hue = (m_teamColorsFirstPixelHue + (i * 190 / m_ledBuffer.getLength())) % 190;
 
             m_ledBuffer.setHSV(i, hue, 255, 128);
             }
 
             m_teamColorsFirstPixelHue += 3;
-            m_teamColorsFirstPixelHue = m_teamColorsFirstPixelHue > 250 ? 60 : m_teamColorFirstPixelHue;
+            m_teamColorsFirstPixelHue = m_teamColorsFirstPixelHue > 250 ? 60 : m_teamColorsFirstPixelHue;
         }else {
            alliance();
         }
@@ -66,10 +65,10 @@ public class LED extends SubsystemBase {
 
     public void alliance() {
         if (DriverStation.getAlliance().equals(Alliance.Blue)) {
-            setLED(0, 0, 255);
+            setColor(0, 0, 255);
             // blue alliance lights
         } else if (DriverStation.getAlliance().equals(Alliance.Red)) {
-            setLED(255, 0, 0);
+            setColor(255, 0, 0);
             // red alliange lights
         }
     }
