@@ -124,6 +124,41 @@ public static Command PIDTurnCommand(double angle, Direction direction){
     );
   }
 
+  public static Command centerAutoNoMove(){
+    return new SequentialCommandGroup(
+      EffectorCommands.timeEffectorReverse(300),
+      ElevatorCommands.autoUnStowCommand(),
+      EffectorCommands.timeEffectorReverse(300),
+      new WaitCommand(0.05),
+      RobotContainer.moveMechanismPID(5),
+      EffectorCommands.timeEffectorReverse(300),
+      new WaitCommand(0.05),
+      driveDistanceCommand(18, Direction.FORWARD),
+      EffectorCommands.timeEffectorForward(300),
+      new WaitCommand(0.05),
+      driveDistanceCommand(18, Direction.BACKWARD),
+      RobotContainer.moveMechanismPID(0)
+    );
+  }
+
+  public static Command bumpAuto(){
+    return new SequentialCommandGroup(
+      EffectorCommands.timeEffectorReverse(300),
+      ElevatorCommands.autoUnStowCommand(),
+      EffectorCommands.timeEffectorReverse(300),
+      new WaitCommand(0.05),
+      RobotContainer.moveMechanismPID(5),
+      EffectorCommands.timeEffectorReverse(300),
+      new WaitCommand(0.05),
+      driveDistanceCommand(18, Direction.FORWARD),
+      EffectorCommands.timeEffectorForward(300),
+      new WaitCommand(0.05),
+      driveDistanceCommand(18, Direction.BACKWARD),
+      RobotContainer.moveMechanismPID(0),
+      driveDistanceCommand(140, Direction.BACKWARD)
+    );
+  }
+
   public static Command engageAndScore(){
     return new SequentialCommandGroup(
       EffectorCommands.timeEffectorReverse(500),

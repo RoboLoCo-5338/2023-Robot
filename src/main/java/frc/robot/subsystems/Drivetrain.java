@@ -12,6 +12,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -68,17 +69,21 @@ public class Drivetrain extends SubsystemBase {
     // setting left and right motors with a motor controller 
     leftFront = new CANSparkMax(Constants.LEFTFRONT_MOTOR, MotorType.kBrushless);
     leftFront.setSmartCurrentLimit(40);
+    leftFront.setIdleMode(IdleMode.kCoast);
     leftEncoder = leftFront.getEncoder();
     leftRear = new CANSparkMax(Constants.LEFTREAR_MOTOR, MotorType.kBrushless);
     leftRear.setSmartCurrentLimit(40);
     leftFront.setInverted(true);
     leftRear.follow(leftFront);
+    leftRear.setIdleMode(IdleMode.kCoast);
     rightFront = new CANSparkMax(Constants.RIGHTFRONT_MOTOR, MotorType.kBrushless);
     rightFront.setSmartCurrentLimit(40);
+    rightFront.setIdleMode(IdleMode.kCoast);
     rightEncoder = rightFront.getEncoder();
     rightRear = new CANSparkMax(Constants.RIGHTREAR_MOTOR, MotorType.kBrushless);
     rightRear.setSmartCurrentLimit(40);
     rightRear.follow(rightFront);
+    rightRear.setIdleMode(IdleMode.kCoast);
 
     // conversion factors for the enconders 
     leftEncoder.setPositionConversionFactor(WHEEL_CIRCUMFERENCE/GEAR_RATIO);
@@ -120,6 +125,24 @@ public class Drivetrain extends SubsystemBase {
 
     rightFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
     leftFrontPID.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+  }
+
+  public void toggleBrakeMode() {
+      if(leftFront.getIdleMode() == IdleMode.kBrake) {
+        leftRear.setIdleMode(IdleMode.kCoast);
+        rightFront.setIdleMode(IdleMode.kCoast);
+        rightRear.setIdleMode(IdleMode.kCoast);
+        leftFront.setIdleMode(IdleMode.kCoast);
+      }
+
+      else if(leftFront.getIdleMode() == IdleMode.kCoast) {
+        leftRear.setIdleMode(IdleMode.kBrake);
+        rightFront.setIdleMode(IdleMode.kBrake);
+        rightRear.setIdleMode(IdleMode.kBrake);
+        leftFront.setIdleMode(IdleMode.kBrake);
+      }
+
+      SmartDashboard.putBoolean("idle mode", leftFront.getIdleMode() == IdleMode.kBrake);
   }
 
   private void configController(CANSparkMax sparkMax, double kP, double kI, double kD, double kF){

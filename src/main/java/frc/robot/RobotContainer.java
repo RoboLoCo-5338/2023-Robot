@@ -108,13 +108,15 @@ public class RobotContainer {
     public Command swapPipeline = new InstantCommand(//changes Limelight
     () -> LimeLight.setPipeline());
 
-    
+    public Command toggleBrakeMode = new InstantCommand(
+      () -> drivetrain.toggleBrakeMode());
+
     public static Command reverseCommand = new InstantCommand(
       () -> { reverseModifier*=-1;}
    );
  
    public Command speedBoost = new RunCommand(
-     () -> {speedMod=controller1.getRawAxis(3)*1.2;}
+     () -> {speedMod=controller1.getRawAxis(3)*1.618;}
    );
 
    public Command speedOff = new InstantCommand(
@@ -183,6 +185,9 @@ public class RobotContainer {
 
     JoystickButton partyMode = new JoystickButton(controller2, Constants.BBUTTON);
     partyMode.onTrue(LEDCommands.party());
+
+    JoystickButton toggleBrakeButton = new JoystickButton(controller1, Constants.BBUTTON);
+    toggleBrakeButton.onTrue(toggleBrakeMode);
    //partyMode.whileFalse( LEDCommands.periodic());
 
     speed.whileTrue(speedBoost);
@@ -233,7 +238,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.leftAuto();
+    return AutoCommands.centerAutoNoMove();
     //return AutoCommands.scoreAndMove();
 
     //return AutoCommands.engageAndScore();

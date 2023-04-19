@@ -20,11 +20,11 @@ public class LED extends SubsystemBase {
 
   public LED() {
       m_led.setLength(m_ledBuffer.getLength());
-      setLED(255, 0, 0);
+      setLED(0, 0, 255);
       m_led.setData(m_ledBuffer);
       m_led.start();
       m_rainbowFirstPixelHue = 1;
-      setLED(255, 0, 0);
+      setLED(0, 0, 255);
 
       m_teamFirstPixelHue = 60;
   }
