@@ -18,6 +18,8 @@ public class LED extends SubsystemBase {
   public AddressableLEDBuffer m_Buffer;
   private Alliance alliance;
   public boolean rainbowBool = false;
+  public int m_rainbowFirstPixelHue =1;
+  public boolean reverseBool=false;
   /** Creates a new LED. */
   public LED() {
     alliance = DriverStation.getAlliance();
@@ -36,13 +38,29 @@ public class LED extends SubsystemBase {
     rainbowBool=!rainbowBool;
   }
 
+  public void reverse(){
+    reverseBool=!reverseBool;
+  }
+
   public void update(){
     SmartDashboard.putString("Rainbow", rainbowBool+"");
-    if(rainbowBool){
+
+    if(reverseBool){
+      setColor(255, 180, 0);
+    }
+    else if(rainbowBool){
       SmartDashboard.putString("hisw", "hi");
-      setColor(255, 0, 0);
+      for (int i = 0; i < m_Buffer.getLength(); i++) {
+        int hue = (m_rainbowFirstPixelHue + (i * 180 / m_Buffer.getLength())) % 180;
+
+        m_Buffer.setHSV(i, hue, 255, 128);
+    }
+    m_rainbowFirstPixelHue += 3;
+    m_rainbowFirstPixelHue %= 180;
+
+    m_strip.setData(m_Buffer);
     }else{
-      setColor(0, 255, 0);
+      setColor(64, 224, 208);
     }
   }
 

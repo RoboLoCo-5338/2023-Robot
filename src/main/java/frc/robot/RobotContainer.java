@@ -10,6 +10,7 @@ import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.LimeLight;
 import frc.robot.commands.RainbowLED;
+import frc.robot.commands.Reverse;
 import frc.robot.commands.SetArmAbsolute;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
@@ -62,6 +63,7 @@ public class RobotContainer {
   private static Joystick controller2 = new Joystick(1); //operator
 
  public static final RainbowLED rainbow = new RainbowLED();
+ public static final Reverse reverse = new Reverse();
 
 //   private static XboxController controller3 = new XboxController(0); potential driver controller stuff
 //   private static XboxController controller4 = new XboxController(1);
@@ -140,6 +142,12 @@ public class RobotContainer {
       rainbow.execute();});
    }
 
+   public static Command reverseLED(){
+      return new InstantCommand(() -> {
+        reverse.execute();
+      });
+   }
+
 
    
 
@@ -200,6 +208,7 @@ public class RobotContainer {
 
      
     revTrigger.onTrue(reverseCommand);
+    revTrigger.onTrue(reverseLED());
     //revTrigger2.whileTrue(LEDCommands.reverse());
    // revTrigger.whileFalse(LEDCommands.update());
 
