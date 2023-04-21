@@ -23,8 +23,8 @@ public class RainbowLED extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putString("hiw", "hi");
-    RobotContainer.led.update();
+    
+    RobotContainer.led.rainbow();
   }
 
   // Called once the command ends or is interrupted.

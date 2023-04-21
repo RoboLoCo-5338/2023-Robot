@@ -136,7 +136,7 @@ public class RobotContainer {
    }
 
    public static Command rainbowLED(){
-    return new RunCommand(() -> {
+    return new InstantCommand(() -> {
       rainbow.execute();});
    }
 
@@ -198,7 +198,7 @@ public class RobotContainer {
 
     speed.whileTrue(speedBoost);
 
-    
+     
     revTrigger.onTrue(reverseCommand);
     //revTrigger2.whileTrue(LEDCommands.reverse());
    // revTrigger.whileFalse(LEDCommands.update());
@@ -244,7 +244,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.centerAutoNoMove();
+    //return AutoCommands.centerAutoNoMove();
+    return AutoCommands.bumpAuto();
     //return AutoCommands.scoreAndMove();
 
     //return AutoCommands.engageAndScore();

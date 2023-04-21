@@ -39,6 +39,7 @@ public class LED extends SubsystemBase {
   public void update(){
     SmartDashboard.putString("Rainbow", rainbowBool+"");
     if(rainbowBool){
+      SmartDashboard.putString("hisw", "hi");
       setColor(255, 0, 0);
     }else{
       setColor(0, 255, 0);
