@@ -1,116 +1,59 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-
 public class LED extends SubsystemBase {
+
+  public AddressableLED m_strip;
+  public AddressableLEDBuffer m_Buffer;
+  private Alliance alliance;
+  public boolean rainbowBool = false;
   /** Creates a new LED. */
-  private final AddressableLED m_led = new AddressableLED(Constants.PWMPORT);
-  private final AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(Constants.BUFFERSIZE);
-  private int m_rainbowFirstPixelHue;
-  private int m_teamFirstPixelHue;
-
-  private int reverse=-1;
-  private int rainbow=-1;
-
   public LED() {
-      m_led.setLength(m_ledBuffer.getLength());
-      setLED(0, 0, 255);
-      m_led.setData(m_ledBuffer);
-      m_led.start();
-      m_rainbowFirstPixelHue = 1;
-      setLED(0, 0, 255);
-
-      m_teamFirstPixelHue = 60;
+    alliance = DriverStation.getAlliance();
+    m_Buffer = new AddressableLEDBuffer(Constants.BUFFERSIZE);
+    m_strip = new AddressableLED(Constants.PWMPORT);
+    m_strip.setLength(m_Buffer.getLength());
+    m_strip.start();
   }
 
-  @Override 
+  @Override
   public void periodic() {
-    
+    // This method will be called once per scheduler run
+  }
+
+  public void rainbow(){
+    rainbowBool=!rainbowBool;
+  }
+
+  public void update(){
+    SmartDashboard.putString("Rainbow", rainbowBool+"");
+    if(rainbowBool){
+      setColor(255, 0, 0);
+    }else{
+      setColor(0, 255, 0);
     }
+  }
 
-    public void update(){
-        if (reverse>0) {
-            setLED(255, 255, 0);
-            // green leds when the robot is in reverse
-        } else {
-            alliance();
-        }
-    
-        m_led.setData(m_ledBuffer);
-        m_led.start();
-    
+
+  public void setColor(int r, int g, int b){
+
+    for(int i=0;i<m_Buffer.getLength();i++){
+      m_Buffer.setRGB(i,  r, g, b);
     }
-
-    public void updateRainbow(){
-        if (reverse>0) {
-            setLED(255, 255, 0);
-            // green leds when the robot is in reverse
-        } else {
-            alliance();
-        }
-    
-        m_led.setData(m_ledBuffer);
-        m_led.start();
-    
-    }
-    public void reverse(){
-        reverse *= -1;
-    }
-
-  
-    
-
-    public void alliance() {
-        if (DriverStation.getAlliance().equals(Alliance.Blue)) {
-            setLED(0, 0, 255);
-            // blue alliance lights
-        } else if (DriverStation.getAlliance().equals(Alliance.Red)) {
-            setLED(255, 0, 0);
-            // red alliange lights
-        }
-    }
+    m_strip.setData(m_Buffer);
+  }
 
 
 
-    public void setLED(int r, int g, int b) {
-        for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-            m_ledBuffer.setRGB(i, r, g, b);
-            m_ledBuffer.setRGB(i, r, g, b);
-
-        }
-    }
-
-    public void rainbow() {
-       // rainbow*=-1;
-        //if(rainbow>0){
-        for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-            int hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
-
-            m_ledBuffer.setHSV(i, hue, 255, 128);
-        }
-        m_rainbowFirstPixelHue += 3;
-        m_rainbowFirstPixelHue %= 180;
-   // }else{
-        //setLED(0, 0, 0);
-   // }
-        m_led.setData(m_ledBuffer);
-
-    }
-
-    public void teamColors(){
-        for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-            int hue = (m_teamFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 120;
-
-            m_ledBuffer.setHSV(i, hue, 255, 128);
-        }
-        m_teamFirstPixelHue += 3;
-        m_teamFirstPixelHue %= 180;
-        m_led.setData(m_ledBuffer);
-    }
 }

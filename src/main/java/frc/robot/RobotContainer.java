@@ -8,18 +8,18 @@ import frc.robot.commands.ArmCommands;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
-import frc.robot.commands.LEDCommands;
-import frc.robot.subsystems.LED;
 import frc.robot.commands.LimeLight;
+import frc.robot.commands.RainbowLED;
 import frc.robot.commands.SetArmAbsolute;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Effector;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.LED;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -49,6 +49,7 @@ public class RobotContainer {
   public static final Effector effector = new Effector();
   public static final LED led = new LED();
 
+
   public static AHRS navX = new AHRS(SPI.Port.kMXP);
   public static double percent = 0.3;
   public static int coneOffset = 0;
@@ -59,6 +60,8 @@ public class RobotContainer {
   // controllers
   private static Joystick controller1 = new Joystick(0); //driver
   private static Joystick controller2 = new Joystick(1); //operator
+
+ public static final RainbowLED rainbow = new RainbowLED();
 
 //   private static XboxController controller3 = new XboxController(0); potential driver controller stuff
 //   private static XboxController controller4 = new XboxController(1);
@@ -123,18 +126,18 @@ public class RobotContainer {
      () -> {speedMod=0;}
    );
 
-     public static ParallelCommandGroup revGroup(){
-      return new ParallelCommandGroup(
-        reverseCommand,
-        LEDCommands.reverse()
-      );
-     }
+     
 
    public static ParallelCommandGroup moveMechanismPID(int preset){
     return new ParallelCommandGroup(
       ElevatorCommands.setElevatorHeight(preset), 
       ArmCommands.setArm(preset)
      );
+   }
+
+   public static Command rainbowLED(){
+    return new RunCommand(() -> {
+      rainbow.execute();});
    }
 
 
@@ -151,6 +154,8 @@ public class RobotContainer {
    */
   
   private void configureBindings() {
+
+    rainbow.initialize();
     //variables 
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
     JoystickButton backwardEffector = new JoystickButton(controller1, Constants.LBBUTTON);
@@ -184,11 +189,12 @@ public class RobotContainer {
    Trigger speed = new Trigger(() -> controller1.getRawAxis(3)>0.1);
 
     JoystickButton partyMode = new JoystickButton(controller2, Constants.BBUTTON);
-    partyMode.onTrue(LEDCommands.party());
+    partyMode.onTrue(rainbowLED());
 
     JoystickButton toggleBrakeButton = new JoystickButton(controller1, Constants.BBUTTON);
     toggleBrakeButton.onTrue(toggleBrakeMode);
    //partyMode.whileFalse( LEDCommands.periodic());
+  
 
     speed.whileTrue(speedBoost);
 

@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.LEDCommands;
+import frc.robot.commands.UpdateLED;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -89,7 +90,6 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     RobotContainer.reverseModifier=1;
-    LEDCommands.alliance();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -98,12 +98,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    UpdateLED update = new UpdateLED();
+    update.initialize();
+    update.execute();
     // SmartDashboard.putString("Dino Rivets ftw","HELLO");
    
-    SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
-    SmartDashboard.putNumber("Arm Position", RobotContainer.m_Arm.getArmPosition());
-    SmartDashboard.putNumber("effector Encoder position", RobotContainer.effector.armAbsEncoder.getPosition());
-    SmartDashboard.putBoolean("direction", (RobotContainer.reverseModifier > 0));
+  
   }
 
   @Override
