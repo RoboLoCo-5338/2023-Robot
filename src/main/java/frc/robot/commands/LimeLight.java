@@ -57,6 +57,12 @@ public class LimeLight extends CommandBase {
     double left= -p*x > 0 ? Math.min(-p*x, 0.3) : Math.max(-p*x, -0.3);//basically an if else statement; if it's greater, choose the smaller of the values, else chooses the max of the other two values
     double right= p*x > 0 ? Math.min(p*x, 0.3) : Math.max(p*x, -0.3);
 
+    // Drive towards target by aligning with crosshair
+    // TODO Calibrate cross hair to light up with top of target (https://docs.limelightvision.io/en/latest/cs_autorange.html)
+    double distance = y * 0.1;
+    left += distance;
+    right += distance;
+
     if(x!=0){//turns when not facing the april tag/when the tag is not in sight
       RobotContainer.driveSystem.tankDriveVelocity(left, right);
     }
