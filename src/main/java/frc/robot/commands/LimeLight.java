@@ -49,15 +49,28 @@ public class LimeLight extends CommandBase {
     x = tx.getDouble(0.0);
     y  = ty.getDouble(0.0);
     area = ta.getDouble(0.0);
-    botpose = tBotpose.getDoubleArray(new double[6]);
-    campose = tCampose.getDoubleArray(new double[6]);
+    double [] botpose = tBotpose.getDoubleArray(new double[6]);
+    double [] campose = tCampose.getDoubleArray(new double[6]);
 
     //post to smart dashboard periodically
     SmartDashboard.putNumber("LimelightX", x);  
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
-    SmartDashboard.putNumberArray("botpose", botpose);
-    SmartDashboard.putNumberArray("campose", campose);
+    
+    String bpose = "  ";
+    String cpose = " ";
+    for(int i = 0; i < 6; i++) {
+      bpose += botpose[i] + ", ";
+      cpose += campose[i] + ", ";
+    }
+
+    SmartDashboard.putString("Bot Pose", bpose);
+    SmartDashboard.putString("Camp Pose", cpose);
+    // SmartDashboard.putNumberArray("botpose", botpose);
+
+
+    // SmartDashboard.putNumberArray("campose", campose);
+    
     //System.out.println(x);
   
     //sets velocity value for turning towards the target

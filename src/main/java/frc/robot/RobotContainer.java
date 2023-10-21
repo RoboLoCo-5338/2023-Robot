@@ -99,9 +99,9 @@ public class RobotContainer {
     // drive buttons
   
 
-    Trigger slowToggle = new Trigger(() -> controller1.getRawAxis(3) > 0.5);
-    slowToggle.whileTrue(slowOn);
-    slowToggle.whileFalse(slowOff);
+    // Trigger slowToggle = new Trigger(() -> controller1.getRawAxis(3) > 0.5);
+    // slowToggle.whileTrue(slowOn);
+    // slowToggle.whileFalse(slowOff);
 
      JoystickButton limeLightButton = new JoystickButton(controller1, Constants.BBUTTON);
   
