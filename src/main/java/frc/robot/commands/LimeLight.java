@@ -19,7 +19,8 @@ public class LimeLight extends CommandBase {
   private double y;//ty value
   private double area;//ta value
   private double p;//multiplier value (proportional speed for turning depending on tx value)
-
+  private double[] botpose;
+  private double[] campose;
 
   /** Creates a new LimeLight + sets initial values. */
   public LimeLight() {
@@ -41,16 +42,22 @@ public class LimeLight extends CommandBase {
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
     NetworkTableEntry ta = table.getEntry("ta");
+    NetworkTableEntry tBotpose = table.getEntry("botpose");
+    NetworkTableEntry tCampose = table.getEntry("campose");
 
     //read values periodically + get 
     x = tx.getDouble(0.0);
     y  = ty.getDouble(0.0);
     area = ta.getDouble(0.0);
+    botpose = tBotpose.getDoubleArray(new double[6]);
+    campose = tCampose.getDoubleArray(new double[6]);
 
     //post to smart dashboard periodically
     SmartDashboard.putNumber("LimelightX", x);  
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
+    SmartDashboard.putNumberArray("botpose", botpose);
+    SmartDashboard.putNumberArray("campose", campose);
     //System.out.println(x);
   
     //sets velocity value for turning towards the target
