@@ -4,10 +4,17 @@
 
 package frc.robot;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonPipelineResult;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,6 +26,22 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  // Constants such as camera and target height stored. Change per robot and goal!
+  final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+  final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
+  // Angle between horizontal and the camera.
+  final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+
+  // How far from the target we want to be
+  final double GOAL_RANGE_METERS = Units.feetToMeters(3);
+
+  // Change this to match the name of your camera
+  PhotonCamera camera = new PhotonCamera("photonvision");
+
+  final double ANGULAR_P = 0.1;
+  final double ANGULAR_D = 0.0;
+  PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -99,6 +122,32 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Arm Position", RobotContainer.m_Arm.getArmPosition());
     SmartDashboard.putNumber("effector Encoder position", RobotContainer.effector.armAbsEncoder.getPosition());
     SmartDashboard.putBoolean("direction", (RobotContainer.reverseModifier > 0));
+
+    double forwardSpeed;
+    double rotationSpeed;
+
+    forwardSpeed = -RobotContainer.controller1.getRawAxis(3);
+
+    if (RobotContainer.controller1.getRawButton(Constants.ABUTTON)) {
+        // Vision-alignment mode
+        // Query the latest result from PhotonVision
+        PhotonPipelineResult result = camera.getLatestResult();
+
+        if (result.hasTargets()) {
+            // Calculate angular turn power
+            // -1.0 required to ensure positive PID controller effort _increases_ yaw
+            rotationSpeed = -turnController.calculate(result.getBestTarget().getYaw(), 0);
+        } else {
+            // If we have no targets, stay still.
+            rotationSpeed = 0;
+        }
+    } else {
+        // Manual Driver Mode
+        rotationSpeed = RobotContainer.controller1.getRawAxis(0);
+    }
+
+    // Use our forward/turn speeds to control the drivetrain
+    RobotContainer.drivetrain.tankDrive(forwardSpeed + rotationSpeed, forwardSpeed - rotationSpeed);
   }
 
   @Override

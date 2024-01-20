@@ -8,7 +8,7 @@ import frc.robot.commands.ArmCommands;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.EffectorCommands;
 import frc.robot.commands.ElevatorCommands;
-import frc.robot.commands.LimeLight;
+//import frc.robot.commands.LimeLight;
 import frc.robot.commands.SetArmAbsolute;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
@@ -42,7 +42,7 @@ public class RobotContainer {
   public static final Arm m_Arm = new Arm();
   public static ElevatorCommands m_ElevatorCommands;
   public static final Drivetrain drivetrain = new Drivetrain();
-  public static final LimeLight LimeLight = new LimeLight();
+  //public static final LimeLight LimeLight = new LimeLight();
   public static final Effector effector = new Effector();
 
   public static AHRS navX = new AHRS(SPI.Port.kMXP);
@@ -53,8 +53,8 @@ public class RobotContainer {
   private static double speedMod=0; //not sure what this should be?? 
 
   // controllers
-  private static Joystick controller1 = new Joystick(0); //driver
-  private static Joystick controller2 = new Joystick(1); //operator
+  public static Joystick controller1 = new Joystick(0); //driver
+  public static Joystick controller2 = new Joystick(1); //operator
 
 //   private static XboxController controller3 = new XboxController(0); potential driver controller stuff
 //   private static XboxController controller4 = new XboxController(1);
@@ -98,11 +98,11 @@ public class RobotContainer {
       () -> {coneOffset=0;}//starting value for cube indexing-ish?
     );
 
-    public Command runLimeLight = new InstantCommand(//runs limelight code
-      () -> LimeLight.execute());
+    //public Command runLimeLight = new InstantCommand(//runs limelight code
+    //  () -> LimeLight.execute());
 
-    public Command swapPipeline = new InstantCommand(//changes Limelight
-    () -> LimeLight.setPipeline());
+    //public Command swapPipeline = new InstantCommand(//changes Limelight
+    //() -> LimeLight.setPipeline());
 
     
     public Command reverse = new InstantCommand(
@@ -139,7 +139,7 @@ public class RobotContainer {
     //variables 
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
     JoystickButton backwardEffector = new JoystickButton(controller1, Constants.LBBUTTON);
-    JoystickButton limeLight = new JoystickButton(controller1, Constants.ABUTTON);
+    //JoystickButton limeLight = new JoystickButton(controller1, Constants.ABUTTON);
 
     //presets
     JoystickButton intakeHeight = new JoystickButton(controller2, Constants.BBUTTON);
