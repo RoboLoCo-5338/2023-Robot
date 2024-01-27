@@ -91,8 +91,8 @@ public class Drivetrain extends SubsystemBase {
     leftFrontPID = rightFront.getPIDController();
     // leftFront.setOpenLoopRampRate(0.3);
     // rightFront.setOpenLoopRampRate(0.3);
-    leftFrontPID.setOutputRange(-7, 7);
-    rightFrontPID.setOutputRange(-7, 7);
+    leftFrontPID.setOutputRange(-0.4, 0.4);
+    rightFrontPID.setOutputRange(-0.4, 0.4);
 
     setPositionPID(RIGHT_POSITION_P, LEFT_POSITION_P, POSITION_I, POSITION_D, POSITION_FEED_FORWARD);
     setVelocityPID(VELOCITY_P, VELOCITY_I, VELOCITY_D, VELOCITY_FEED_FORWARD);
@@ -166,7 +166,7 @@ public void tankDriveVelocity(double leftVelocity, double rightVelocity){
 }
 
   public void tankPercent(double left, double right) {
-    tankDriveVelocity(left * 0.25, right * 0.25);
+    tankDriveVelocity(left * Constants.speed_multi, right * Constants.speed_multi);
   }  
 
   public void setPeakOutput(double output) {

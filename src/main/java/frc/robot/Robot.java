@@ -151,7 +151,14 @@ public class Robot extends TimedRobot {
         // -1.0 required to ensure positive PID controller effort _increases_ yaw
         rotationSpeed = -result.getBestTarget().getYaw();
         SmartDashboard.putString("Yaw", Double.toString(rotationSpeed));
-        RobotContainer.drivetrain.tankDrive(Constants.kp * (forwardSpeed - rotationSpeed), Constants.kp * (forwardSpeed + rotationSpeed));
+        if (Math.abs(rotationSpeed) > 1.0) {
+          if (rotationSpeed < 0) {
+          RobotContainer.drivetrain.tankDrive(Constants.kp * (forwardSpeed - rotationSpeed) + Constants.min_command, Constants.kp * (forwardSpeed + rotationSpeed) - Constants.min_command);
+          } else {
+            RobotContainer.drivetrain.tankDrive(Constants.kp * (forwardSpeed - rotationSpeed) - Constants.min_command, Constants.kp * (forwardSpeed + rotationSpeed) + Constants.min_command);
+          }
+        }
+
 
     } else {
         // If we have no targets, tstay still.

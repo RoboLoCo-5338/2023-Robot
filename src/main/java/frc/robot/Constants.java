@@ -46,5 +46,9 @@ public final class Constants {
   public static final int height3 = 3;
   public static final int height4 = 4;
   public static final int height5 = 5;
-  public static final double kp = 0.1;
+
+  //speed_multi
+  public static final double speed_multi = 0.1;
+  public static final double kp = 0.005;
+  public static final double min_command = 0.05;
 }
