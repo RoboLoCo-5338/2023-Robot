@@ -4,16 +4,16 @@
 
 package frc.robot;
 
-import frc.robot.commands.ArmCommands;
-import frc.robot.commands.AutoCommands;
-import frc.robot.commands.EffectorCommands;
-import frc.robot.commands.ElevatorCommands;
+// import frc.robot.commands.ArmCommands;
+// import frc.robot.commands.AutoCommands;
+// import frc.robot.commands.EffectorCommands;
+// import frc.robot.commands.ElevatorCommands;
 //import frc.robot.commands.LimeLight;
-import frc.robot.commands.SetArmAbsolute;
-import frc.robot.subsystems.Arm;
+// import frc.robot.commands.SetArmAbsolute;
+// import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Effector;
-import frc.robot.subsystems.Elevator;
+// import frc.robot.subsystems.Effector;
+// // import frc.robot.subsystems.Elevator;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
@@ -38,12 +38,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here... + percent and coneOffset
-  public static final Elevator m_Elevator = new Elevator();
-  public static final Arm m_Arm = new Arm();
-  public static ElevatorCommands m_ElevatorCommands;
+  // public static final Elevator m_Elevator = new Elevator();
+  // public static final Arm m_Arm = new Arm();
+  // public static ElevatorCommands m_ElevatorCommands;
   public static final Drivetrain drivetrain = new Drivetrain();
   //public static final LimeLight LimeLight = new LimeLight();
-  public static final Effector effector = new Effector();
+  // public static final Effector effector = new Effector();
 
   public static AHRS navX = new AHRS(SPI.Port.kMXP);
   public static double percent = 0.3;
@@ -119,8 +119,8 @@ public class RobotContainer {
 
    public static ParallelCommandGroup moveMechanismPID(int preset){
     return new ParallelCommandGroup(
-      ElevatorCommands.setElevatorHeight(preset), 
-      new SetArmAbsolute(preset)
+      // ElevatorCommands.setElevatorHeight(preset), 
+      // new SetArmAbsolute(preset)
      );
    }
 
@@ -134,16 +134,16 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  
+  public static JoystickButton limeLight;
   private void configureBindings() {
     //variables 
     JoystickButton forwardEffector = new JoystickButton(controller1, Constants.RBBUTTON);
     JoystickButton backwardEffector = new JoystickButton(controller1, Constants.LBBUTTON);
-    //JoystickButton limeLight = new JoystickButton(controller1, Constants.ABUTTON);
+    limeLight = new JoystickButton(controller1, Constants.ABUTTON);
 
     //presets
     JoystickButton intakeHeight = new JoystickButton(controller2, Constants.BBUTTON);
-    JoystickButton bottomHeight = new JoystickButton(controller2, Constants.ABUTTON);
+    // JoystickButton bottomHeight = new JoystickButton(controller2, Constants.ABUTTON);
     JoystickButton mediumHeight = new JoystickButton(controller2, Constants.XBUTTON);
     JoystickButton highHeight = new JoystickButton(controller2, Constants.YBUTTON);
 
@@ -174,35 +174,35 @@ public class RobotContainer {
     speed.onFalse(speedOff);
    
     //operator presets   
-    bottomHeight.onTrue(moveMechanismPID(0));
+    // bottomHeight.onTrue(moveMechanismPID(0));
     mediumHeight.onTrue(moveMechanismPID(1));
     //mediumHeight.onTrue(ArmCommands.setArmAbsolute(0.5));
     highHeight.onTrue(moveMechanismPID(5)); //ADD PRESETS
     // intakeHeight.onTrue(moveMechanismPID(6)); //ADD PRESETS
 
-    unstow.onTrue(ElevatorCommands.unStowCommand());
-    stow.onTrue(ElevatorCommands.stowCommand());
+    // unstow.onTrue(ElevatorCommands.unStowCommand());
+    // stow.onTrue(ElevatorCommands.stowCommand());
 
-    moveElevatorUp.whileTrue(ElevatorCommands.moveElevator( 0.4 ));
-    moveElevatorDown.whileTrue(ElevatorCommands.moveElevator(-0.4));
-    moveElevatorDown.whileFalse(ElevatorCommands.stopElevator());
-    moveElevatorUp.whileFalse(ElevatorCommands.stopElevator());
-    moveArmUp.whileTrue(ArmCommands.moveArm(-0.4));
-    moveArmDown.whileTrue(ArmCommands.moveArm(0.4));
-    moveArmDown.whileFalse(ArmCommands.stopArm());
-    moveArmUp.whileFalse(ArmCommands.stopArm());
+    // moveElevatorUp.whileTrue(ElevatorCommands.moveElevator( 0.4 ));
+    // moveElevatorDown.whileTrue(ElevatorCommands.moveElevator(-0.4));
+    // moveElevatorDown.whileFalse(ElevatorCommands.stopElevator());
+    // moveElevatorUp.whileFalse(ElevatorCommands.stopElevator());
+    // moveArmUp.whileTrue(ArmCommands.moveArm(-0.4));
+    // moveArmDown.whileTrue(ArmCommands.moveArm(0.4));
+    // moveArmDown.whileFalse(ArmCommands.stopArm());
+    // moveArmUp.whileFalse(ArmCommands.stopArm());
 
-    //operator
-    forwardEffector2.whileTrue(EffectorCommands.effectorForward());
-    backwardEffector2.whileTrue(EffectorCommands.effectorReverse());
-    forwardEffector2.onFalse(EffectorCommands.effectorStop());
-    backwardEffector2.onFalse(EffectorCommands.effectorStop());
+    // //operator
+    // forwardEffector2.whileTrue(EffectorCommands.effectorForward());
+    // backwardEffector2.whileTrue(EffectorCommands.effectorReverse());
+    // forwardEffector2.onFalse(EffectorCommands.effectorStop());
+    // backwardEffector2.onFalse(EffectorCommands.effectorStop());
 
-    //driver
-    forwardEffector.whileTrue(EffectorCommands.effectorForward());
-    backwardEffector.whileTrue(EffectorCommands.effectorReverse());
-    forwardEffector.onFalse(EffectorCommands.effectorStop());
-    backwardEffector.onFalse(EffectorCommands.effectorStop());
+    // //driver
+    // forwardEffector.whileTrue(EffectorCommands.effectorForward());
+    // backwardEffector.whileTrue(EffectorCommands.effectorReverse());
+    // forwardEffector.onFalse(EffectorCommands.effectorStop());
+    // backwardEffector.onFalse(EffectorCommands.effectorStop());
   }
 
 
@@ -211,7 +211,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    return AutoCommands.leftAuto();
+    return null;
+    // return AutoCommands.leftAuto();
     //return AutoCommands.scoreAndMove();
 
     //return AutoCommands.engageAndScore();

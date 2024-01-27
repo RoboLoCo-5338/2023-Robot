@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -14,6 +17,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -24,8 +28,10 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
+  private double rotationSpeed;
+  private double forwardSpeed;
   private RobotContainer m_robotContainer;
+
 
   // Constants such as camera and target height stored. Change per robot and goal!
   final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
@@ -37,7 +43,7 @@ public class Robot extends TimedRobot {
   final double GOAL_RANGE_METERS = Units.feetToMeters(3);
 
   // Change this to match the name of your camera
-  PhotonCamera camera = new PhotonCamera("photonvision");
+  static PhotonCamera camera = new PhotonCamera("Camera_Module_v1");
 
   final double ANGULAR_P = 0.1;
   final double ANGULAR_D = 0.0;
@@ -52,8 +58,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    RobotContainer.m_Arm.resetArm();
-    RobotContainer.m_Elevator.resetElevator();
+    // RobotContainer.m_Arm.resetArm();
+    // RobotContainer.m_Elevator.resetElevator();
   }
 
   /**
@@ -99,7 +105,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Drive train position" , RobotContainer.drivetrain.getPosition());
     SmartDashboard.putNumber("Drive train left velocity", RobotContainer.drivetrain.leftEncoder.getVelocity());
     SmartDashboard.putNumber("Drive train right velocity", RobotContainer.drivetrain.rightEncoder.getVelocity());
-    SmartDashboard.putNumber("Autonomous Effector Encoder Position", RobotContainer.effector.armAbsEncoder.getPosition());
+    // SmartDashboard.putNumber("Autonomous Effector Encoder Position", RobotContainer.effector.armAbsEncoder.getPosition());
   }
 
   @Override
@@ -118,39 +124,41 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // SmartDashboard.putString("Dino Rivets ftw","HELLO");
     
-    SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
-    SmartDashboard.putNumber("Arm Position", RobotContainer.m_Arm.getArmPosition());
-    SmartDashboard.putNumber("effector Encoder position", RobotContainer.effector.armAbsEncoder.getPosition());
+    // SmartDashboard.putNumber("Elevator Position Periodic", RobotContainer.m_Elevator.getElevatorPosition());
+    // SmartDashboard.putNumber("Arm Position", RobotContainer.m_Arm.getArmPosition());
+    // SmartDashboard.putNumber("effector Encoder position", RobotContainer.effector.armAbsEncoder.getPosition());
     SmartDashboard.putBoolean("direction", (RobotContainer.reverseModifier > 0));
 
-    double forwardSpeed;
-    double rotationSpeed;
-
     forwardSpeed = -RobotContainer.controller1.getRawAxis(3);
-
-    if (RobotContainer.controller1.getRawButton(Constants.ABUTTON)) {
-        // Vision-alignment mode
-        // Query the latest result from PhotonVision
-        PhotonPipelineResult result = camera.getLatestResult();
-
-        if (result.hasTargets()) {
-            // Calculate angular turn power
-            // -1.0 required to ensure positive PID controller effort _increases_ yaw
-            rotationSpeed = -turnController.calculate(result.getBestTarget().getYaw(), 0);
-        } else {
-            // If we have no targets, stay still.
-            rotationSpeed = 0;
-        }
-    } else {
-        // Manual Driver Mode
-        rotationSpeed = RobotContainer.controller1.getRawAxis(0);
-    }
+    SmartDashboard.putString("Test Before Test", "Working tho");
+    RobotContainer.limeLight.whileTrue(turnToTag());
 
     // Use our forward/turn speeds to control the drivetrain
-    RobotContainer.drivetrain.tankDrive(forwardSpeed + rotationSpeed, forwardSpeed - rotationSpeed);
   }
 
-  @Override
+  public Command turnToTag() {
+    return new InstantCommand(
+      () -> turnToTag2()
+    );
+  }
+
+  public void turnToTag2() {
+    // Vision-alignment mode
+    // Query the latest result from PhotonVision
+    var result = camera.getLatestResult();
+    if (result.hasTargets()) {
+        // Calculate angular turn power
+        // -1.0 required to ensure positive PID controller effort _increases_ yaw
+        rotationSpeed = -result.getBestTarget().getYaw();
+        SmartDashboard.putString("Yaw", Double.toString(rotationSpeed));
+        RobotContainer.drivetrain.tankDrive(Constants.kp * (forwardSpeed - rotationSpeed), Constants.kp * (forwardSpeed + rotationSpeed));
+
+    } else {
+        // If we have no targets, tstay still.
+        rotationSpeed = 0;
+    }
+  }
+
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
