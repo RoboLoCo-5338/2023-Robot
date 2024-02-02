@@ -166,7 +166,7 @@ public void tankDriveVelocity(double leftVelocity, double rightVelocity){
 }
 
   public void tankPercent(double left, double right) {
-    tankDriveVelocity(left * Constants.speed_multi, right * Constants.speed_multi);
+    tankDriveVelocity(left, right);
   }  
 
   public void setPeakOutput(double output) {

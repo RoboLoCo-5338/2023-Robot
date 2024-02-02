@@ -8,16 +8,19 @@ import java.util.List;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
+import org.photonvision.PhotonUtils.*;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -34,18 +37,19 @@ public class Robot extends TimedRobot {
 
 
   // Constants such as camera and target height stored. Change per robot and goal!
-  final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
-  final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
+  final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(42);
+  final double TARGET_HEIGHT_METERS = Units.feetToMeters(2.66);
   // Angle between horizontal and the camera.
   final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
-
   // How far from the target we want to be
   final double GOAL_RANGE_METERS = Units.feetToMeters(3);
 
   // Change this to match the name of your camera
-  static PhotonCamera camera = new PhotonCamera("Camera_Module_v1");
-
-  final double ANGULAR_P = 0.1;
+  static PhotonCamera camera = new PhotonCamera("Captain_Rivets");
+  // final double LINEAR_P = 0.001;
+  // final double LINEAR_D = 0.0;
+  // PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
+  final double ANGULAR_P = 0.01;
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
@@ -131,40 +135,87 @@ public class Robot extends TimedRobot {
 
     forwardSpeed = -RobotContainer.controller1.getRawAxis(3);
     SmartDashboard.putString("Test Before Test", "Working tho");
-    RobotContainer.limeLight.whileTrue(turnToTag());
-
+    
+    RobotContainer.limeLight.whileTrue(turnToTarg());
     // Use our forward/turn speeds to control the drivetrain
   }
 
-  public Command turnToTag() {
-    return new InstantCommand(
-      () -> turnToTag2()
+  public Command turnToTarg() {
+    return new RunCommand(
+      () -> turnToTarg2()
     );
   }
 
-  public void turnToTag2() {
+  public void turnToTarg2() {
     // Vision-alignment mode
     // Query the latest result from PhotonVision
     var result = camera.getLatestResult();
+    PhotonTrackedTarget best_result = null;
     if (result.hasTargets()) {
-        // Calculate angular turn power
-        // -1.0 required to ensure positive PID controller effort _increases_ yaw
-        rotationSpeed = -result.getBestTarget().getYaw();
-        SmartDashboard.putString("Yaw", Double.toString(rotationSpeed));
-        if (Math.abs(rotationSpeed) > 1.0) {
-          if (rotationSpeed < 0) {
-          RobotContainer.drivetrain.tankDrive(Constants.kp * (forwardSpeed - rotationSpeed) + Constants.min_command, Constants.kp * (forwardSpeed + rotationSpeed) - Constants.min_command);
-          } else {
-            RobotContainer.drivetrain.tankDrive(Constants.kp * (forwardSpeed - rotationSpeed) - Constants.min_command, Constants.kp * (forwardSpeed + rotationSpeed) + Constants.min_command);
-          }
-        }
-
-
+      best_result = result.getBestTarget();
+      double range = 
+              PhotonUtils.calculateDistanceToTargetMeters(
+                      CAMERA_HEIGHT_METERS, 
+                      TARGET_HEIGHT_METERS, 
+                      CAMERA_PITCH_RADIANS, 
+                      Units.degreesToRadians(best_result.getPitch()));
+      forwardSpeed = -RobotContainer.controller1.getY();
+      // Calculate angular turn power
+      // -1.0 required to ensure positive PID controller effort _increases_ yaw
+      rotationSpeed = -turnController.calculate(best_result.getYaw(), 0);
+      SmartDashboard.putNumber("Distance from April Tag", range);
     } else {
-        // If we have no targets, tstay still.
-        rotationSpeed = 0;
+      rotationSpeed = 0;
     }
-  }
+    // if making a max speed
+    if (rotationSpeed > 0.1) {
+      rotationSpeed = 0.1;
+    } 
+    if (rotationSpeed < -0.1) {
+      rotationSpeed = -0.1;
+    }
+    // turns based on yaw
+    if (best_result != null && result.hasTargets() && best_result.getYaw() < 1) {
+      SmartDashboard.putString("RotationSpeed", Double.toString(rotationSpeed));
+      RobotContainer.drivetrain.tankDrive(rotationSpeed - Constants.min_command, -rotationSpeed + Constants.min_command);
+    } else if (best_result != null && result.hasTargets() && best_result.getYaw() > 1) {
+      SmartDashboard.putString("-RotationSpeed", Double.toString(rotationSpeed));
+      RobotContainer.drivetrain.tankDrive(rotationSpeed + Constants.min_command, -rotationSpeed - Constants.min_command);
+    }
+    }
+
+    // if (result.hasTargets()) {
+    //     // Calculate angular turn power
+    //     // -1.0 required to ensure positive PID controller effort _increases_ yaw
+    //     rotationSpeed = -result.getBestTarget().getYaw();
+    //     double range = PhotonUtils.calculateDistanceToTargetMeters(0, 0.1397, CAMERA_PITCH_RADIANS, Units.degreesToRadians(result.getBestTarget().getPitch()));
+    //     SmartDashboard.putString("Distance", Double.toString(range));
+    //     if (range < 1) {
+    //       if (Math.abs(rotationSpeed) > 1.0) {
+    //         if (rotationSpeed < 0) {
+    //           RobotContainer.drivetrain.tankDrive((Constants.kp * (forwardSpeed - rotationSpeed) + Constants.min_command), (Constants.kp * (forwardSpeed + rotationSpeed) - Constants.min_command));
+    //         } else {
+    //           RobotContainer.drivetrain.tankDrive((Constants.kp * (forwardSpeed - rotationSpeed) - Constants.min_command), (Constants.kp * (forwardSpeed + rotationSpeed) + Constants.min_command));
+    //         }
+    //       } else {
+    //       // If we have no targets, tstay still.
+    //       rotationSpeed = 0;
+    //       }
+    //     } else {
+    //       if (Math.abs(rotationSpeed) > 1.0) {
+    //         if (rotationSpeed < 0) {
+    //           RobotContainer.drivetrain.tankDrive((Constants.kp * (forwardSpeed - rotationSpeed) + Constants.min_command)/range, (Constants.kp * (forwardSpeed + rotationSpeed) - Constants.min_command)/range);
+    //         } else {
+    //           RobotContainer.drivetrain.tankDrive((Constants.kp * (forwardSpeed - rotationSpeed) - Constants.min_command)/range, (Constants.kp * (forwardSpeed + rotationSpeed) + Constants.min_command)/range);
+    //         }
+    //       } else {
+    //       // If we have no targets, tstay still.
+    //       rotationSpeed = 0;
+    //       }
+    //       }
+    // } 
+
+
 
   public void testInit() {
     // Cancels all running commands at the start of test mode.

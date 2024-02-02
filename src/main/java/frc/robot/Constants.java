@@ -49,6 +49,6 @@ public final class Constants {
 
   //speed_multi
   public static final double speed_multi = 0.1;
-  public static final double kp = 0.005;
-  public static final double min_command = 0.05;
+  public static final double kp = 0.01;
+  public static final double min_command = 0.001;
 }
